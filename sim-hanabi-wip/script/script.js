@@ -469,6 +469,7 @@ let err_msg_label = document.getElementById('errmsg');
 
 let setting_visibility_button = document.getElementById('setting-visibility-button');
 let setting_text = document.getElementById('setting');
+let peace_visibility_button = document.getElementById('peace-visibility-button');
 
 let setting_ratio_pane = document.getElementById('setting-ratio-pane');
 
@@ -488,6 +489,16 @@ setting_visibility_button.onclick = () => {
   } else {
     setting_visibility_button.textContent = "設定を隠す";
     setting_text.style.opacity = 1.0;
+  }
+}
+
+peace_visibility_button.onclick = () => {
+  if (peace_visibility_button.textContent == "ピースを隠す") {
+    peace_visibility_button.textContent = "ピースを見る";
+    // .style.opacity = 0.0;
+  } else {
+    peace_visibility_button.textContent = "ピースを隠す";
+    // .style.opacity = 1.0;
   }
 }
 
