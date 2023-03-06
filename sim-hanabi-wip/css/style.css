@@ -78,3 +78,8 @@ div.settings {
   color: red;
   visibility: hidden;
 }
+
+#setting-ratio-pane {
+  padding-top: 2px;
+  display: none;
+}

@@ -470,6 +470,17 @@ let err_msg_label = document.getElementById('errmsg');
 let setting_visibility_button = document.getElementById('setting-visibility-button');
 let setting_text = document.getElementById('setting');
 
+let setting_ratio_pane = document.getElementById('setting-ratio-pane');
+
+select_setting.addEventListener('change', function(){
+  var index = this.selectedIndex;
+  if (this.options[index].value == "?") {
+    setting_ratio_pane.style.display = "block";
+  } else {
+    setting_ratio_pane.style.display = "none";
+  }
+});
+
 setting_visibility_button.onclick = () => {
   if (setting_visibility_button.textContent == "設定を隠す") {
     setting_visibility_button.textContent = "設定を見る";
