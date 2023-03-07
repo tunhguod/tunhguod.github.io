@@ -71,7 +71,7 @@ div.settings {
 }
 
 #game-count-form {
-  width: 12.5%;
+  width: 20%;
 }
 
 #errmsg {
@@ -82,4 +82,8 @@ div.settings {
 #setting-ratio-pane {
   padding-top: 2px;
   display: none;
+}
+
+button {
+  margin: 0px 2px;
 }

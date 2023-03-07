@@ -1,5 +1,3 @@
-const MASK_BONUS = 7; // b111
-
 const ROLE = {
   // ボーナス
   D_BB:     1<<0,
@@ -304,8 +302,40 @@ function convert_setting_enum_to_string(setting) {
   }
 }
 
-function get_flag() {
-  return Math.floor(Math.random() * 65536);
+
+function get_flag(num) {
+  return Math.floor(Math.random() * num);
+}
+
+function get_random_setting(r1, r2, r5, r6) {
+  if (r1 < 0 || r2 < 0 || r5 < 0 || r6 < 0) {
+    return SETTING.NOT_DEFINED;
+  }
+
+  if ((r1 + r2 + r5 + r6) == 0) {
+    r1 = 25;
+    r2 = 25;
+    r5 = 25;
+    r6 = 25;
+  }
+
+  if ((r1 + r2 + r5 + r6) != 100) {
+    return SETTING.NOT_DEFINED;
+  }
+
+  let num = get_flag(100);
+
+  if (0 <= num && num < r1) {
+    return SETTING.LOW_1;
+  } else if (r1 <= num && num < (r1 + r2)) {
+    return SETTING.LOW_2;
+  } else if ((r1 + r2) <= num && num < (r1 + r2 + r5)) {
+    return SETTING.HIGH_5;
+  } else {
+    return SETTING.HIGH_6
+  }
+
+  return SETTING.NOT_DEFINED;
 }
 
 function digest_big_bonus(setting) {
@@ -316,7 +346,7 @@ function digest_big_bonus(setting) {
   let rare_bell = 0;
 
   for (let i = 0; i < 29; ++i) {
-    let flag = get_flag();
+    let flag = get_flag(65536);
     switch(setting) {
       case SETTING.LOW_1:
       case SETTING.HIGH_5:
@@ -366,7 +396,7 @@ function digest_reg_bonus(setting) {
 
   let cnt = 0;
   for (let i = 0; i < 12; ++i) {
-    let flag = get_flag();
+    let flag = get_flag(65536);
     switch(setting) {
       case SETTING.LOW_1:
       case SETTING.LOW_2:
@@ -398,10 +428,40 @@ function digest_reg_bonus(setting) {
     }
   }
 
+  let flag = get_flag(1000);
+  let not_ice = one_medal_role + blank;
+
   data["game_count"] = cnt;
   data["one_medal_role"] = one_medal_role;
   data["leaning_ice"] = leaning_ice;
   data["blank"] = blank;
+  data["pank_lv_low"] = 0;
+  data["pank_lv_mid"] = 0;
+  data["pank_lv_high"] = 0;
+  data["showed_peace_lv_low"] = 0;
+  data["showed_peace_lv_mid"] = 0;
+  data["showed_peace_lv_high"] = 0;
+
+  if (not_ice <= 4) {
+    ++data['pank_lv_low'];
+    if (setting != SETTING.LOW_1 && flag < 31) {
+      ++data["showed_peace_lv_low"];
+    }
+  } else if (not_ice <= 6) {
+    ++data['pank_lv_mid'];
+    if (setting != SETTING.LOW_1 && flag < 250) {
+      ++data["showed_peace_lv_mid"];
+    }
+  } else { // >= 7
+    ++data['pank_lv_high'];
+    if (setting == SETTING.LOW_2 && flag < 250) {
+      ++data["showed_peace_lv_high"];
+    } else if (setting == SETTING.HIGH_5 && flag < 500) {
+      ++data["showed_peace_lv_high"];
+    } else if (setting == SETTING.HIGH_6 && flag < 500) {
+      ++data["showed_peace_lv_high"];
+    }
+  }
 
   return data;
 }
@@ -432,6 +492,19 @@ let rb_lean_ice_count = document.getElementById('rb-lean-ice-count');
 let rb_lean_ice_per = document.getElementById('rb-lean-ice-per');
 let rb_blank_count = document.getElementById('rb-blank-count');
 let rb_blank_per = document.getElementById('rb-blank-per');
+
+let rb_pank_lv_low_count = document.getElementById('rb-pank-lv-low-count');
+let rb_pank_lv_low_per = document.getElementById('rb-pank-lv-low-per');
+let rb_pank_lv_mid_count = document.getElementById('rb-pank-lv-mid-count');
+let rb_pank_lv_mid_per = document.getElementById('rb-pank-lv-mid-per');
+let rb_pank_lv_high_count = document.getElementById('rb-pank-lv-high-count');
+let rb_pank_lv_high_per = document.getElementById('rb-pank-lv-high-per');
+let rb_showed_peace_lv_low_count = document.getElementById('rb-showed-peace-lv-low-count');
+let rb_showed_peace_lv_low_per = document.getElementById('rb-showed-peace-lv-low-per');
+let rb_showed_peace_lv_mid_count = document.getElementById('rb-showed-peace-lv-mid-count');
+let rb_showed_peace_lv_mid_per = document.getElementById('rb-showed-peace-lv-mid-per');
+let rb_showed_peace_lv_high_count = document.getElementById('rb-showed-peace-lv-high-count');
+let rb_showed_peace_lv_high_per = document.getElementById('rb-showed-peace-lv-high-per');
 
 let all_bell_count = document.getElementById('all-bell-count');
 let all_bell_per = document.getElementById('all-bell-per');
@@ -473,6 +546,12 @@ let peace_visibility_button = document.getElementById('peace-visibility-button')
 
 let setting_ratio_pane = document.getElementById('setting-ratio-pane');
 
+let setting_1_ratio_form = document.getElementById('low-1-ratio');
+let setting_2_ratio_form = document.getElementById('low-2-ratio');
+let setting_5_ratio_form = document.getElementById('high-5-ratio');
+let setting_6_ratio_form = document.getElementById('high-6-ratio');
+
+
 select_setting.addEventListener('change', function(){
   var index = this.selectedIndex;
   if (this.options[index].value == "?") {
@@ -495,10 +574,20 @@ setting_visibility_button.onclick = () => {
 peace_visibility_button.onclick = () => {
   if (peace_visibility_button.textContent == "ピースを隠す") {
     peace_visibility_button.textContent = "ピースを見る";
-    // .style.opacity = 0.0;
+    rb_showed_peace_lv_low_count.style.opacity = 0.0;
+    rb_showed_peace_lv_low_per.style.opacity = 0.0;
+    rb_showed_peace_lv_mid_count.style.opacity = 0.0;
+    rb_showed_peace_lv_mid_per.style.opacity = 0.0;
+    rb_showed_peace_lv_high_count.style.opacity = 0.0;
+    rb_showed_peace_lv_high_per.style.opacity = 0.0;
   } else {
     peace_visibility_button.textContent = "ピースを隠す";
-    // .style.opacity = 1.0;
+    rb_showed_peace_lv_low_count.style.opacity = 1.0;
+    rb_showed_peace_lv_low_per.style.opacity = 1.0;
+    rb_showed_peace_lv_mid_count.style.opacity = 1.0;
+    rb_showed_peace_lv_mid_per.style.opacity = 1.0;
+    rb_showed_peace_lv_high_count.style.opacity = 1.0;
+    rb_showed_peace_lv_high_per.style.opacity = 1.0;
   }
 }
 
@@ -529,7 +618,16 @@ simulate_button.onclick = () => {
       setting = SETTING.HIGH_6;
       break;
     case "?":
-      setting = Math.floor(Math.random() * 4);
+      setting = get_random_setting(Number(setting_1_ratio_form.value),
+                                   Number(setting_2_ratio_form.value),
+                                   Number(setting_5_ratio_form.value),
+                                   Number(setting_6_ratio_form.value));
+      if (setting == SETTING.NOT_DEFINED) {
+        err_msg_label.textContent = "設定配分が不正です";
+        err_msg_label.style.visibility = "visible";
+        simulate_button.disabled = false;
+        return;
+      }
       break;
     default:
       err_msg_label.textContent = "設定を指定してください";
@@ -553,6 +651,12 @@ simulate_button.onclick = () => {
   let rb_one_medal_role = 0;
   let rb_lean_ice = 0;
   let rb_blank = 0;
+  let rb_pank_lv_low = 0;
+  let rb_pank_lv_mid = 0;
+  let rb_pank_lv_high = 0;
+  let rb_showed_peace_lv_low = 0;
+  let rb_showed_peace_lv_mid = 0;
+  let rb_showed_peace_lv_high = 0;
 
   let bell_a = 0;
   let bell_b = 0;
@@ -572,7 +676,7 @@ simulate_button.onclick = () => {
   let role = new Role(setting);
 
   for (let i = 0; i < simulate_game_count; ++i) {
-    role_bit = role.get_role(get_flag());
+    role_bit = role.get_role(get_flag(65536));
 
     // RT 中
     if (left_hg_game_count > 0) {
@@ -636,6 +740,12 @@ simulate_button.onclick = () => {
       rb_one_medal_role += rb_data.one_medal_role;
       rb_lean_ice += rb_data.leaning_ice;
       rb_blank += rb_data.blank;
+      rb_pank_lv_low += rb_data.pank_lv_low;
+      rb_pank_lv_mid += rb_data.pank_lv_mid;
+      rb_pank_lv_high += rb_data.pank_lv_high;
+      rb_showed_peace_lv_low += rb_data.showed_peace_lv_low;
+      rb_showed_peace_lv_mid += rb_data.showed_peace_lv_mid;
+      rb_showed_peace_lv_high += rb_data.showed_peace_lv_high;
       left_hc_game_count = 0;
       left_hg_game_count = 0;
     }
@@ -671,6 +781,20 @@ simulate_button.onclick = () => {
   rb_lean_ice_per.textContent = "1/" + (rb_game_count / rb_lean_ice).toFixed(1);
   rb_blank_count.textContent = rb_blank + "回";
   rb_blank_per.textContent = "1/" + (rb_game_count / rb_blank).toFixed(1);
+
+  rb_pank_lv_low_count.textContent = rb_pank_lv_low + "回";
+  rb_pank_lv_mid_count.textContent = rb_pank_lv_mid + "回";
+  rb_pank_lv_high_count.textContent = rb_pank_lv_high + "回";
+  rb_showed_peace_lv_low_count.textContent = rb_showed_peace_lv_low + "回";
+  rb_showed_peace_lv_mid_count.textContent = rb_showed_peace_lv_mid + "回";
+  rb_showed_peace_lv_high_count.textContent = rb_showed_peace_lv_high + "回";
+
+  rb_pank_lv_low_per.textContent = "1/" + (rb / rb_pank_lv_low).toFixed(2);
+  rb_pank_lv_mid_per.textContent = "1/" + (rb / rb_pank_lv_mid).toFixed(1);
+  rb_pank_lv_high_per.textContent = "1/" + (rb / rb_pank_lv_high).toFixed(1);
+  rb_showed_peace_lv_low_per.textContent = "1/" + (rb_pank_lv_low / rb_showed_peace_lv_low).toFixed(1);
+  rb_showed_peace_lv_mid_per.textContent = "1/" + (rb_pank_lv_mid / rb_showed_peace_lv_mid).toFixed(1);
+  rb_showed_peace_lv_high_per.textContent = "1/" + (rb_pank_lv_high / rb_showed_peace_lv_high).toFixed(1);
 
   all_bell_count.textContent = bell_a + bell_b + "回";
   all_bell_per.textContent = "1/" + (cnt / (bell_a + bell_b)).toFixed(1);
