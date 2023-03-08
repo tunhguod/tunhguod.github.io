@@ -1,0 +1,128 @@
+.input-form {
+  height: 2.4em;
+  width: 100%;
+  padding: 0 16px;
+  border-radius: 4px;
+  border: none;
+  box-shadow: 0 0 0 1px #ccc inset;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.input-form:focus {
+  outline: 0;
+  box-shadow: 0 0 0 2px rgb(33, 150, 243) inset;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+tr:nth-child(odd) {
+  background: #eeeeee;
+}
+
+tr:nth-child(even) {
+  background: #f7f7f7;
+}
+
+th {
+  background: #eaa12a;
+  color: #ffffff;
+  text-align: left;
+  padding-left: 2%;
+  padding-top: 1%;
+  padding-bottom: 1%;
+}
+
+tr td {
+  border: none;
+}
+td.key {
+  text-align: left;
+  padding-left: 4%;
+}
+
+td.value {
+  text-align: right;
+  padding-top: 1.5%;
+  padding-bottom: 2%;
+  padding-right: 1.5%;
+}
+
+td.nest {
+  padding-left: 8%;
+}
+
+td.dummy-elem {
+  display: none;
+}
+
+div.parent {
+  max-width: 100%;
+  height: auto;
+}
+
+div.settings {
+  display: flex;
+  width: 100%;
+}
+
+#game-count-form {
+  width: 20%;
+}
+
+#errmsg {
+  color: red;
+  visibility: hidden;
+}
+
+#setting-ratio-pane {
+  padding-top: 2px;
+  display: none;
+}
+
+button {
+  background-color: #FFFFFF;
+  border: 1px solid #222222;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #222222;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  margin: 2px;
+  outline: none;
+  padding: 13px 23px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
+  user-select: none;
+  -webkit-user-select: none;
+  width: auto;
+}
+
+button:focus-visible {
+  box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+  transition: box-shadow .2s;
+}
+
+button:active {
+  background-color: #F7F7F7;
+  border-color: #000000;
+  transform: scale(.96);
+}
+
+button:disabled {
+  border-color: #DDDDDD;
+  color: #DDDDDD;
+  cursor: not-allowed;
+  opacity: 1;
+}
