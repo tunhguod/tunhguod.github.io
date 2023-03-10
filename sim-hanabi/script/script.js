@@ -33,7 +33,8 @@ const ROLE = {
   HG_BLANK: 1<<19,
 
   HC_JAC_REP: 1<<20,
-  HG_RT_REP:  1<<21
+  HC_RT_REP:  1<<21,
+  HG_RT_REP:  1<<22
 }
 
 const SETTING = {
@@ -60,6 +61,7 @@ class Role {
   }
 
   constructor(setting) {
+    let rt_thresh = 0;
     switch(setting) {
       case SETTING.LOW_1:
         // リテラルな整数値はそのフラグが 65536 個のフラグに対していくつ割り当てられるかを表す
@@ -86,17 +88,22 @@ class Role {
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 22);        // 20: Eバケ
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4);         // 21: 風鈴B + ドン
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4);         // 22: チェリーA + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4283);      // 24: ベルA
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4283 - 4);  // 25: ベルB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 1239);      // 26: 氷A
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 40);        // 27: 氷B
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 659 - 4);   // 28: チェリーA1
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 3121);      // 29: チェリーA2
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 232 - 22);  // 30: チェリーB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 10923);     // 31: HC中ハズレ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4891);      // 32: HG中ハズレ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 18724 - 24);// 33: HC中JACリプ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 37449 - 60);// 34: HG中RTリプ
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4283);      // 23: ベルA
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4283 - 4);  // 24: ベルB
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 1239);      // 25: 氷A
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 40);        // 26: 氷B
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 659 - 4);   // 27: チェリーA1
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 3121);      // 28: チェリーA2
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 232 - 22);  // 29: チェリーB
+
+        rt_thresh = this.get_mapped_flag_num(this.flag_thresh);
+        this.flag_thresh.push(rt_thresh + 8977);                                       // 30: リプ
+        this.flag_thresh.push(rt_thresh + 21845);                                      // 31: HC中RTリプ
+        this.flag_thresh.push(rt_thresh + 21845 + 10923);                              // 32: HC中ハズレ
+        this.flag_thresh.push(rt_thresh + 21845 + 10923 + 18724);                      // 33: HC中JACリプ
+        this.flag_thresh.push(rt_thresh + 8977 + 4891);                                // 34: HG中ハズレ
+        this.flag_thresh.push(rt_thresh + 8977 + 4891 + 37449);                        // 35: HG中RTリプ
+
         break;
       case SETTING.LOW_2:
         this.flag_thresh.push(41);                                                     // 0:  単独ドンBB
@@ -129,10 +136,15 @@ class Role {
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 659 - 4);   // 28: チェリーA1
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 3396);      // 29: チェリーA2
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 233 - 23);  // 30: チェリーB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 11299);     // 31: HC中ハズレ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 5285);      // 32: HG中ハズレ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 18724 - 25);// 33: HC中JACリプ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 36817 - 62);// 34: HG中RTリプ
+
+        rt_thresh = this.get_mapped_flag_num(this.flag_thresh);
+        this.flag_thresh.push(rt_thresh + 8977);                                       // 30: リプ
+        this.flag_thresh.push(rt_thresh + 21141);                                      // 31: HC中RTリプ
+        this.flag_thresh.push(rt_thresh + 21141 + 11299);                              // 32: HC中ハズレ
+        this.flag_thresh.push(rt_thresh + 21141 + 11299 + 18724);                      // 33: HC中JACリプ
+        this.flag_thresh.push(rt_thresh + 8977 + 5285);                                // 34: HG中ハズレ
+        this.flag_thresh.push(rt_thresh + 8977 + 5285 + 36817);                        // 35: HG中RTリプ
+
         break;
       case SETTING.HIGH_5:
         this.flag_thresh.push(42);                                                     // 0:  単独ドンBB
@@ -148,7 +160,7 @@ class Role {
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 13);        // 10: チェリーB + RB
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 9);         // 11: Aドン
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 17);        // 12: A赤
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 9);        // 13: Bドン
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 9);         // 13: Bドン
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 47);        // 14: Bバケ
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 22);        // 15: C赤
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 17);        // 16: Dドン
@@ -158,17 +170,21 @@ class Role {
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 24);        // 20: Eバケ
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 5);         // 21: 風鈴B + ドン
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 5);         // 22: チェリーA + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4520);      // 24: ベルA
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4283 - 5);  // 25: ベルB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 1321);      // 26: 氷A
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 40);        // 27: 氷B
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 660 - 5);   // 28: チェリーA1
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 3181);      // 29: チェリーA2
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 237 - 27);  // 30: チェリーB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 12365);     // 31: HC中ハズレ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 6489);      // 32: HG中ハズレ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 18724 - 26);// 33: HC中JACリプ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 35424 - 66);// 34: HG中RTリプ
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4520);      // 23: ベルA
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4283 - 5);  // 24: ベルB
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 1321);      // 25: 氷A
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 40);        // 26: 氷B
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 660 - 5);   // 27: チェリーA1
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 3181);      // 28: チェリーA2
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 237 - 27);  // 29: チェリーB
+
+        rt_thresh = this.get_mapped_flag_num(this.flag_thresh);
+        this.flag_thresh.push(rt_thresh + 8977);                                       // 30: リプ
+        this.flag_thresh.push(rt_thresh + 20480);                                      // 31: HC中RTリプ
+        this.flag_thresh.push(rt_thresh + 20480 + 12365);                              // 32: HC中ハズレ
+        this.flag_thresh.push(rt_thresh + 20480 + 12465 + 18724);                      // 33: HC中JACリプ
+        this.flag_thresh.push(rt_thresh + 8977 + 6489);                                // 34: HG中ハズレ
+        this.flag_thresh.push(rt_thresh + 8977 + 6489 + 35424);                        // 35: HG中RTリプ
         break;
       case SETTING.HIGH_6:
         this.flag_thresh.push(42);                                                     // 0:  単独ドンBB
@@ -194,17 +210,21 @@ class Role {
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 25);        // 20: Eバケ
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 5);         // 21: 風鈴B + ドン
         this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 5);         // 22: チェリーA + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4648);      // 24: ベルA
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4340 - 5);  // 25: ベルB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 1290);      // 26: 氷A
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 40);        // 27: 氷B
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 660 - 5);   // 28: チェリーA1
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 3293);      // 29: チェリーA2
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 239 - 29);  // 30: チェリーB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 12850);     // 31: HC中ハズレ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 6899);      // 32: HG中ハズレ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 18724 - 28);// 33: HC中JACリプ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 34675 - 69);// 34: HG中RTリプ
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4648);      // 23: ベルA
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4340 - 5);  // 24: ベルB
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 1290);      // 25: 氷A
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 40);        // 26: 氷B
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 660 - 5);   // 27: チェリーA1
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 3293);      // 28: チェリーA2
+        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 239 - 29);  // 29: チェリーB
+
+        rt_thresh = this.get_mapped_flag_num(this.flag_thresh);
+        this.flag_thresh.push(rt_thresh + 8977);                                       // 30: リプ
+        this.flag_thresh.push(rt_thresh + 19859);                                      // 31: HC中RTリプ
+        this.flag_thresh.push(rt_thresh + 19859 + 12850);                              // 32: HC中ハズレ
+        this.flag_thresh.push(rt_thresh + 19859 + 12850 + 18724);                      // 33: HC中JACリプ
+        this.flag_thresh.push(rt_thresh + 8977 + 6899);                                // 34: HG中ハズレ
+        this.flag_thresh.push(rt_thresh + 8977 + 6899 + 34675);                        // 35: HG中RTリプ
         break;
     }
   }
@@ -271,14 +291,22 @@ class Role {
       role = ROLE.CHER_A2;
     } else if (this.flag_thresh[28] <= flag && flag < this.flag_thresh[29]) {
       role = ROLE.CHER_B;
-    } else if (this.flag_thresh[29] <= flag && flag < this.flag_thresh[30]) {
-      role = ROLE.HC_BLANK;
+    }
+
+    if (this.flag_thresh[29] <= flag && flag < this.flag_thresh[30]) {
+      role = ROLE.REP;
     } else if (this.flag_thresh[30] <= flag && flag < this.flag_thresh[31]) {
-      role = ROLE.HG_BLANK;
+      role = ROLE.HC_RT_REP;
     } else if (this.flag_thresh[31] <= flag && flag < this.flag_thresh[32]) {
-      role = ROLE.HC_JAC_REP;
+      role = ROLE.HC_BLANK;
     } else if (this.flag_thresh[32] <= flag && flag < this.flag_thresh[33]) {
-      role = ROLE.HG_RT_REP;
+      role = ROLE.HC_JAC_REP;
+    }
+
+    if (this.flag_thresh[30] <= flag && flag < this.flag_thresh[34]) {
+      role += ROLE.HG_BLANK;
+    } else if (this.flag_thresh[34] <= flag && flag < this.flag_thresh[35]) {
+      role += ROLE.HG_RT_REP;
     }
 
     // print("flag: " + flag + ", role: " + role.toString(2));
@@ -393,9 +421,12 @@ function digest_reg_bonus(setting) {
   let leaning_ice = 0;
   let horizontal_ice = 0;
   let blank = 0;
+  let in_medal = 0;
+  let out_medal = 0;
 
   let cnt = 0;
   for (let i = 0; i < 12; ++i) {
+    ++in_medal;
     let flag = get_flag(65536);
     switch(setting) {
       case SETTING.LOW_1:
@@ -404,8 +435,10 @@ function digest_reg_bonus(setting) {
           ++one_medal_role;
         } else if (8192 <= flag && flag < 8522) {
           ++leaning_ice;
+          out_medal += 15;
         } else {
           ++horizontal_ice;
+          out_medal += 15;
         }
         break;
       case SETTING.HIGH_5:
@@ -414,10 +447,12 @@ function digest_reg_bonus(setting) {
           ++one_medal_role;
         } else if (9362 <= flag && flag < 9692) {
           ++leaning_ice;
+          out_medal += 15;
         } else if (9692 <= flag && flag < 9866) {
           ++blank;
         } else {
           ++horizontal_ice;
+          out_medal += 15;
         }
         break;
     }
@@ -441,6 +476,8 @@ function digest_reg_bonus(setting) {
   data["showed_peace_lv_low"] = 0;
   data["showed_peace_lv_mid"] = 0;
   data["showed_peace_lv_high"] = 0;
+  data["in_medal"] = in_medal;
+  data["out_medal"] = out_medal;
 
   if (not_ice <= 4) {
     ++data['pank_lv_low'];
@@ -555,6 +592,69 @@ let longest_bonus_span = document.getElementById('longest-b-span');
 let longest_bb_span = document.getElementById('longest-bb-span');
 let longest_rb_span = document.getElementById('longest-rb-span');
 
+let total_medal = document.getElementById('total-medal');
+let payout = document.getElementById('payout');
+
+// ボーナス詳細
+let alone_don_bb_count = document.getElementById('alone-don-bb-count');
+let alone_don_bb_per = document.getElementById('alone-don-bb-per');
+let alone_red_bb_count = document.getElementById('alone-red-bb-count');
+let alone_red_bb_per = document.getElementById('alone-red-bb-per');
+let alone_rb_count = document.getElementById('alone-rb-count');
+let alone_rb_per = document.getElementById('alone-rb-per');
+
+let rt_rep_don_bb_count = document.getElementById('rt-rep-don-bb-count');
+let rt_rep_don_bb_per = document.getElementById('rt-rep-don-bb-per');
+let rt_rep_red_bb_count = document.getElementById('rt-rep-red-bb-count');
+let rt_rep_red_bb_per = document.getElementById('rt-rep-red-bb-per');
+let rt_rep_rb_count = document.getElementById('rt-rep-rb-count');
+let rt_rep_rb_per = document.getElementById('rt-rep-rb-per');
+
+let jac_rep_don_bb_count = document.getElementById('jac-rep-don-bb-count');
+let jac_rep_don_bb_per = document.getElementById('jac-rep-don-bb-per');
+let jac_rep_red_bb_count = document.getElementById('jac-rep-red-bb-count');
+let jac_rep_red_bb_per = document.getElementById('jac-rep-red-bb-per');
+let jac_rep_rb_count = document.getElementById('jac-rep-rb-count');
+let jac_rep_rb_per = document.getElementById('jac-rep-rb-per');
+
+let cher_b_don_bb_count = document.getElementById('cher-b-don-bb-count');
+let cher_b_don_bb_per = document.getElementById('cher-b-don-bb-per');
+let cher_b_red_bb_count = document.getElementById('cher-b-red-bb-count');
+let cher_b_red_bb_per = document.getElementById('cher-b-red-bb-per');
+let cher_b_rb_count = document.getElementById('cher-b-rb-count');
+let cher_b_rb_per = document.getElementById('cher-b-rb-per');
+
+let sp_a_don_bb_count = document.getElementById('sp-a-don-bb-count');
+let sp_a_don_bb_per = document.getElementById('sp-a-don-bb-per');
+let sp_a_red_bb_count = document.getElementById('sp-a-red-bb-count');
+let sp_a_red_bb_per = document.getElementById('sp-a-red-bb-per');
+
+let sp_b_don_bb_count = document.getElementById('sp-b-don-bb-count');
+let sp_b_don_bb_per = document.getElementById('sp-b-don-bb-per');
+let sp_b_rb_count = document.getElementById('sp-b-rb-count');
+let sp_b_rb_per = document.getElementById('sp-b-rb-per');
+
+let sp_c_red_bb_count = document.getElementById('sp-c-red-bb-count');
+let sp_c_red_bb_per = document.getElementById('sp-c-red-bb-per');
+
+let sp_d_don_bb_count = document.getElementById('sp-d-don-bb-count');
+let sp_d_don_bb_per = document.getElementById('sp-d-don-bb-per');
+let sp_d_rb_count = document.getElementById('sp-d-rb-count');
+let sp_d_rb_per = document.getElementById('sp-d-rb-per');
+
+let sp_e_don_bb_count = document.getElementById('sp-e-don-bb-count');
+let sp_e_don_bb_per = document.getElementById('sp-e-don-bb-per');
+let sp_e_red_bb_count = document.getElementById('sp-e-red-bb-count');
+let sp_e_red_bb_per = document.getElementById('sp-e-red-bb-per');
+let sp_e_rb_count = document.getElementById('sp-e-rb-count');
+let sp_e_rb_per = document.getElementById('sp-e-rb-per');
+
+let bell_b_don_bb_count = document.getElementById('bell-b-don-bb-count');
+let bell_b_don_bb_per = document.getElementById('bell-b-don-bb-per');
+
+let cher_a1_red_bb_count = document.getElementById('cher-a1-red-bb-count');
+let cher_a1_red_bb_per = document.getElementById('cher-a1-red-bb-per');
+
 select_setting.addEventListener('change', function(){
   var index = this.selectedIndex;
   if (this.options[index].value == "?") {
@@ -602,7 +702,7 @@ simulate_button.onclick = () => {
   err_msg_label.style.visibility = "hidden";
 
   let simulate_game_count = simulate_game_count_form.value;
-  if (simulate_game_count <= 0 || simulate_game_count > 500000) {
+  if (simulate_game_count <= 0 || simulate_game_count > 500000000) {
     err_msg_label.textContent = "無効なG数が指定されています (1 ~ 500000 の値を指定してください)";
     err_msg_label.style.visibility = "visible";
     simulate_button.disabled = false;
@@ -642,6 +742,9 @@ simulate_button.onclick = () => {
   }
 
   setting_text.textContent = convert_setting_enum_to_string(setting);
+
+  let in_medal = 0;
+  let out_medal = 0;
 
   let d_bb = 0;
   let r_bb = 0;
@@ -686,9 +789,43 @@ simulate_button.onclick = () => {
   let bb_span_game_count = 0;
   let rb_span_game_count = 0;
 
+  let alone_don_bb = 0;
+  let alone_red_bb = 0;
+  let alone_rb = 0;
+
+  let rt_rep_don_bb = 0;
+  let rt_rep_red_bb = 0;
+  let rt_rep_rb = 0;
+
+  let jac_rep_don_bb = 0;
+  let jac_rep_red_bb = 0;
+
+  let cher_b_don_bb = 0;
+  let cher_b_red_bb = 0;
+  let cher_b_rb = 0;
+
+  let sp_a_don_bb = 0;
+  let sp_a_red_bb = 0;
+
+  let sp_b_don_bb = 0;
+  let sp_b_rb = 0;
+
+  let sp_c_red_bb = 0;
+
+  let sp_d_don_bb = 0;
+  let sp_d_rb = 0;
+
+  let sp_e_don_bb = 0;
+  let sp_e_red_bb = 0;
+  let sp_e_rb = 0;
+
+  let bell_b_don_bb = 0;
+  let cher_a1_red_bb = 0;
+
   let cnt = 0;
   for (; cnt < simulate_game_count; ++cnt) {
     role_bit = role.get_role(get_flag(65536));
+    in_medal += 3;
 
     // RT 中
     if (left_hg_game_count > 0) {
@@ -698,6 +835,10 @@ simulate_button.onclick = () => {
       if ((role_bit & ROLE.HG_BLANK) != 0) {
         ++hg_blank;
       }
+      if ((role_bit & (ROLE.REP | ROLE.HG_RT_REP | ROLE.RT_REP | ROLE.JAC_REP)) != 0) {
+        // 0in0out の補正
+        in_medal -= 3;
+      }
     } else if (left_hc_game_count > 0) {
       --left_hc_game_count;
       ++hc_game_count;
@@ -706,26 +847,43 @@ simulate_button.onclick = () => {
       if (((role_bit & ROLE.HC_JAC_REP) != 0) && left_hc_game_count <= 7) {
         left_hg_game_count = 20;
         left_hc_game_count = 0;
-      } else if ((role_bit & ROLE.HC_BLANK) != 0) {
+      }
+      if ((role_bit & ROLE.HC_BLANK) != 0) {
         ++hc_blank;
+      }
+      if ((role_bit & (ROLE.HC_RT_REP | ROLE.HC_JAC_REP | ROLE.RT_REP | ROLE.JAC_REP)) != 0) {
+        // 0in0out の補正
+        in_medal -= 3;
+      }
+    } else { // 通常時
+      if ((role_bit & (ROLE.REP | ROLE.RT_REP | ROLE.JAC_REP)) != 0) {
+        // 0in0out の補正
+        in_medal -= 3;
       }
     }
 
     // 小役計数
     if ((role_bit & ROLE.BELL_A) != 0) {
       ++bell_a;
+      out_medal += 8;
     } else if ((role_bit & ROLE.BELL_B) != 0) {
       ++bell_b;
+      out_medal += 8;
     } else if ((role_bit & ROLE.ICE_A) != 0) {
       ++ice_a;
+      out_medal += 8;
     } else if ((role_bit & ROLE.ICE_B) != 0) {
       ++ice_b;
+      out_medal += 8;
     } else if ((role_bit & ROLE.CHER_A1) != 0) {
       ++cher_a1;
+      out_medal += 4;
     } else if ((role_bit & ROLE.CHER_A2) != 0) {
       ++cher_a2;
+      out_medal += 4;
     } else if ((role_bit & ROLE.CHER_B) != 0) {
       ++cher_b;
+      out_medal += 4;
     }
 
     ++bonus_span_game_count;
@@ -743,7 +901,28 @@ simulate_button.onclick = () => {
 
     // ボーナス消化開始
     if ((role_bit & ROLE.D_BB) != 0) {
+      if (role_bit == ROLE.D_BB) {
+        ++alone_don_bb;
+      } else if ((role_bit & ROLE.RT_REP) != 0) {
+        ++rt_rep_don_bb;
+      } else if ((role_bit & ROLE.JAC_REP) != 0) {
+        ++jac_rep_don_bb;
+      } else if ((role_bit & ROLE.CHER_B) != 0) {
+        ++cher_b_don_bb;
+      } else if ((role_bit & ROLE.SP_A) != 0) {
+        ++sp_a_don_bb;
+      } else if ((role_bit & ROLE.SP_B) != 0) {
+        ++sp_b_don_bb;
+      } else if ((role_bit & ROLE.SP_D) != 0) {
+        ++sp_d_don_bb;
+      } else if ((role_bit & ROLE.SP_E) != 0) {
+        ++sp_e_don_bb;
+      } else if ((role_bit & ROLE.BELL_B) != 0) {
+        ++bell_b_don_bb;
+      }
       ++d_bb;
+      in_medal += 1 + 3 * 29;
+      out_medal += 10 * 29;
       bb_bell = digest_big_bonus(setting);
       hriz_bell += bb_bell.horizontal_bell;
       lean_bell += bb_bell.leaning_bell;
@@ -754,7 +933,26 @@ simulate_button.onclick = () => {
       bonus_span_game_count = 0;
       bb_span_game_count = 0;
     } else if ((role_bit & ROLE.R_BB) != 0) {
+      if (role_bit == ROLE.R_BB) {
+        ++alone_red_bb;
+      } else if ((role_bit & ROLE.RT_REP) != 0) {
+        ++rt_rep_red_bb;
+      } else if ((role_bit & ROLE.JAC_REP) != 0) {
+        ++jac_rep_red_bb;
+      } else if ((role_bit & ROLE.CHER_B) != 0) {
+        ++cher_b_red_bb;
+      } else if ((role_bit & ROLE.SP_A) != 0) {
+        ++sp_a_red_bb;
+      } else if ((role_bit & ROLE.SP_C) != 0) {
+        ++sp_c_red_bb;
+      } else if ((role_bit & ROLE.SP_E) != 0) {
+        ++sp_e_red_bb;
+      } else if ((role_bit & ROLE.CHER_A1) != 0) {
+        ++cher_a1_red_bb;
+      }
       ++r_bb;
+      in_medal += 1 + 3 * 29;
+      out_medal += 10 * 29;
       bb_bell = digest_big_bonus(setting);
       hriz_bell += bb_bell.horizontal_bell;
       lean_bell += bb_bell.leaning_bell;
@@ -765,8 +963,24 @@ simulate_button.onclick = () => {
       bonus_span_game_count = 0;
       bb_span_game_count = 0;
     } else if ((role_bit & ROLE.RB) != 0) {
+      if (role_bit == ROLE.RB) {
+        ++alone_rb;
+      } else if ((role_bit & ROLE.RT_REP) != 0) {
+        ++rt_rep_rb;
+      } else if ((role_bit & ROLE.CHER_B) != 0) {
+        ++cher_b_rb;
+      } else if ((role_bit & ROLE.SP_B) != 0) {
+        ++sp_b_rb;
+      } else if ((role_bit & ROLE.SP_D) != 0) {
+        ++sp_d_rb;
+      } else if ((role_bit & ROLE.SP_E) != 0) {
+        ++sp_e_rb;
+      }
       ++rb;
       rb_data = digest_reg_bonus(setting);
+      in_medal += 1 + rb_data.in_medal;
+      out_medal += rb_data.out_medal;
+
       rb_game_count += rb_data.game_count;
       rb_one_medal_role += rb_data.one_medal_role;
       rb_lean_ice += rb_data.leaning_ice;
@@ -860,6 +1074,65 @@ simulate_button.onclick = () => {
   longest_bonus_span.textContent = longest_bonus_span_game_count + "G";
   longest_bb_span.textContent = longest_bb_span_game_count + "G";
   longest_rb_span.textContent = longest_rb_span_game_count + "G";
+
+  alone_don_bb_count.textContent = alone_don_bb + "回";
+  alone_red_bb_count.textContent = alone_red_bb + "回";
+  alone_rb_count.textContent = alone_rb + "回";
+  alone_don_bb_per.textContent = "1/" + (cnt / alone_don_bb).toFixed(1);
+  alone_red_bb_per.textContent = "1/" + (cnt / alone_red_bb).toFixed(1);
+  alone_rb_per.textContent = "1/" + (cnt / alone_rb).toFixed(1);
+
+  rt_rep_don_bb_count.textContent = rt_rep_don_bb + "回";
+  rt_rep_red_bb_count.textContent = rt_rep_red_bb + "回";
+  rt_rep_rb_count.textContent = rt_rep_rb + "回";
+  rt_rep_don_bb_per.textContent = "1/" + (cnt / rt_rep_don_bb).toFixed(1);
+  rt_rep_red_bb_per.textContent = "1/" + (cnt / rt_rep_red_bb).toFixed(1);
+  rt_rep_rb_per.textContent = "1/" + (cnt / rt_rep_rb).toFixed(1);
+
+  jac_rep_don_bb_count.textContent = jac_rep_don_bb + "回";
+  jac_rep_red_bb_count.textContent = jac_rep_red_bb + "回";
+  jac_rep_don_bb_per.textContent = "1/" + (cnt / jac_rep_don_bb).toFixed(1);
+  jac_rep_red_bb_per.textContent = "1/" + (cnt / jac_rep_red_bb).toFixed(1);
+
+  cher_b_don_bb_count.textContent = cher_b_don_bb + "回";
+  cher_b_red_bb_count.textContent = cher_b_red_bb + "回";
+  cher_b_rb_count.textContent = cher_b_rb + "回";
+  cher_b_don_bb_per.textContent = "1/" + (cnt / cher_b_don_bb).toFixed(1);
+  cher_b_red_bb_per.textContent = "1/" + (cnt / cher_b_red_bb).toFixed(1);
+  cher_b_rb_per.textContent = "1/" + (cnt / cher_b_rb).toFixed(1);
+
+  sp_a_don_bb_count.textContent = sp_a_don_bb + "回";
+  sp_a_red_bb_count.textContent = sp_a_red_bb + "回";
+  sp_a_don_bb_per.textContent = "1/" + (cnt / sp_a_don_bb).toFixed(1);
+  sp_a_red_bb_per.textContent = "1/" + (cnt / sp_a_red_bb).toFixed(1);
+
+  sp_b_don_bb_count.textContent = sp_b_don_bb + "回";
+  sp_b_rb_count.textContent = sp_b_rb + "回";
+  sp_b_don_bb_per.textContent = "1/" + (cnt / sp_b_don_bb).toFixed(1);
+  sp_b_rb_per.textContent = "1/" + (cnt / sp_b_rb).toFixed(1);
+
+  sp_c_red_bb_count.textContent = sp_c_red_bb + "回";
+  sp_c_red_bb_per.textContent = "1/" + (cnt / sp_c_red_bb).toFixed(1);
+
+  sp_d_don_bb_count.textContent = sp_d_don_bb + "回";
+  sp_d_rb_count.textContent = sp_d_rb + "回";
+  sp_d_don_bb_per.textContent = "1/" + (cnt / sp_d_don_bb).toFixed(1);
+  sp_d_rb_per.textContent = "1/" + (cnt / sp_d_rb).toFixed(1);
+
+  sp_e_don_bb_count.textContent = sp_e_don_bb + "回";
+  sp_e_red_bb_count.textContent = sp_e_red_bb + "回";
+  sp_e_rb_count.textContent = sp_e_rb + "回";
+  sp_e_don_bb_per.textContent = "1/" + (cnt / sp_e_don_bb).toFixed(1);
+  sp_e_red_bb_per.textContent = "1/" + (cnt / sp_e_red_bb).toFixed(1);
+  sp_e_rb_per.textContent = "1/" + (cnt / sp_e_rb).toFixed(1);
+
+  bell_b_don_bb_count.textContent = bell_b_don_bb + "回";
+  bell_b_don_bb_per.textContent = "1/" + (cnt / bell_b_don_bb).toFixed(1);
+  cher_a1_red_bb_count.textContent = cher_a1_red_bb + "回";
+  cher_a1_red_bb_per.textContent = "1/" + (cnt / cher_a1_red_bb).toFixed(1);
+
+  total_medal.textContent = (out_medal - in_medal) + "枚";
+  payout.textContent = (out_medal / in_medal * 100).toFixed(2) + "%";
 
   simulate_button.disabled = false;
 }

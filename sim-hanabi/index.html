@@ -115,8 +115,18 @@
     <tr>
       <td class="value" id="rb-per"></td>
     </tr>
+
     <tr>
-      <td class="key">ボーナス間最大ハマり</td>
+      <td class="key" rowspan="3">差枚数</td>
+      <td class="value" id="payout"></td>
+    </tr>
+    <tr><td class="dummy-elem"></tr>
+    <tr>
+      <td class="value" id="total-medal"></td>
+    </tr>
+
+    <tr>
+      <td class="key">最大ハマり</td>
       <td class="value" id="longest-b-span"></td>
     </tr>
     <tr>
@@ -359,6 +369,198 @@
       <td class="value" id="rb-showed-peace-lv-high-per"></td>
     </tr>
   </tbody>
+</table>
+
+<table id="bonus-info">
+  <thead>
+    <tr>
+      <th colspan="2">ボーナス詳細</th>
+    </tr>
+  </thead>
+  <tr>
+    <td class="key" rowspan="3">単独ドンBB</td>
+    <td class="value" id="alone-don-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="alone-don-bb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">単独赤七BB</td>
+    <td class="value" id="alone-red-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="alone-red-bb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">単独RB</td>
+    <td class="value" id="alone-rb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="alone-rb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">RTリプ + ドンBB</td>
+    <td class="value" id="rt-rep-don-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="rt-rep-don-bb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">RTリプ + 赤七BB</td>
+    <td class="value" id="rt-rep-red-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="rt-rep-red-bb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">RTリプ + RB</td>
+    <td class="value" id="rt-rep-rb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="rt-rep-rb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">JACリプ + ドンBB</td>
+    <td class="value" id="jac-rep-don-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="jac-rep-don-bb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">JACリプ + 赤七BB</td>
+    <td class="value" id="jac-rep-red-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="jac-rep-red-bb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">チェリーB + ドンBB</td>
+    <td class="value" id="cher-b-don-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="cher-b-don-bb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">チェリーB + 赤七BB</td>
+    <td class="value" id="cher-b-red-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="cher-b-red-bb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">チェリーB + RB</td>
+    <td class="value" id="cher-b-rb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="cher-b-rb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">特殊役A + ドンBB</td>
+    <td class="value" id="sp-a-don-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="sp-a-don-bb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">特殊役A + 赤七BB</td>
+    <td class="value" id="sp-a-red-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="sp-a-red-bb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">特殊役B + ドンBB</td>
+    <td class="value" id="sp-b-don-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="sp-b-don-bb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">特殊役B + RB</td>
+    <td class="value" id="sp-b-rb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="sp-b-rb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">特殊役C + 赤七BB</td>
+    <td class="value" id="sp-c-red-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="sp-c-red-bb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">特殊役D + ドンBB</td>
+    <td class="value" id="sp-d-don-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="sp-d-don-bb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">特殊役D + RB</td>
+    <td class="value" id="sp-d-rb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="sp-d-rb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">特殊役E + ドンBB</td>
+    <td class="value" id="sp-e-don-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="sp-e-don-bb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">特殊役E + 赤七BB</td>
+    <td class="value" id="sp-e-red-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="sp-e-red-bb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">特殊役E + RB</td>
+    <td class="value" id="sp-e-rb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="sp-e-rb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">風鈴B + ドンBB</td>
+    <td class="value" id="bell-b-don-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="bell-b-don-bb-per"></td>
+  </tr>
+  <tr>
+    <td class="key" rowspan="3">チェリーA1 + 赤七BB</td>
+    <td class="value" id="cher-a1-red-bb-count"></td>
+  </tr>
+  <tr><td class="dummy-elem"></tr>
+  <tr>
+    <td class="value" id="cher-a1-red-bb-per"></td>
+  </tr>
 </table>
 
 </div>
