@@ -702,7 +702,7 @@ simulate_button.onclick = () => {
   err_msg_label.style.visibility = "hidden";
 
   let simulate_game_count = simulate_game_count_form.value;
-  if (simulate_game_count <= 0 || simulate_game_count > 500000000) {
+  if (simulate_game_count <= 0 || simulate_game_count > 500000) {
     err_msg_label.textContent = "無効なG数が指定されています (1 ~ 500000 の値を指定してください)";
     err_msg_label.style.visibility = "visible";
     simulate_button.disabled = false;
