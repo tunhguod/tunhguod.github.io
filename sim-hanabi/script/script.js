@@ -594,7 +594,8 @@ let longest_rb_span = document.getElementById('longest-rb-span');
 
 let total_medal = document.getElementById('total-medal');
 let payout = document.getElementById('payout');
-
+let slump_canvas = document.getElementById("slump-graph");
+let context = slump_canvas.getContext('2d');
 // ボーナス詳細
 let alone_don_bb_count = document.getElementById('alone-don-bb-count');
 let alone_don_bb_per = document.getElementById('alone-don-bb-per');
@@ -654,6 +655,18 @@ let bell_b_don_bb_per = document.getElementById('bell-b-don-bb-per');
 
 let cher_a1_red_bb_count = document.getElementById('cher-a1-red-bb-count');
 let cher_a1_red_bb_per = document.getElementById('cher-a1-red-bb-per');
+
+let graph = new Chart(context, {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: "差枚数",
+        data: [],
+        borderColor: 'rgb(255, 99, 132)',
+      }],
+    }
+});
 
 select_setting.addEventListener('change', function(){
   var index = this.selectedIndex;
@@ -745,6 +758,9 @@ simulate_button.onclick = () => {
 
   let in_medal = 0;
   let out_medal = 0;
+  let section_unit = Math.trunc(simulate_game_count / 100);
+  let section_total_medal = new Array();
+  let section_total_medal_labels = new Array();
 
   let d_bb = 0;
   let r_bb = 0;
@@ -998,7 +1014,14 @@ simulate_button.onclick = () => {
       rb_span_game_count = 0;
     }
 
+    if (cnt % section_unit == 0) {
+      section_total_medal.push(out_medal - in_medal);
+      section_total_medal_labels.push(cnt.toString());
+    }
   }
+
+  section_total_medal.push(out_medal - in_medal);
+  section_total_medal_labels.push(cnt.toString());
 
   let bb = d_bb + r_bb;
   let bb_bell_count = bb * 29;
@@ -1134,5 +1157,19 @@ simulate_button.onclick = () => {
   total_medal.textContent = (out_medal - in_medal) + "枚";
   payout.textContent = (out_medal / in_medal * 100).toFixed(2) + "%";
 
+  graph.destroy();
+  graph = new Chart(context, {
+    type: 'line',
+    data: {
+      labels: section_total_medal_labels,
+      datasets: [{
+        label: "差枚数",
+        data: section_total_medal,
+        borderColor: 'rgb(255, 99, 132)',
+      }],
+    }
+  })
+
   simulate_button.disabled = false;
 }
+
