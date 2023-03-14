@@ -574,12 +574,14 @@ let hg_blank_per = document.getElementById('hg-blank-per');
 let simulate_button = document.getElementById('simulate-button');
 let simulate_game_count_form = document.getElementById('game-count-form');
 let select_setting = document.getElementById('select-setting');
+let screen_shot_area = document.getElementById('screen-shot-area');
 
 let err_msg_label = document.getElementById('errmsg');
 
 let setting_visibility_button = document.getElementById('setting-visibility-button');
 let setting_text = document.getElementById('setting');
 let peace_visibility_button = document.getElementById('peace-visibility-button');
+let screen_shot_button = document.getElementById('screen-shot-button');
 
 let setting_ratio_pane = document.getElementById('setting-ratio-pane');
 
@@ -707,6 +709,18 @@ peace_visibility_button.onclick = () => {
     rb_showed_peace_lv_high_per.style.opacity = 1.0;
   }
   document.activeElement.blur()
+}
+
+screen_shot_button.onclick = () => {
+htmlToImage.toPng(screen_shot_area)
+  .then(function (dataUrl) {
+    download(dataUrl, 'sim-hanabi-ss.png');
+  })
+  .catch(function (error) {
+    err_msg_label.textContent = "スクショに失敗しました。";
+    err_msg_label.style.visibility = "visible";
+    simulate_button.disabled = false;
+  });
 }
 
 simulate_button.onclick = () => {
@@ -1172,4 +1186,3 @@ simulate_button.onclick = () => {
 
   simulate_button.disabled = false;
 }
-
