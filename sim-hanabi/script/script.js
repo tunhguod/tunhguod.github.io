@@ -330,6 +330,16 @@ function convert_setting_enum_to_string(setting) {
   }
 }
 
+function to_fixed(value, digits) {
+
+  let fixed_value = value.toFixed(digits);
+
+  if (!isFinite(fixed_value) || fixed_value != fixed_value) {
+    return "-";
+  }
+
+  return fixed_value.toString();
+}
 
 function get_flag(num) {
   return Math.floor(Math.random() * num);
@@ -712,7 +722,8 @@ peace_visibility_button.onclick = () => {
 }
 
 screen_shot_button.onclick = () => {
-htmlToImage.toPng(screen_shot_area)
+  screen_shot_button.disabled = true;
+  htmlToImage.toPng(screen_shot_area)
   .then(function (dataUrl) {
     download(dataUrl, 'sim-hanabi-ss.png');
   })
@@ -721,6 +732,7 @@ htmlToImage.toPng(screen_shot_area)
     err_msg_label.style.visibility = "visible";
     simulate_button.disabled = false;
   });
+  screen_shot_button.disabled = false;
 }
 
 simulate_button.onclick = () => {
@@ -1042,29 +1054,29 @@ simulate_button.onclick = () => {
 
   game_count.textContent = cnt + "G";
   all_bonus_count.textContent = bb + rb + "回";
-  all_bonus_per.textContent = "1/" + (cnt / (bb + rb)).toFixed(1);
+  all_bonus_per.textContent = "1/" + to_fixed(cnt / (bb + rb), 1);
   all_bb_count.textContent = bb + "回";
-  all_bb_per.textContent = "1/" + (cnt / bb).toFixed(1);
+  all_bb_per.textContent = "1/" + to_fixed(cnt / bb, 1);
   don_bb_count.textContent = d_bb + "回";
-  don_bb_per.textContent = "1/" + (cnt / d_bb).toFixed(1);
+  don_bb_per.textContent = "1/" + to_fixed(cnt / d_bb, 1);
   red_bb_count.textContent = r_bb + "回";
-  red_bb_per.textContent = "1/" + (cnt / r_bb).toFixed(1);
+  red_bb_per.textContent = "1/" + to_fixed(cnt / r_bb, 1);
   rb_count.textContent = rb + "回";
-  rb_per.textContent = "1/" + (cnt / rb).toFixed(1);
+  rb_per.textContent = "1/" + to_fixed(cnt / rb, 1);
 
   bb_hriz_bell_count.textContent = hriz_bell + "回";
-  bb_hriz_bell_per.textContent = "1/" + (bb_bell_count / hriz_bell).toFixed(1);
+  bb_hriz_bell_per.textContent = "1/" + to_fixed(bb_bell_count / hriz_bell, 1);
   bb_lean_bell_count.textContent = lean_bell + "回";
-  bb_lean_bell_per.textContent = "1/" + (bb_bell_count / lean_bell).toFixed(1);
+  bb_lean_bell_per.textContent = "1/" + to_fixed(bb_bell_count / lean_bell, 1);
   bb_rare_bell_count.textContent = rare_bell + "回";
-  bb_rare_bell_per.textContent = "1/" + (bb_bell_count / rare_bell).toFixed(1);
+  bb_rare_bell_per.textContent = "1/" + to_fixed(bb_bell_count / rare_bell, 1);
 
   rb_omr_count.textContent = rb_one_medal_role + "回";
-  rb_omr_per.textContent = "1/" + (rb_game_count / rb_one_medal_role).toFixed(1);
+  rb_omr_per.textContent = "1/" + to_fixed(rb_game_count / rb_one_medal_role, 1);
   rb_lean_ice_count.textContent = rb_lean_ice + "回";
-  rb_lean_ice_per.textContent = "1/" + (rb_game_count / rb_lean_ice).toFixed(1);
+  rb_lean_ice_per.textContent = "1/" + to_fixed(rb_game_count / rb_lean_ice, 1);
   rb_blank_count.textContent = rb_blank + "回";
-  rb_blank_per.textContent = "1/" + (rb_game_count / rb_blank).toFixed(1);
+  rb_blank_per.textContent = "1/" + to_fixed(rb_game_count / rb_blank, 1);
 
   rb_pank_lv_low_count.textContent = rb_pank_lv_low + "回";
   rb_pank_lv_mid_count.textContent = rb_pank_lv_mid + "回";
@@ -1073,40 +1085,40 @@ simulate_button.onclick = () => {
   rb_showed_peace_lv_mid_count.textContent = rb_showed_peace_lv_mid + "回";
   rb_showed_peace_lv_high_count.textContent = rb_showed_peace_lv_high + "回";
 
-  rb_pank_lv_low_per.textContent = "1/" + (rb / rb_pank_lv_low).toFixed(2);
-  rb_pank_lv_mid_per.textContent = "1/" + (rb / rb_pank_lv_mid).toFixed(1);
-  rb_pank_lv_high_per.textContent = "1/" + (rb / rb_pank_lv_high).toFixed(1);
-  rb_showed_peace_lv_low_per.textContent = "1/" + (rb_pank_lv_low / rb_showed_peace_lv_low).toFixed(1);
-  rb_showed_peace_lv_mid_per.textContent = "1/" + (rb_pank_lv_mid / rb_showed_peace_lv_mid).toFixed(1);
-  rb_showed_peace_lv_high_per.textContent = "1/" + (rb_pank_lv_high / rb_showed_peace_lv_high).toFixed(1);
+  rb_pank_lv_low_per.textContent = "1/" + to_fixed(rb / rb_pank_lv_low, 2);
+  rb_pank_lv_mid_per.textContent = "1/" + to_fixed(rb / rb_pank_lv_mid, 1);
+  rb_pank_lv_high_per.textContent = "1/" + to_fixed(rb / rb_pank_lv_high, 1);
+  rb_showed_peace_lv_low_per.textContent = "1/" + to_fixed(rb_pank_lv_low / rb_showed_peace_lv_low, 1);
+  rb_showed_peace_lv_mid_per.textContent = "1/" + to_fixed(rb_pank_lv_mid / rb_showed_peace_lv_mid, 1);
+  rb_showed_peace_lv_high_per.textContent = "1/" + to_fixed(rb_pank_lv_high / rb_showed_peace_lv_high, 1);
 
   all_bell_count.textContent = bell_a + bell_b + "回";
-  all_bell_per.textContent = "1/" + (cnt / (bell_a + bell_b)).toFixed(1);
+  all_bell_per.textContent = "1/" + to_fixed(cnt / (bell_a + bell_b), 1);
   bell_a_count.textContent = bell_a + "回";
-  bell_a_per.textContent = "1/" + (cnt / bell_a).toFixed(1);
+  bell_a_per.textContent = "1/" + to_fixed(cnt / bell_a, 1);
   bell_b_count.textContent = bell_b + "回";
-  bell_b_per.textContent = "1/" + (cnt / bell_b).toFixed(1);
+  bell_b_per.textContent = "1/" + to_fixed(cnt / bell_b, 1);
 
   all_ice_count.textContent = ice_a + ice_b + "回";
-  all_ice_per.textContent = "1/" + (cnt / (ice_a + ice_b)).toFixed(1);
+  all_ice_per.textContent = "1/" + to_fixed(cnt / (ice_a + ice_b), 1);
   ice_a_count.textContent = ice_a + "回";
-  ice_a_per.textContent = "1/" + (cnt / ice_a).toFixed(1);
+  ice_a_per.textContent = "1/" + to_fixed(cnt / ice_a, 1);
   ice_b_count.textContent = ice_b + "回";
-  ice_b_per.textContent = "1/" + (cnt / ice_b).toFixed(1);
+  ice_b_per.textContent = "1/" + to_fixed(cnt / ice_b, 1);
 
   all_cher_count.textContent = cher_a1 + cher_a2 + cher_b + "回";
-  all_cher_per.textContent = "1/" + (cnt / (cher_a1 + cher_a2 + cher_b)).toFixed(1);
+  all_cher_per.textContent = "1/" + to_fixed(cnt / (cher_a1 + cher_a2 + cher_b), 1);
   cher_a1_count.textContent = cher_a1 + "回";
-  cher_a1_per.textContent = "1/" + (cnt / cher_a1).toFixed(1);
+  cher_a1_per.textContent = "1/" + to_fixed(cnt / cher_a1, 1);
   cher_a2_count.textContent = cher_a2 + "回";
-  cher_a2_per.textContent = "1/" + (cnt / cher_a2).toFixed(1);
+  cher_a2_per.textContent = "1/" + to_fixed(cnt / cher_a2, 1);
   cher_b_count.textContent = cher_b + "回";
-  cher_b_per.textContent = "1/" + (cnt / cher_b).toFixed(1);
+  cher_b_per.textContent = "1/" + to_fixed(cnt / cher_b, 1);
 
   hc_blank_count.textContent = hc_blank + "回";
-  hc_blank_per.textContent = "1/" + (hc_game_count / hc_blank).toFixed(1);
+  hc_blank_per.textContent = "1/" + to_fixed(hc_game_count / hc_blank, 1);
   hg_blank_count.textContent = hg_blank + "回";
-  hg_blank_per.textContent = "1/" + (hg_game_count / hg_blank).toFixed(1);
+  hg_blank_per.textContent = "1/" + to_fixed(hg_game_count / hg_blank, 1);
 
   longest_bonus_span.textContent = longest_bonus_span_game_count + "G";
   longest_bb_span.textContent = longest_bb_span_game_count + "G";
@@ -1115,61 +1127,61 @@ simulate_button.onclick = () => {
   alone_don_bb_count.textContent = alone_don_bb + "回";
   alone_red_bb_count.textContent = alone_red_bb + "回";
   alone_rb_count.textContent = alone_rb + "回";
-  alone_don_bb_per.textContent = "1/" + (cnt / alone_don_bb).toFixed(1);
-  alone_red_bb_per.textContent = "1/" + (cnt / alone_red_bb).toFixed(1);
-  alone_rb_per.textContent = "1/" + (cnt / alone_rb).toFixed(1);
+  alone_don_bb_per.textContent = "1/" + to_fixed(cnt / alone_don_bb, 1);
+  alone_red_bb_per.textContent = "1/" + to_fixed(cnt / alone_red_bb, 1);
+  alone_rb_per.textContent = "1/" + to_fixed(cnt / alone_rb, 1);
 
   rt_rep_don_bb_count.textContent = rt_rep_don_bb + "回";
   rt_rep_red_bb_count.textContent = rt_rep_red_bb + "回";
   rt_rep_rb_count.textContent = rt_rep_rb + "回";
-  rt_rep_don_bb_per.textContent = "1/" + (cnt / rt_rep_don_bb).toFixed(1);
-  rt_rep_red_bb_per.textContent = "1/" + (cnt / rt_rep_red_bb).toFixed(1);
-  rt_rep_rb_per.textContent = "1/" + (cnt / rt_rep_rb).toFixed(1);
+  rt_rep_don_bb_per.textContent = "1/" + to_fixed(cnt / rt_rep_don_bb, 1);
+  rt_rep_red_bb_per.textContent = "1/" + to_fixed(cnt / rt_rep_red_bb, 1);
+  rt_rep_rb_per.textContent = "1/" + to_fixed(cnt / rt_rep_rb, 1);
 
   jac_rep_don_bb_count.textContent = jac_rep_don_bb + "回";
   jac_rep_red_bb_count.textContent = jac_rep_red_bb + "回";
-  jac_rep_don_bb_per.textContent = "1/" + (cnt / jac_rep_don_bb).toFixed(1);
-  jac_rep_red_bb_per.textContent = "1/" + (cnt / jac_rep_red_bb).toFixed(1);
+  jac_rep_don_bb_per.textContent = "1/" + to_fixed(cnt / jac_rep_don_bb, 1);
+  jac_rep_red_bb_per.textContent = "1/" + to_fixed(cnt / jac_rep_red_bb, 1);
 
   cher_b_don_bb_count.textContent = cher_b_don_bb + "回";
   cher_b_red_bb_count.textContent = cher_b_red_bb + "回";
   cher_b_rb_count.textContent = cher_b_rb + "回";
-  cher_b_don_bb_per.textContent = "1/" + (cnt / cher_b_don_bb).toFixed(1);
-  cher_b_red_bb_per.textContent = "1/" + (cnt / cher_b_red_bb).toFixed(1);
-  cher_b_rb_per.textContent = "1/" + (cnt / cher_b_rb).toFixed(1);
+  cher_b_don_bb_per.textContent = "1/" + to_fixed(cnt / cher_b_don_bb, 1);
+  cher_b_red_bb_per.textContent = "1/" + to_fixed(cnt / cher_b_red_bb, 1);
+  cher_b_rb_per.textContent = "1/" + to_fixed(cnt / cher_b_rb, 1);
 
   sp_a_don_bb_count.textContent = sp_a_don_bb + "回";
   sp_a_red_bb_count.textContent = sp_a_red_bb + "回";
-  sp_a_don_bb_per.textContent = "1/" + (cnt / sp_a_don_bb).toFixed(1);
-  sp_a_red_bb_per.textContent = "1/" + (cnt / sp_a_red_bb).toFixed(1);
+  sp_a_don_bb_per.textContent = "1/" + to_fixed(cnt / sp_a_don_bb, 1);
+  sp_a_red_bb_per.textContent = "1/" + to_fixed(cnt / sp_a_red_bb, 1);
 
   sp_b_don_bb_count.textContent = sp_b_don_bb + "回";
   sp_b_rb_count.textContent = sp_b_rb + "回";
-  sp_b_don_bb_per.textContent = "1/" + (cnt / sp_b_don_bb).toFixed(1);
-  sp_b_rb_per.textContent = "1/" + (cnt / sp_b_rb).toFixed(1);
+  sp_b_don_bb_per.textContent = "1/" + to_fixed(cnt / sp_b_don_bb, 1);
+  sp_b_rb_per.textContent = "1/" + to_fixed(cnt / sp_b_rb, 1);
 
   sp_c_red_bb_count.textContent = sp_c_red_bb + "回";
-  sp_c_red_bb_per.textContent = "1/" + (cnt / sp_c_red_bb).toFixed(1);
+  sp_c_red_bb_per.textContent = "1/" + to_fixed(cnt / sp_c_red_bb, 1);
 
   sp_d_don_bb_count.textContent = sp_d_don_bb + "回";
   sp_d_rb_count.textContent = sp_d_rb + "回";
-  sp_d_don_bb_per.textContent = "1/" + (cnt / sp_d_don_bb).toFixed(1);
-  sp_d_rb_per.textContent = "1/" + (cnt / sp_d_rb).toFixed(1);
+  sp_d_don_bb_per.textContent = "1/" + to_fixed(cnt / sp_d_don_bb, 1);
+  sp_d_rb_per.textContent = "1/" + to_fixed(cnt / sp_d_rb, 1);
 
   sp_e_don_bb_count.textContent = sp_e_don_bb + "回";
   sp_e_red_bb_count.textContent = sp_e_red_bb + "回";
   sp_e_rb_count.textContent = sp_e_rb + "回";
-  sp_e_don_bb_per.textContent = "1/" + (cnt / sp_e_don_bb).toFixed(1);
-  sp_e_red_bb_per.textContent = "1/" + (cnt / sp_e_red_bb).toFixed(1);
-  sp_e_rb_per.textContent = "1/" + (cnt / sp_e_rb).toFixed(1);
+  sp_e_don_bb_per.textContent = "1/" + to_fixed(cnt / sp_e_don_bb, 1);
+  sp_e_red_bb_per.textContent = "1/" + to_fixed(cnt / sp_e_red_bb, 1);
+  sp_e_rb_per.textContent = "1/" + to_fixed(cnt / sp_e_rb, 1);
 
   bell_b_don_bb_count.textContent = bell_b_don_bb + "回";
-  bell_b_don_bb_per.textContent = "1/" + (cnt / bell_b_don_bb).toFixed(1);
+  bell_b_don_bb_per.textContent = "1/" + to_fixed(cnt / bell_b_don_bb, 1);
   cher_a1_red_bb_count.textContent = cher_a1_red_bb + "回";
-  cher_a1_red_bb_per.textContent = "1/" + (cnt / cher_a1_red_bb).toFixed(1);
+  cher_a1_red_bb_per.textContent = "1/" + to_fixed(cnt / cher_a1_red_bb, 1);
 
   total_medal.textContent = (out_medal - in_medal) + "枚";
-  payout.textContent = (out_medal / in_medal * 100).toFixed(2) + "%";
+  payout.textContent = to_fixed(out_medal / in_medal * 100, 2) + "%";
 
   graph.destroy();
   graph = new Chart(context, {
