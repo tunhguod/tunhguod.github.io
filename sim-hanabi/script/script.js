@@ -726,13 +726,13 @@ screen_shot_button.onclick = () => {
   htmlToImage.toPng(screen_shot_area)
   .then(function (dataUrl) {
     download(dataUrl, 'sim-hanabi-ss.png');
+    screen_shot_button.disabled = false;
   })
   .catch(function (error) {
     err_msg_label.textContent = "スクショに失敗しました。";
     err_msg_label.style.visibility = "visible";
     simulate_button.disabled = false;
   });
-  screen_shot_button.disabled = false;
 }
 
 simulate_button.onclick = () => {
