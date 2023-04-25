@@ -424,6 +424,28 @@ function digest_big_bonus(setting) {
   return data;
 }
 
+function simulate_reg_push() {
+  let medal, flag;
+  switch (rb_push_order) {
+    case "left":
+      medal = 10;
+      break;
+    case "center":
+      // TODO
+      medal = 15;
+      break;
+    case "right":
+      flag = get_flag(65536)
+      if (flag < 16384) {
+        medal = 4;
+      } else {
+        medal = 15;
+      }
+      break;
+  }
+  return medal;
+}
+
 function digest_reg_bonus(setting) {
   let data = {};
 
@@ -448,7 +470,7 @@ function digest_reg_bonus(setting) {
           out_medal += 15;
         } else {
           ++horizontal_ice;
-          out_medal += 15;
+          out_medal += simulate_reg_push();
         }
         break;
       case SETTING.HIGH_5:
@@ -462,7 +484,7 @@ function digest_reg_bonus(setting) {
           ++blank;
         } else {
           ++horizontal_ice;
-          out_medal += 15;
+          out_medal += simulate_reg_push();
         }
         break;
     }
@@ -488,6 +510,8 @@ function digest_reg_bonus(setting) {
   data["showed_peace_lv_high"] = 0;
   data["in_medal"] = in_medal;
   data["out_medal"] = out_medal;
+
+  // print(out_medal - in_medal);
 
   if (not_ice <= 4) {
     ++data['pank_lv_low'];
@@ -667,6 +691,23 @@ let bell_b_don_bb_per = document.getElementById('bell-b-don-bb-per');
 
 let cher_a1_red_bb_count = document.getElementById('cher-a1-red-bb-count');
 let cher_a1_red_bb_per = document.getElementById('cher-a1-red-bb-per');
+
+let rb_push_order = document.querySelector('[name="rb-1st-order"]:checked').value;
+// let rb_center_1st_success_per_form = document.getElementById('rb-center-1st-success-per');
+let rb_push_order_group = document.getElementsByName('rb-1st-order');
+
+rb_push_order_group.forEach(function(e) {
+  e.addEventListener("click", function() {
+    rb_push_order = document.querySelector('[name="rb-1st-order"]:checked').value;
+    /* TODO
+    if (rb_push_order == "center") {
+      rb_center_1st_success_per_form.style.display = "block";
+    } else {
+      rb_center_1st_success_per_form.style.display = "none";
+    }
+    */
+  });
+});
 
 let graph = new Chart(context, {
     type: 'line',
