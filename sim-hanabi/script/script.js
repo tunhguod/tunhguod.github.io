@@ -511,7 +511,7 @@ function digest_reg_bonus(setting) {
   data["in_medal"] = in_medal;
   data["out_medal"] = out_medal;
 
-  print(out_medal - in_medal);
+  // print(out_medal - in_medal);
 
   if (not_ice <= 4) {
     ++data['pank_lv_low'];
