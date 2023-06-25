@@ -9,3 +9,14 @@
 
 * URL
   * https://tunhguod.github.io/sim-hanabi/
+ 
+## hanapay/
+
+ユニメモ風新ハナビシミュレーター
+
+* Doc Root
+  * [hanapay/](./hanapay/)
+
+* URL
+  * https://tunhguod.github.io/hanapay/
+
