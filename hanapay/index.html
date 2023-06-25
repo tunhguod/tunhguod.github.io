@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>hanapay</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/script.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">hanapay</h1>
+
+    <div id="result">推定差枚: </div>
+
+    <form id="calculation-form">
+      <div class="form-group">
+        <label for="g-input">G数</label>
+        <input type="number" id="g-input">
+      </div>
+      <div class="form-group">
+        <label for="bb-input">BB回数</label>
+        <input type="number" id="bb-input">
+      </div>
+      <div class="form-group">
+        <label for="rb-input">RB回数</label>
+        <input type="number" id="rb-input">
+      </div>
+      <div class="form-group">
+        <label for="fuurin-input">風鈴回数</label>
+        <input type="number" id="fuurin-input">
+      </div>
+      <div class="form-group">
+        <label for="kori-input">氷回数</label>
+        <input type="number" id="kori-input">
+      </div>
+      <div class="form-group">
+        <label for="cherry-input">チェリー回数</label>
+        <input type="number" id="cherry-input">
+      </div>
+      <div class="form-group">
+        <label for="hc-miss-input">HC中ハズレ回数</label>
+        <input type="number" id="hc-miss-input">
+      </div>
+      <div class="form-group">
+        <label for="hc-miss-prob-input">HC中ハズレ確率</label>
+        <div class="fraction-input">
+          <span>1/</span>
+          <input type="number" id="hc-miss-prob-input" class="denominator-input">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="hg-miss-input">HG中ハズレ回数</label>
+        <input type="number" id="hg-miss-input">
+      </div>
+      <div class="form-group">
+        <label for="hg-miss-prob-input">HG中ハズレ確率</label>
+        <div class="fraction-input">
+          <span>1/</span>
+          <input type="number" id="hg-miss-prob-input">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="rb-miss-input">RB中1枚役回数</label>
+        <input type="number" id="rb-miss-input">
+      </div>
+      <div class="form-group">
+        <label for="rb-failure-input">RB中失敗回数</label>
+        <input type="number" id="rb-failure-input">
+      </div>
+
+      <button class="btn" onclick="startCalculation(event)">計算開始</button>
+    </form>
+
+    <div id="result"></div>
+  </div>
+</body>
+</html>
