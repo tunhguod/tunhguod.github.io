@@ -19,8 +19,8 @@ function startCalculation(event) {
   var normalGameCount = gValue - hcGameCount - hgGameCount;
   
   var inMedalValue = gValue * 3;
-  var outMedalValue = (bbValue * 202)
-                        + (rbValue * 112) - (rbMissValue * 1) - (rbFailureValue * 10)
+  var outMedalValue = (bbValue * (202 - 1))
+                        + (rbValue * (112 - 1)) - (rbMissValue * 1) - (rbFailureValue * 10)
                         + (fuurinValue * 8)
                         + (koriValue * 8)
                         + (cherryValue * 4)
