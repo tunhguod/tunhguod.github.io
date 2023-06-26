@@ -12,11 +12,11 @@
  
 ## hanapay/
 
-ユニメモ風新ハナビシミュレーター
+新ハナビ差枚計算機
 
 * Doc Root
   * [hanapay/](https://github.com/tunhguod/tunhguod.github.io/blob/main/hanapay)
 
 * URL
-  * [https://tunhguod.github.io/sim-hanabi/](https://tunhguod.github.io/hanapay/)
+  * [https://tunhguod.github.io/hanapay/](https://tunhguod.github.io/hanapay/)
 
