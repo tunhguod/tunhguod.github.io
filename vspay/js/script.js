@@ -23,7 +23,7 @@ function startCalculation(event) {
                         + (rbValue * 111) - (rbMissValue * 1) - (rbFailureValue * 11)
                         + (bellValue * 8)
                         + (suikaValue * 12)
-                        + (cherryValue * 2)
+                        + (cherryValue * 4)
                         + ((normalGameCount / 7.298) * 3)
                         + ((vcGameCount / 3.025) * 3)
                         + ((vcGameCount / 3.5) * 3)
