@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>vspay</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/script.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">vspay</h1>
+
+    <div id="result-medals">推定差枚数: </div>
+    <div id="result-payout">推定機械割: </div>
+
+    <form id="calculation-form">
+      <div class="form-group">
+        <label for="g-input">G数</label>
+        <input type="number" id="g-input">
+      </div>
+      <div class="form-group">
+        <label for="bb-input">BB回数</label>
+        <input type="number" id="bb-input">
+      </div>
+      <div class="form-group">
+        <label for="rb-input">RB回数</label>
+        <input type="number" id="rb-input">
+      </div>
+      <div class="form-group">
+        <label for="bell-input">ベル回数</label>
+        <input type="number" id="bell-input">
+      </div>
+      <div class="form-group">
+        <label for="suika-input">スイカ回数</label>
+        <input type="number" id="suika-input">
+      </div>
+      <div class="form-group">
+        <label for="cherry-input">チェリー回数</label>
+        <input type="number" id="cherry-input">
+      </div>
+      <div class="form-group">
+        <label for="vc-miss-input">VC中ハズレ回数</label>
+        <input type="number" id="vc-miss-input">
+      </div>
+      <div class="form-group">
+        <label for="vc-miss-prob-input">VC中ハズレ確率</label>
+        <div class="fraction-input">
+          <span>1/</span>
+          <input type="number" id="vc-miss-prob-input" class="denominator-input">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="vg-miss-input">VG中ハズレ回数</label>
+        <input type="number" id="vg-miss-input">
+      </div>
+      <div class="form-group">
+        <label for="vg-miss-prob-input">VG中ハズレ確率</label>
+        <div class="fraction-input">
+          <span>1/</span>
+          <input type="number" id="vg-miss-prob-input">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="rb-miss-input">RB中1枚役回数</label>
+        <input type="number" id="rb-miss-input">
+      </div>
+      <div class="form-group">
+        <label for="rb-failure-input">RB中失敗回数</label>
+        <input type="number" id="rb-failure-input">
+      </div>
+
+      <button class="btn" onclick="startCalculation(event)">計算開始</button>
+    </form>
+
+    <div id="result"></div>
+  </div>
+</body>
+</html>
