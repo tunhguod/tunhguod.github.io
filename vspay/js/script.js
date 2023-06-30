@@ -32,6 +32,7 @@ function startCalculation(event) {
 
   // calc payout.
   var _inMedalValue = inMedalValue
+                        - ((normalGameCount / 7.298) * 3)
                         - ((vcGameCount / 3.025) * 3)
                         - ((vcGameCount / 3.5) * 3)
                         - ((vgGameCount / 1.725) * 3)
@@ -42,6 +43,7 @@ function startCalculation(event) {
                         + rbValue
 
   var _outMedalValue = outMedalValue
+                        - ((normalGameCount / 7.298) * 3)
                         - ((vcGameCount / 3.025) * 3)
                         - ((vcGameCount / 3.5) * 3)
                         - ((vgGameCount / 1.725) * 3)

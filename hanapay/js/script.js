@@ -1,18 +1,18 @@
 function startCalculation(event) {
   event.preventDefault();
 
-  var gValue = document.getElementById('g-input').value;
-  var bbValue = document.getElementById('bb-input').value;
-  var rbValue = document.getElementById('rb-input').value;
-  var fuurinValue = document.getElementById('fuurin-input').value;
-  var koriValue = document.getElementById('kori-input').value;
-  var cherryValue = document.getElementById('cherry-input').value;
-  var hcMissValue = document.getElementById('hc-miss-input').value;
-  var hcMissProbValue = document.getElementById('hc-miss-prob-input').value;
-  var hgMissValue = document.getElementById('hg-miss-input').value;
-  var hgMissProbValue = document.getElementById('hg-miss-prob-input').value;
-  var rbMissValue = document.getElementById('rb-miss-input').value;
-  var rbFailureValue = document.getElementById('rb-failure-input').value;
+  var gValue = Number(document.getElementById('g-input').value);
+  var bbValue = Number(document.getElementById('bb-input').value);
+  var rbValue = Number(document.getElementById('rb-input').value);
+  var fuurinValue = Number(document.getElementById('fuurin-input').value);
+  var koriValue = Number(document.getElementById('kori-input').value);
+  var cherryValue = Number(document.getElementById('cherry-input').value);
+  var hcMissValue = Number(document.getElementById('hc-miss-input').value);
+  var hcMissProbValue = Number(document.getElementById('hc-miss-prob-input').value);
+  var hgMissValue = Number(document.getElementById('hg-miss-input').value);
+  var hgMissProbValue = Number(document.getElementById('hg-miss-prob-input').value);
+  var rbMissValue = Number(document.getElementById('rb-miss-input').value);
+  var rbFailureValue = Number(document.getElementById('rb-failure-input').value);
   
   var hcGameCount = (hcMissValue * hcMissProbValue);
   var hgGameCount = (hgMissValue * hgMissProbValue);
@@ -30,10 +30,37 @@ function startCalculation(event) {
                         + ((hgGameCount / 1.75) * 3)
                         + ((hgGameCount / 7.298) * 3)
 
-  var medalValue = outMedalValue - inMedalValue; 
+  // calc payout.
+  var _inMedalValue = inMedalValue
+                        - ((normalGameCount / 7.298) * 3)
+                        - ((hcGameCount / 3.0) * 3)
+                        - ((hcGameCount / 3.5) * 3)
+                        - ((hgGameCount / 1.75) * 3)
+                        - ((hgGameCount / 7.298) * 3)
+                        + (bbValue * 29 * 3)
+                        + bbValue
+                        + (rbValue * 8) + rbMissValue
+                        + rbValue
 
-  var resultMessage = '推定差枚: ' + Math.round(medalValue) + '枚';
+  var _outMedalValue = outMedalValue
+                        - ((normalGameCount / 7.298) * 3)
+                        - ((hcGameCount / 3.0) * 3)
+                        - ((hcGameCount / 3.5) * 3)
+                        - ((hgGameCount / 1.75) * 3)
+                        - ((hgGameCount / 7.298) * 3)
+                        - (bbValue * 201) + (bbValue * 28 * 10) + (bbValue * 9)
+                        - (rbValue * 111) + (rbMissValue * 1) + (rbFailureValue * 10) + (rbValue * 15 * 8) - (rbFailureValue * 10)
+
+  var medalValue = outMedalValue - inMedalValue;
+  var payoutValue = _outMedalValue / _inMedalValue * 100;
+
+  console.log(_outMedalValue - _inMedalValue);
+
+  var resultMedalMessage = '推定差枚: ' + Math.round(medalValue) + '枚';
+  var resultPayoutMessage = '推定機械割: ' + payoutValue.toFixed(2) + '%';
   
-  var resultElement = document.getElementById('result');
-  resultElement.textContent = resultMessage;
+  var resultMedalsElement = document.getElementById('result-medals');
+  var resultPayoutElement = document.getElementById('result-payout');
+  resultMedalsElement.textContent = resultMedalMessage;
+  resultPayoutElement.textContent = resultPayoutMessage;
 }
