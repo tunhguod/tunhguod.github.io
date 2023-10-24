@@ -1,1 +1,1 @@
-# test
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">そろそろハロウィンなので、ホシゾラマップ/マジハロ4 を弾いてみました🎃<br>世間じゃクソ台扱いだけど、ハマれば出るので僕は4好きです😭 <a href="https://t.co/fLUUgwu7Rc">pic.twitter.com/fLUUgwu7Rc</a></p>&mdash; どなつ (@doughnut_777) <a href="https://twitter.com/doughnut_777/status/1716813132969238863?ref_src=twsrc%5Etfw">October 24, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
