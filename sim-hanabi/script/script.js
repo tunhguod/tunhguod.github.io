@@ -1014,7 +1014,7 @@ screen_shot_button.onclick = () => {
     });
 }
 
-const worker = new Worker('simulate.js');
+const worker = new Worker('./script/simulate.js');
 worker.onmessage = (data) => {
   data.section_total_medal.push(data.out_medal - data.in_medal);
   data.section_total_medal_labels.push(data.cnt.toString());
