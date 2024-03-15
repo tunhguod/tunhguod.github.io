@@ -185,5 +185,5 @@ self.addEventListener("message", data => {
         }
     }
 
-    self.postMessage({ event: "complete", data });
+    self.postMessage(data);
 })
