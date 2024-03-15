@@ -1,13 +1,8 @@
-const GAME_COUNT_THRESHOLD = 100000000
-const IS_REPLAY_ZERO_MEDAL_AS_CALC = false
-const SIMULATE_EVENT = new Event('simulateEvent');
-
 class DisplayInfo {
   #in_medal = 0;
   #out_medal = 0;
-  #section_unit = null;
-  #section_total_medal = new Array();
-  #section_total_medal_labels = new Array();
+  #section_total_medal = new Array()
+  #section_total_medal_labels = new Array()
 
   #d_bb = 0;
   #r_bb = 0;
@@ -42,8 +37,6 @@ class DisplayInfo {
   #hg_blank = 0;
   #hc_game_count = 0;
   #hg_game_count = 0;
-
-  #role = null
 
   #longest_bonus_span_game_count = 0;
   #longest_bb_span_game_count = 0;
@@ -90,9 +83,10 @@ class DisplayInfo {
   #simulate_game_count = 0;
   #setting = SETTING.NOT_DEFINED
 
+  #rb_push_order = "center"
+
   get in_medal() { return this.#in_medal; }
   get out_medal() { return this.#out_medal; }
-  get section_unit() { return this.#section_unit; }
   get section_total_medal() { return this.#section_total_medal; }
   get section_total_medal_labels() { return this.#section_total_medal_labels; }
   get d_bb() { return this.#d_bb; }
@@ -125,7 +119,6 @@ class DisplayInfo {
   get hg_blank() { return this.#hg_blank; }
   get hc_game_count() { return this.#hc_game_count; }
   get hg_game_count() { return this.#hg_game_count; }
-  get role() { return this.#role; }
   get longest_bonus_span_game_count() { return this.#longest_bonus_span_game_count; }
   get longest_bb_span_game_count() { return this.#longest_bb_span_game_count; }
   get longest_rb_span_game_count() { return this.#longest_rb_span_game_count; }
@@ -158,10 +151,10 @@ class DisplayInfo {
   get cnt() { return this.#cnt; }
   get simulate_game_count() { return this.#simulate_game_count; }
   get setting() { return this.#setting; }
+  get rb_push_order() { return this.#rb_push_order; }
 
   set in_medal(value) { return this.#in_medal = value; }
   set out_medal(value) { this.#out_medal = value; }
-  set section_unit(value) { this.#section_unit = value; }
   set section_total_medal(value) { this.#section_total_medal = value; }
   set section_total_medal_labels(value) { this.#section_total_medal_labels = value; }
   set d_bb(value) { this.#d_bb = value; }
@@ -194,7 +187,6 @@ class DisplayInfo {
   set hg_blank(value) { this.#hg_blank = value; }
   set hc_game_count(value) { this.#hc_game_count = value; }
   set hg_game_count(value) { this.#hg_game_count = value; }
-  set role(value) { this.#role = value; }
   set longest_bonus_span_game_count(value) { this.#longest_bonus_span_game_count = value; }
   set longest_bb_span_game_count(value) { this.#longest_bb_span_game_count = value; }
   set longest_rb_span_game_count(value) { this.#longest_rb_span_game_count = value; }
@@ -227,553 +219,99 @@ class DisplayInfo {
   set cnt(value) { this.#cnt = value; }
   set simulate_game_count(value) { this.#simulate_game_count = value; }
   set setting(value) { this.#setting = value; }
-}
+  set rb_push_order(value) { this.#rb_push_order = value }
 
-const ROLE = {
-  // ボーナス
-  D_BB: 1 << 0,
-  R_BB: 1 << 1,
-  RB: 1 << 2,
+  toJson() {
+    return {
+      in_medal: this.#in_medal,
+      out_medal: this.#out_medal,
+      section_total_medal: this.#section_total_medal,
+      section_total_medal_labels: this.#section_total_medal_labels,
 
-  // 特殊役
-  SP_A: 1 << 3,
-  SP_B: 1 << 4,
-  SP_C: 1 << 5,
-  SP_D: 1 << 6,
-  SP_E: 1 << 7,
+      d_bb: this.d_bb,
+      r_bb: this.r_bb,
+      rb: this.rb,
 
-  // リプレイ
-  REP: 1 << 8,
-  RT_REP: 1 << 9,
-  JAC_REP: 1 << 10,
+      bb_bell: this.bb_bell,
+      hriz_bell: this.hriz_bell,
+      lean_bell: this.lean_bell,
+      rare_bell: this.rare_bell,
+      rb_game_count: this.rb_game_count,
+      rb_one_medal_role: this.rb_one_medal_role,
+      rb_lean_ice: this.rb_lean_ice,
+      rb_blank: this.rb_blank,
+      rb_pank_lv_low: this.rb_pank_lv_low,
+      rb_pank_lv_mid: this.rb_pank_lv_mid,
+      rb_pank_lv_high: this.rb_pank_lv_high,
+      rb_showed_peace_lv_low: this.rb_showed_peace_lv_low,
+      rb_showed_peace_lv_mid: this.rb_showed_peace_lv_mid,
+      rb_showed_peace_lv_high: this.rb_showed_peace_lv_high,
 
-  // 風鈴
-  BELL_A: 1 << 11,
-  BELL_B: 1 << 12,
+      bell_a: this.bell_a,
+      bell_b: this.bell_b,
+      ice_a: this.ice_a,
+      ice_b: this.ice_b,
+      cher_a1: this.cher_a1,
+      cher_a2: this.cher_a2,
+      cher_b: this.cher_b,
 
-  // 氷
-  ICE_A: 1 << 13,
-  ICE_B: 1 << 14,
+      left_hc_game_count: this.left_hc_game_count,
+      left_hg_game_count: this.left_hg_game_count,
+      hc_blank: this.hc_blank,
+      hg_blank: this.hg_blank,
+      hc_game_count: this.hc_game_count,
+      hg_game_count: this.hg_game_count,
 
-  // チェリー
-  CHER_A1: 1 << 15,
-  CHER_A2: 1 << 16,
-  CHER_B: 1 << 17,
+      longest_bonus_span_game_count: this.longest_bonus_span_game_count,
+      longest_bb_span_game_count: this.longest_bb_span_game_count,
+      longest_rb_span_game_count: this.longest_rb_span_game_count,
+      bonus_span_game_count: this.bonus_span_game_count,
+      bb_span_game_count: this.bb_span_game_count,
+      rb_span_game_count: this.rb_span_game_count,
 
-  HC_BLANK: 1 << 18,
-  HG_BLANK: 1 << 19,
+      alone_don_bb: this.alone_don_bb,
+      alone_red_bb: this.alone_red_bb,
+      alone_rb: this.alone_rb,
 
-  HC_JAC_REP: 1 << 20,
-  HC_RT_REP: 1 << 21,
-  HG_RT_REP: 1 << 22
-}
+      rt_rep_don_bb: this.rt_rep_don_bb,
+      rt_rep_red_bb: this.rt_rep_red_bb,
+      rt_rep_rb: this.rt_rep_rb,
 
-const SETTING = {
-  NOT_DEFINED: -1,
-  LOW_1: 0,
-  LOW_2: 1,
-  HIGH_5: 2,
-  HIGH_6: 3
-}
+      jac_rep_don_bb: this.jac_rep_don_bb,
+      jac_rep_red_bb: this.jac_rep_red_bb,
 
-function print(msg) {
-  console.log(msg);
-}
+      cher_b_don_bb: this.cher_b_don_bb,
+      cher_b_red_bb: this.cher_b_red_bb,
+      cher_b_rb: this.cher_b_rb,
 
-class Role {
+      sp_a_don_bb: this.sp_a_don_bb,
+      sp_a_red_bb: this.sp_a_red_bb,
 
-  flag_thresh = new Array();
+      sp_b_don_bb: this.sp_b_don_bb,
+      sp_b_rb: this.sp_b_rb,
 
-  get_mapped_flag_num(flag) {
-    let num = 0;
-    // XXX: ???
-    num += flag[flag.length - 1];
-    return num;
-  }
+      sp_c_red_bb: this.sp_c_red_bb,
 
-  constructor(setting) {
-    let rt_thresh = 0;
-    switch (setting) {
-      case SETTING.LOW_1:
-        // リテラルな整数値はそのフラグが 65536 個のフラグに対していくつ割り当てられるかを表す
-        this.flag_thresh.push(40);                                                     // 0:  単独ドンBB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 32);        // 1:  単独赤七BB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 52);        // 2:  単独RB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 15);        // 3:  RTリプ + ドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 15);        // 4:  RTリプ + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 30);        // 5:  RTリプ + RB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 16);        // 6:  JACリプ + ドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 8);         // 7:  JACリプ + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 6);         // 8:  チェリーB + ドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 6);         // 9:  チェリーB + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 10);        // 10: チェリーB + RB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 8);         // 11: Aドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 16);        // 12: A赤
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 8);         // 13: Bドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 40);        // 14: Bバケ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 20);        // 15: C赤
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 16);        // 16: Dドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 30);        // 17: Dバケ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 5);         // 18: Eドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 17);        // 19: E赤
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 22);        // 20: Eバケ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4);         // 21: 風鈴B + ドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4);         // 22: チェリーA + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4283);      // 23: ベルA
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4283 - 4);  // 24: ベルB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 1239);      // 25: 氷A
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 40);        // 26: 氷B
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 659 - 4);   // 27: チェリーA1
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 3121);      // 28: チェリーA2
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 232 - 22);  // 29: チェリーB
+      sp_d_don_bb: this.sp_d_don_bb,
+      sp_d_rb: this.sp_d_rb,
 
-        rt_thresh = this.get_mapped_flag_num(this.flag_thresh);
-        this.flag_thresh.push(rt_thresh + 8977);                                       // 30: リプ
-        this.flag_thresh.push(rt_thresh + 21845);                                      // 31: HC中RTリプ
-        this.flag_thresh.push(rt_thresh + 21845 + 10923);                              // 32: HC中ハズレ
-        this.flag_thresh.push(rt_thresh + 21845 + 10923 + 18724);                      // 33: HC中JACリプ
-        this.flag_thresh.push(rt_thresh + 8977 + 4891);                                // 34: HG中ハズレ
-        this.flag_thresh.push(rt_thresh + 8977 + 4891 + 37449);                        // 35: HG中RTリプ
+      sp_e_don_bb: this.sp_e_don_bb,
+      sp_e_red_bb: this.sp_e_red_bb,
+      sp_e_rb: this.sp_e_rb,
 
-        break;
-      case SETTING.LOW_2:
-        this.flag_thresh.push(41);                                                     // 0:  単独ドンBB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 33);        // 1:  単独赤七BB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 56);        // 2:  単独RB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 15);        // 3:  RTリプ + ドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 15);        // 4:  RTリプ + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 32);        // 5:  RTリプ + RB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 17);        // 6:  JACリプ + ドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 8);         // 7:  JACリプ + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 6);         // 8:  チェリーB + ドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 6);         // 9:  チェリーB + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 11);        // 10: チェリーB + RB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 8);         // 11: Aドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 17);        // 12: A赤
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 8);         // 13: Bドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 43);        // 14: Bバケ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 21);        // 15: C赤
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 17);        // 16: Dドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 33);        // 17: Dバケ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 6);         // 18: Eドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 18);        // 19: E赤
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 23);        // 20: Eバケ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4);         // 21: 風鈴B + ドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4);         // 22: チェリーA + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4398);      // 24: ベルA
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4201 - 4);  // 25: ベルB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 1225);      // 26: 氷A
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 40);        // 27: 氷B
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 659 - 4);   // 28: チェリーA1
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 3396);      // 29: チェリーA2
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 233 - 23);  // 30: チェリーB
+      bell_b_don_bb: this.bell_b_don_bb,
+      cher_a1_red_bb: this.cher_a1_red_bb,
 
-        rt_thresh = this.get_mapped_flag_num(this.flag_thresh);
-        this.flag_thresh.push(rt_thresh + 8977);                                       // 30: リプ
-        this.flag_thresh.push(rt_thresh + 21141);                                      // 31: HC中RTリプ
-        this.flag_thresh.push(rt_thresh + 21141 + 11299);                              // 32: HC中ハズレ
-        this.flag_thresh.push(rt_thresh + 21141 + 11299 + 18724);                      // 33: HC中JACリプ
-        this.flag_thresh.push(rt_thresh + 8977 + 5285);                                // 34: HG中ハズレ
-        this.flag_thresh.push(rt_thresh + 8977 + 5285 + 36817);                        // 35: HG中RTリプ
+      cnt: this.cnt,
 
-        break;
-      case SETTING.HIGH_5:
-        this.flag_thresh.push(42);                                                     // 0:  単独ドンBB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 34);        // 1:  単独赤七BB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 60);        // 2:  単独RB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 16);        // 3:  RTリプ + ドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 16);        // 4:  RTリプ + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 34);        // 5:  RTリプ + RB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 17);        // 6:  JACリプ + ドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 9);         // 7:  JACリプ + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 7);         // 8:  チェリーB + ドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 7);         // 9:  チェリーB + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 13);        // 10: チェリーB + RB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 9);         // 11: Aドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 17);        // 12: A赤
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 9);         // 13: Bドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 47);        // 14: Bバケ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 22);        // 15: C赤
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 17);        // 16: Dドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 36);        // 17: Dバケ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 6);         // 18: Eドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 18);        // 19: E赤
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 24);        // 20: Eバケ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 5);         // 21: 風鈴B + ドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 5);         // 22: チェリーA + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4520);      // 23: ベルA
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4283 - 5);  // 24: ベルB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 1321);      // 25: 氷A
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 40);        // 26: 氷B
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 660 - 5);   // 27: チェリーA1
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 3181);      // 28: チェリーA2
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 237 - 27);  // 29: チェリーB
+      simulate_game_count: this.simulate_game_count,
+      setting: this.setting,
 
-        rt_thresh = this.get_mapped_flag_num(this.flag_thresh);
-        this.flag_thresh.push(rt_thresh + 8977);                                       // 30: リプ
-        this.flag_thresh.push(rt_thresh + 20480);                                      // 31: HC中RTリプ
-        this.flag_thresh.push(rt_thresh + 20480 + 12365);                              // 32: HC中ハズレ
-        this.flag_thresh.push(rt_thresh + 20480 + 12465 + 18724);                      // 33: HC中JACリプ
-        this.flag_thresh.push(rt_thresh + 8977 + 6489);                                // 34: HG中ハズレ
-        this.flag_thresh.push(rt_thresh + 8977 + 6489 + 35424);                        // 35: HG中RTリプ
-        break;
-      case SETTING.HIGH_6:
-        this.flag_thresh.push(42);                                                     // 0:  単独ドンBB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 35);        // 1:  単独赤七BB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 66);        // 2:  単独RB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 16);        // 3:  RTリプ + ドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 16);        // 4:  RTリプ + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 37);        // 5:  RTリプ + RB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 18);        // 6:  JACリプ + ドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 10);        // 7:  JACリプ + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 7);         // 8:  チェリーB + ドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 7);         // 9:  チェリーB + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 15);        // 10: チェリーB + RB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 10);        // 11: Aドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 18);        // 12: A赤
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 10);        // 13: Bドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 51);        // 14: Bバケ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 22);        // 15: C赤
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 18);        // 16: Dドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 40);        // 17: Dバケ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 6);         // 18: Eドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 19);        // 19: E赤
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 25);        // 20: Eバケ
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 5);         // 21: 風鈴B + ドン
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 5);         // 22: チェリーA + 赤七
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4648);      // 23: ベルA
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 4340 - 5);  // 24: ベルB
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 1290);      // 25: 氷A
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 40);        // 26: 氷B
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 660 - 5);   // 27: チェリーA1
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 3293);      // 28: チェリーA2
-        this.flag_thresh.push(this.get_mapped_flag_num(this.flag_thresh) + 239 - 29);  // 29: チェリーB
-
-        rt_thresh = this.get_mapped_flag_num(this.flag_thresh);
-        this.flag_thresh.push(rt_thresh + 8977);                                       // 30: リプ
-        this.flag_thresh.push(rt_thresh + 19859);                                      // 31: HC中RTリプ
-        this.flag_thresh.push(rt_thresh + 19859 + 12850);                              // 32: HC中ハズレ
-        this.flag_thresh.push(rt_thresh + 19859 + 12850 + 18724);                      // 33: HC中JACリプ
-        this.flag_thresh.push(rt_thresh + 8977 + 6899);                                // 34: HG中ハズレ
-        this.flag_thresh.push(rt_thresh + 8977 + 6899 + 34675);                        // 35: HG中RTリプ
-        break;
+      rb_push_order: this.#rb_push_order
     }
   }
-
-  get_role(flag) {
-    let role = 0;
-    if (0 <= flag && flag < this.flag_thresh[0]) {
-      role = ROLE.D_BB;
-    } else if (this.flag_thresh[0] <= flag && flag < this.flag_thresh[1]) {
-      role = ROLE.R_BB;
-    } else if (this.flag_thresh[1] <= flag && flag < this.flag_thresh[2]) {
-      role = ROLE.RB;
-    } else if (this.flag_thresh[2] <= flag && flag < this.flag_thresh[3]) {
-      role = ROLE.D_BB | ROLE.RT_REP;
-    } else if (this.flag_thresh[3] <= flag && flag < this.flag_thresh[4]) {
-      role = ROLE.R_BB | ROLE.RT_REP;
-    } else if (this.flag_thresh[4] <= flag && flag < this.flag_thresh[5]) {
-      role = ROLE.RB | ROLE.RT_REP;
-    } else if (this.flag_thresh[5] <= flag && flag < this.flag_thresh[6]) {
-      role = ROLE.D_BB | ROLE.JAC_REP;
-    } else if (this.flag_thresh[6] <= flag && flag < this.flag_thresh[7]) {
-      role = ROLE.R_BB | ROLE.JAC_REP;
-    } else if (this.flag_thresh[7] <= flag && flag < this.flag_thresh[8]) {
-      role = ROLE.D_BB | ROLE.CHER_B;
-    } else if (this.flag_thresh[8] <= flag && flag < this.flag_thresh[9]) {
-      role = ROLE.R_BB | ROLE.CHER_B;
-    } else if (this.flag_thresh[9] <= flag && flag < this.flag_thresh[10]) {
-      role = ROLE.RB | ROLE.CHER_B;
-    } else if (this.flag_thresh[10] <= flag && flag < this.flag_thresh[11]) {
-      role = ROLE.D_BB | ROLE.SP_A;
-    } else if (this.flag_thresh[11] <= flag && flag < this.flag_thresh[12]) {
-      role = ROLE.R_BB | ROLE.SP_A;
-    } else if (this.flag_thresh[12] <= flag && flag < this.flag_thresh[13]) {
-      role = ROLE.D_BB | ROLE.SP_B;
-    } else if (this.flag_thresh[13] <= flag && flag < this.flag_thresh[14]) {
-      role = ROLE.RB | ROLE.SP_B;
-    } else if (this.flag_thresh[14] <= flag && flag < this.flag_thresh[15]) {
-      role = ROLE.R_BB | ROLE.SP_C;
-    } else if (this.flag_thresh[15] <= flag && flag < this.flag_thresh[16]) {
-      role = ROLE.D_BB | ROLE.SP_D;
-    } else if (this.flag_thresh[16] <= flag && flag < this.flag_thresh[17]) {
-      role = ROLE.RB | ROLE.SP_D;
-    } else if (this.flag_thresh[17] <= flag && flag < this.flag_thresh[18]) {
-      role = ROLE.D_BB | ROLE.SP_E;
-    } else if (this.flag_thresh[18] <= flag && flag < this.flag_thresh[19]) {
-      role = ROLE.R_BB | ROLE.SP_E;
-    } else if (this.flag_thresh[19] <= flag && flag < this.flag_thresh[20]) {
-      role = ROLE.RB | ROLE.SP_E;
-    } else if (this.flag_thresh[20] <= flag && flag < this.flag_thresh[21]) {
-      role = ROLE.D_BB | ROLE.BELL_B;
-    } else if (this.flag_thresh[21] <= flag && flag < this.flag_thresh[22]) {
-      role = ROLE.R_BB | ROLE.CHER_A1;
-    } else if (this.flag_thresh[22] <= flag && flag < this.flag_thresh[23]) {
-      role = ROLE.BELL_A;
-    } else if (this.flag_thresh[23] <= flag && flag < this.flag_thresh[24]) {
-      role = ROLE.BELL_B;
-    } else if (this.flag_thresh[24] <= flag && flag < this.flag_thresh[25]) {
-      role = ROLE.ICE_A;
-    } else if (this.flag_thresh[25] <= flag && flag < this.flag_thresh[26]) {
-      role = ROLE.ICE_B;
-    } else if (this.flag_thresh[26] <= flag && flag < this.flag_thresh[27]) {
-      role = ROLE.CHER_A1;
-    } else if (this.flag_thresh[27] <= flag && flag < this.flag_thresh[28]) {
-      role = ROLE.CHER_A2;
-    } else if (this.flag_thresh[28] <= flag && flag < this.flag_thresh[29]) {
-      role = ROLE.CHER_B;
-    }
-
-    if (this.flag_thresh[29] <= flag && flag < this.flag_thresh[30]) {
-      role = ROLE.REP;
-    } else if (this.flag_thresh[30] <= flag && flag < this.flag_thresh[31]) {
-      role = ROLE.HC_RT_REP;
-    } else if (this.flag_thresh[31] <= flag && flag < this.flag_thresh[32]) {
-      role = ROLE.HC_BLANK;
-    } else if (this.flag_thresh[32] <= flag && flag < this.flag_thresh[33]) {
-      role = ROLE.HC_JAC_REP;
-    }
-
-    if (this.flag_thresh[30] <= flag && flag < this.flag_thresh[34]) {
-      role += ROLE.HG_BLANK;
-    } else if (this.flag_thresh[34] <= flag && flag < this.flag_thresh[35]) {
-      role += ROLE.HG_RT_REP;
-    }
-
-    // print("flag: " + flag + ", role: " + role.toString(2));
-
-    return role
-  }
 }
 
-function convert_setting_enum_to_string(setting) {
-  switch (setting) {
-    case SETTING.LOW_1:
-      return "1";
-    case SETTING.LOW_2:
-      return "2";
-    case SETTING.HIGH_5:
-      return "5";
-    case SETTING.HIGH_6:
-      return "6";
-    default:
-      return "N/A";
-  }
-}
-
-function to_fixed(value, digits) {
-  let fixed_value = value.toFixed(digits);
-
-  if (!isFinite(fixed_value) || fixed_value != fixed_value) {
-    return "-";
-  }
-
-  return fixed_value.toString();
-}
-
-function get_flag(num) {
-  return Math.floor(Math.random() * num);
-}
-
-function get_random_setting(r1, r2, r5, r6) {
-  if (r1 < 0 || r2 < 0 || r5 < 0 || r6 < 0) {
-    return SETTING.NOT_DEFINED;
-  }
-
-  if ((r1 + r2 + r5 + r6) == 0) {
-    r1 = 25;
-    r2 = 25;
-    r5 = 25;
-    r6 = 25;
-  }
-
-  if ((r1 + r2 + r5 + r6) != 100) {
-    return SETTING.NOT_DEFINED;
-  }
-
-  let num = get_flag(100);
-
-  if (0 <= num && num < r1) {
-    return SETTING.LOW_1;
-  } else if (r1 <= num && num < (r1 + r2)) {
-    return SETTING.LOW_2;
-  } else if ((r1 + r2) <= num && num < (r1 + r2 + r5)) {
-    return SETTING.HIGH_5;
-  } else {
-    return SETTING.HIGH_6
-  }
-
-  return SETTING.NOT_DEFINED;
-}
-
-function digest_big_bonus(setting) {
-  let data = {};
-
-  let horizontal_bell = 0;
-  let leaning_bell = 0;
-  let rare_bell = 0;
-
-  for (let i = 0; i < 29; ++i) {
-    let flag = get_flag(65536);
-    switch (setting) {
-      case SETTING.LOW_1:
-      case SETTING.HIGH_5:
-        if (0 <= flag && flag < 5958) {
-          ++leaning_bell;
-        } else if (5958 <= flag && flag < 5962) {
-          ++rare_bell;
-        } else {
-          ++horizontal_bell;
-        }
-        break;
-      case SETTING.LOW_2:
-        if (0 <= flag && flag < 7282) {
-          ++leaning_bell;
-        } else if (7282 <= flag && flag < 7286) {
-          ++rare_bell;
-        } else {
-          ++horizontal_bell;
-        }
-        break;
-      case SETTING.HIGH_6:
-        if (0 <= flag && flag < 7282) {
-          ++leaning_bell;
-        } else if (7282 <= flag && flag < 7382) {
-          ++rare_bell;
-        } else {
-          ++horizontal_bell;
-        }
-        break;
-    }
-  }
-
-  data["horizontal_bell"] = horizontal_bell;
-  data["leaning_bell"] = leaning_bell;
-  data["rare_bell"] = rare_bell;
-
-  return data;
-}
-
-function simulate_reg_push() {
-  let medal, flag;
-  switch (rb_push_order) {
-    case "left":
-      medal = 10;
-      break;
-    case "center":
-      // TODO
-      medal = 15;
-      break;
-    case "right":
-      flag = get_flag(65536)
-      if (flag < 16384) {
-        medal = 4;
-      } else {
-        medal = 15;
-      }
-      break;
-  }
-  return medal;
-}
-
-function digest_reg_bonus(setting) {
-  let data = {};
-
-  let one_medal_role = 0;
-  let leaning_ice = 0;
-  let horizontal_ice = 0;
-  let blank = 0;
-  let in_medal = 0;
-  let out_medal = 0;
-
-  let cnt = 0;
-  for (let i = 0; i < 12; ++i) {
-    ++in_medal;
-    let flag = get_flag(65536);
-    switch (setting) {
-      case SETTING.LOW_1:
-      case SETTING.LOW_2:
-        if (0 <= flag && flag < 8192) {
-          ++one_medal_role;
-        } else if (8192 <= flag && flag < 8522) {
-          ++leaning_ice;
-          out_medal += 15;
-        } else {
-          ++horizontal_ice;
-          out_medal += simulate_reg_push();
-        }
-        break;
-      case SETTING.HIGH_5:
-      case SETTING.HIGH_6:
-        if (0 <= flag && flag < 9362) {
-          ++one_medal_role;
-        } else if (9362 <= flag && flag < 9692) {
-          ++leaning_ice;
-          out_medal += 15;
-        } else if (9692 <= flag && flag < 9866) {
-          ++blank;
-        } else {
-          ++horizontal_ice;
-          out_medal += simulate_reg_push();
-        }
-        break;
-    }
-
-    ++cnt;
-    if ((leaning_ice + horizontal_ice) >= 8) {
-      break;
-    }
-  }
-
-  let flag = get_flag(1000);
-  let not_ice = one_medal_role + blank;
-
-  data["game_count"] = cnt;
-  data["one_medal_role"] = one_medal_role;
-  data["leaning_ice"] = leaning_ice;
-  data["blank"] = blank;
-  data["pank_lv_low"] = 0;
-  data["pank_lv_mid"] = 0;
-  data["pank_lv_high"] = 0;
-  data["showed_peace_lv_low"] = 0;
-  data["showed_peace_lv_mid"] = 0;
-  data["showed_peace_lv_high"] = 0;
-  data["in_medal"] = in_medal;
-  data["out_medal"] = out_medal;
-
-  // print(out_medal - in_medal);
-
-  if (not_ice <= 4) {
-    ++data['pank_lv_low'];
-    if (setting != SETTING.LOW_1 && flag < 31) {
-      ++data["showed_peace_lv_low"];
-    }
-  } else if (not_ice <= 6) {
-    ++data['pank_lv_mid'];
-    if (setting != SETTING.LOW_1 && flag < 250) {
-      ++data["showed_peace_lv_mid"];
-    }
-  } else { // >= 7
-    ++data['pank_lv_high'];
-    if (setting == SETTING.LOW_2 && flag < 250) {
-      ++data["showed_peace_lv_high"];
-    } else if (setting == SETTING.HIGH_5 && flag < 500) {
-      ++data["showed_peace_lv_high"];
-    } else if (setting == SETTING.HIGH_6 && flag < 500) {
-      ++data["showed_peace_lv_high"];
-    }
-  }
-
-  return data;
-}
-
-function calculate_replay_medal() {
-  let medal = 3
-  if (IS_REPLAY_ZERO_MEDAL_AS_CALC) {
-    medal = 0
-  }
-  return IS_REPLAY_ZERO_MEDAL_AS_CALC ? 0 : 3
-}
 
 // html 要素
 let game_count = document.getElementById('game-count');
@@ -1015,18 +553,19 @@ screen_shot_button.onclick = () => {
 }
 
 const worker = new Worker('./script/simulate.js');
-worker.onmessage = (data) => {
+worker.onmessage = function (e) {
+  const data = e.data
   data.section_total_medal.push(data.out_medal - data.in_medal);
   data.section_total_medal_labels.push(data.cnt.toString());
+  data.rb_push_order = rb_push_order.value;
+  data.bb_bell_count = (data.d_bb + data.r_bb) * 29;
 
-  data.bb = data.d_bb + data.r_bb;
-  data.bb_bell_count = data.bb * 29;
-
+  setting_text.textContent = convert_setting_enum_to_string(data.setting);
   game_count.textContent = data.cnt + "G";
-  all_bonus_count.textContent = data.bb + data.rb + "回";
-  all_bonus_per.textContent = "1/" + to_fixed(data.cnt / (data.bb + data.rb), 1);
-  all_bb_count.textContent = data.bb + "回";
-  all_bb_per.textContent = "1/" + to_fixed(data.cnt / data.bb, 1);
+  all_bonus_count.textContent = data.d_bb + data.r_bb + data.rb + "回";
+  all_bonus_per.textContent = "1/" + to_fixed(data.cnt / (data.d_bb + data.r_bb + data.rb), 1);
+  all_bb_count.textContent = data.d_bb + data.r_bb + "回";
+  all_bb_per.textContent = "1/" + to_fixed(data.cnt / (data.d_bb + data.r_bb), 1);
   don_bb_count.textContent = data.d_bb + "回";
   don_bb_per.textContent = "1/" + to_fixed(data.cnt / data.d_bb, 1);
   red_bb_count.textContent = data.r_bb + "回";
@@ -1174,6 +713,7 @@ simulate_button.onclick = function () {
   err_msg_label.style.visibility = "hidden";
 
   const data = new DisplayInfo()
+  data.rb_push_order = rb_push_order
   data.simulate_game_count = simulate_game_count_form.value;
   if (data.simulate_game_count <= 0 || data.simulate_game_count > GAME_COUNT_THRESHOLD) {
     err_msg_label.textContent = "無効なG数が指定されています (1 ~ " + GAME_COUNT_THRESHOLD + " の値を指定してください)";
@@ -1215,10 +755,8 @@ simulate_button.onclick = function () {
       return;
   }
 
-  data.role = new Role(data.setting)
-  setting_text.textContent = convert_setting_enum_to_string(data.setting);
+  // data.role = new Role(data.setting)
 
-  data.section_unit = Math.trunc(data.simulate_game_count / 100);
 
-  worker.postMessage(data);
+  worker.postMessage(data.toJson());
 }
