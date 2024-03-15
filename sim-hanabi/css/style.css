@@ -18,6 +18,7 @@
 table {
   border-collapse: collapse;
   width: 100%;
+  border-spacing: 0;
 }
 
 tr:nth-child(odd) {
@@ -37,18 +38,15 @@ th {
   padding-bottom: 1%;
 }
 
-tr td {
-  border: none;
-}
 td.key {
   text-align: left;
   padding-left: 4%;
+  padding-top: 0.5%
+  padding-bottom: 0.5%
 }
 
 td.value {
   text-align: right;
-  padding-top: 1.5%;
-  padding-bottom: 2%;
   padding-right: 1.5%;
 }
 

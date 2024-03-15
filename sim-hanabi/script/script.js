@@ -1,40 +1,271 @@
+const GAME_COUNT_THRESHOLD = 100000000
+const IS_REPLAY_ZERO_MEDAL_AS_CALC = false
+const SIMULATE_EVENT = new Event('simulateEvent');
+
+class DisplayInfo {
+  #in_medal = 0;
+  #out_medal = 0;
+  #section_unit = null;
+  #section_total_medal = new Array();
+  #section_total_medal_labels = new Array();
+
+  #d_bb = 0;
+  #r_bb = 0;
+  #rb = 0;
+
+  #bb_bell;
+  #hriz_bell = 0;
+  #lean_bell = 0;
+  #rare_bell = 0;
+  #rb_game_count = 0;
+  #rb_one_medal_role = 0;
+  #rb_lean_ice = 0;
+  #rb_blank = 0;
+  #rb_pank_lv_low = 0;
+  #rb_pank_lv_mid = 0;
+  #rb_pank_lv_high = 0;
+  #rb_showed_peace_lv_low = 0;
+  #rb_showed_peace_lv_mid = 0;
+  #rb_showed_peace_lv_high = 0;
+
+  #bell_a = 0;
+  #bell_b = 0;
+  #ice_a = 0;
+  #ice_b = 0;
+  #cher_a1 = 0;
+  #cher_a2 = 0;
+  #cher_b = 0;
+
+  #left_hc_game_count = 0;
+  #left_hg_game_count = 0;
+  #hc_blank = 0;
+  #hg_blank = 0;
+  #hc_game_count = 0;
+  #hg_game_count = 0;
+
+  #role = null
+
+  #longest_bonus_span_game_count = 0;
+  #longest_bb_span_game_count = 0;
+  #longest_rb_span_game_count = 0;
+  #bonus_span_game_count = 0;
+  #bb_span_game_count = 0;
+  #rb_span_game_count = 0;
+
+  #alone_don_bb = 0;
+  #alone_red_bb = 0;
+  #alone_rb = 0;
+
+  #rt_rep_don_bb = 0;
+  #rt_rep_red_bb = 0;
+  #rt_rep_rb = 0;
+
+  #jac_rep_don_bb = 0;
+  #jac_rep_red_bb = 0;
+
+  #cher_b_don_bb = 0;
+  #cher_b_red_bb = 0;
+  #cher_b_rb = 0;
+
+  #sp_a_don_bb = 0;
+  #sp_a_red_bb = 0;
+
+  #sp_b_don_bb = 0;
+  #sp_b_rb = 0;
+
+  #sp_c_red_bb = 0;
+
+  #sp_d_don_bb = 0;
+  #sp_d_rb = 0;
+
+  #sp_e_don_bb = 0;
+  #sp_e_red_bb = 0;
+  #sp_e_rb = 0;
+
+  #bell_b_don_bb = 0;
+  #cher_a1_red_bb = 0;
+
+  #cnt = 0;
+
+  #simulate_game_count = 0;
+  #setting = SETTING.NOT_DEFINED
+
+  get in_medal() { return this.#in_medal; }
+  get out_medal() { return this.#out_medal; }
+  get section_unit() { return this.#section_unit; }
+  get section_total_medal() { return this.#section_total_medal; }
+  get section_total_medal_labels() { return this.#section_total_medal_labels; }
+  get d_bb() { return this.#d_bb; }
+  get r_bb() { return this.#r_bb; }
+  get rb() { return this.#rb; }
+  get bb_bell() { return this.#bb_bell; }
+  get hriz_bell() { return this.#hriz_bell; }
+  get lean_bell() { return this.#lean_bell; }
+  get rare_bell() { return this.#rare_bell; }
+  get rb_game_count() { return this.#rb_game_count; }
+  get rb_one_medal_role() { return this.#rb_one_medal_role; }
+  get rb_lean_ice() { return this.#rb_lean_ice; }
+  get rb_blank() { return this.#rb_blank; }
+  get rb_pank_lv_low() { return this.#rb_pank_lv_low; }
+  get rb_pank_lv_mid() { return this.#rb_pank_lv_mid; }
+  get rb_pank_lv_high() { return this.#rb_pank_lv_high; }
+  get rb_showed_peace_lv_low() { return this.#rb_showed_peace_lv_low; }
+  get rb_showed_peace_lv_mid() { return this.#rb_showed_peace_lv_mid; }
+  get rb_showed_peace_lv_high() { return this.#rb_showed_peace_lv_high; }
+  get bell_a() { return this.#bell_a; }
+  get bell_b() { return this.#bell_b; }
+  get ice_a() { return this.#ice_a; }
+  get ice_b() { return this.#ice_b; }
+  get cher_a1() { return this.#cher_a1; }
+  get cher_a2() { return this.#cher_a2; }
+  get cher_b() { return this.#cher_b; }
+  get left_hc_game_count() { return this.#left_hc_game_count; }
+  get left_hg_game_count() { return this.#left_hg_game_count; }
+  get hc_blank() { return this.#hc_blank; }
+  get hg_blank() { return this.#hg_blank; }
+  get hc_game_count() { return this.#hc_game_count; }
+  get hg_game_count() { return this.#hg_game_count; }
+  get role() { return this.#role; }
+  get longest_bonus_span_game_count() { return this.#longest_bonus_span_game_count; }
+  get longest_bb_span_game_count() { return this.#longest_bb_span_game_count; }
+  get longest_rb_span_game_count() { return this.#longest_rb_span_game_count; }
+  get bonus_span_game_count() { return this.#bonus_span_game_count; }
+  get bb_span_game_count() { return this.#bb_span_game_count; }
+  get rb_span_game_count() { return this.#rb_span_game_count; }
+  get alone_don_bb() { return this.#alone_don_bb; }
+  get alone_red_bb() { return this.#alone_red_bb; }
+  get alone_rb() { return this.#alone_rb; }
+  get rt_rep_don_bb() { return this.#rt_rep_don_bb; }
+  get rt_rep_red_bb() { return this.#rt_rep_red_bb; }
+  get rt_rep_rb() { return this.#rt_rep_rb; }
+  get jac_rep_don_bb() { return this.#jac_rep_don_bb; }
+  get jac_rep_red_bb() { return this.#jac_rep_red_bb; }
+  get cher_b_don_bb() { return this.#cher_b_don_bb; }
+  get cher_b_red_bb() { return this.#cher_b_red_bb; }
+  get cher_b_rb() { return this.#cher_b_rb; }
+  get sp_a_don_bb() { return this.#sp_a_don_bb; }
+  get sp_a_red_bb() { return this.#sp_a_red_bb; }
+  get sp_b_don_bb() { return this.#sp_b_don_bb; }
+  get sp_b_rb() { return this.#sp_b_rb; }
+  get sp_c_red_bb() { return this.#sp_c_red_bb; }
+  get sp_d_don_bb() { return this.#sp_d_don_bb; }
+  get sp_d_rb() { return this.#sp_d_rb; }
+  get sp_e_don_bb() { return this.#sp_e_don_bb; }
+  get sp_e_red_bb() { return this.#sp_e_red_bb; }
+  get sp_e_rb() { return this.#sp_e_rb; }
+  get bell_b_don_bb() { return this.#bell_b_don_bb; }
+  get cher_a1_red_bb() { return this.#cher_a1_red_bb; }
+  get cnt() { return this.#cnt; }
+  get simulate_game_count() { return this.#simulate_game_count; }
+  get setting() { return this.#setting; }
+
+  set in_medal(value) { return this.#in_medal = value; }
+  set out_medal(value) { this.#out_medal = value; }
+  set section_unit(value) { this.#section_unit = value; }
+  set section_total_medal(value) { this.#section_total_medal = value; }
+  set section_total_medal_labels(value) { this.#section_total_medal_labels = value; }
+  set d_bb(value) { this.#d_bb = value; }
+  set r_bb(value) { this.#r_bb = value; }
+  set rb(value) { this.#rb = value; }
+  set bb_bell(value) { this.#bb_bell = value; }
+  set hriz_bell(value) { this.#hriz_bell = value; }
+  set lean_bell(value) { this.#lean_bell = value; }
+  set rare_bell(value) { this.#rare_bell = value; }
+  set rb_game_count(value) { this.#rb_game_count = value; }
+  set rb_one_medal_role(value) { this.#rb_one_medal_role = value; }
+  set rb_lean_ice(value) { this.#rb_lean_ice = value; }
+  set rb_blank(value) { this.#rb_blank = value; }
+  set rb_pank_lv_low(value) { this.#rb_pank_lv_low = value; }
+  set rb_pank_lv_mid(value) { this.#rb_pank_lv_mid = value; }
+  set rb_pank_lv_high(value) { this.#rb_pank_lv_high = value; }
+  set rb_showed_peace_lv_low(value) { this.#rb_showed_peace_lv_low = value; }
+  set rb_showed_peace_lv_mid(value) { this.#rb_showed_peace_lv_mid = value; }
+  set rb_showed_peace_lv_high(value) { this.#rb_showed_peace_lv_high = value; }
+  set bell_a(value) { this.#bell_a = value; }
+  set bell_b(value) { this.#bell_b = value; }
+  set ice_a(value) { this.#ice_a = value; }
+  set ice_b(value) { this.#ice_b = value; }
+  set cher_a1(value) { this.#cher_a1 = value; }
+  set cher_a2(value) { this.#cher_a2 = value; }
+  set cher_b(value) { this.#cher_b = value; }
+  set left_hc_game_count(value) { this.#left_hc_game_count = value; }
+  set left_hg_game_count(value) { this.#left_hg_game_count = value; }
+  set hc_blank(value) { this.#hc_blank = value; }
+  set hg_blank(value) { this.#hg_blank = value; }
+  set hc_game_count(value) { this.#hc_game_count = value; }
+  set hg_game_count(value) { this.#hg_game_count = value; }
+  set role(value) { this.#role = value; }
+  set longest_bonus_span_game_count(value) { this.#longest_bonus_span_game_count = value; }
+  set longest_bb_span_game_count(value) { this.#longest_bb_span_game_count = value; }
+  set longest_rb_span_game_count(value) { this.#longest_rb_span_game_count = value; }
+  set bonus_span_game_count(value) { this.#bonus_span_game_count = value; }
+  set bb_span_game_count(value) { this.#bb_span_game_count = value; }
+  set rb_span_game_count(value) { this.#rb_span_game_count = value; }
+  set alone_don_bb(value) { this.#alone_don_bb = value; }
+  set alone_red_bb(value) { this.#alone_red_bb = value; }
+  set alone_rb(value) { this.#alone_rb = value; }
+  set rt_rep_don_bb(value) { this.#rt_rep_don_bb = value; }
+  set rt_rep_red_bb(value) { this.#rt_rep_red_bb = value; }
+  set rt_rep_rb(value) { this.#rt_rep_rb = value; }
+  set jac_rep_don_bb(value) { this.#jac_rep_don_bb = value; }
+  set jac_rep_red_bb(value) { this.#jac_rep_red_bb = value; }
+  set cher_b_don_bb(value) { this.#cher_b_don_bb = value; }
+  set cher_b_red_bb(value) { this.#cher_b_red_bb = value; }
+  set cher_b_rb(value) { this.#cher_b_rb = value; }
+  set sp_a_don_bb(value) { this.#sp_a_don_bb = value; }
+  set sp_a_red_bb(value) { this.#sp_a_red_bb = value; }
+  set sp_b_don_bb(value) { this.#sp_b_don_bb = value; }
+  set sp_b_rb(value) { this.#sp_b_rb = value; }
+  set sp_c_red_bb(value) { this.#sp_c_red_bb = value; }
+  set sp_d_don_bb(value) { this.#sp_d_don_bb = value; }
+  set sp_d_rb(value) { this.#sp_d_rb = value; }
+  set sp_e_don_bb(value) { this.#sp_e_don_bb = value; }
+  set sp_e_red_bb(value) { this.#sp_e_red_bb = value; }
+  set sp_e_rb(value) { this.#sp_e_rb = value; }
+  set bell_b_don_bb(value) { this.#bell_b_don_bb = value; }
+  set cher_a1_red_bb(value) { this.#cher_a1_red_bb = value; }
+  set cnt(value) { this.#cnt = value; }
+  set simulate_game_count(value) { this.#simulate_game_count = value; }
+  set setting(value) { this.#setting = value; }
+}
+
 const ROLE = {
   // ボーナス
-  D_BB:     1<<0,
-  R_BB:     1<<1,
-  RB:       1<<2,
+  D_BB: 1 << 0,
+  R_BB: 1 << 1,
+  RB: 1 << 2,
 
   // 特殊役
-  SP_A:     1<<3,
-  SP_B:     1<<4,
-  SP_C:     1<<5,
-  SP_D:     1<<6,
-  SP_E:     1<<7,
+  SP_A: 1 << 3,
+  SP_B: 1 << 4,
+  SP_C: 1 << 5,
+  SP_D: 1 << 6,
+  SP_E: 1 << 7,
 
   // リプレイ
-  REP:      1<<8,
-  RT_REP:   1<<9,
-  JAC_REP:  1<<10,
+  REP: 1 << 8,
+  RT_REP: 1 << 9,
+  JAC_REP: 1 << 10,
 
   // 風鈴
-  BELL_A:   1<<11,
-  BELL_B:   1<<12,
+  BELL_A: 1 << 11,
+  BELL_B: 1 << 12,
 
   // 氷
-  ICE_A:    1<<13,
-  ICE_B:    1<<14,
+  ICE_A: 1 << 13,
+  ICE_B: 1 << 14,
 
   // チェリー
-  CHER_A1:  1<<15,
-  CHER_A2:  1<<16,
-  CHER_B:   1<<17,
+  CHER_A1: 1 << 15,
+  CHER_A2: 1 << 16,
+  CHER_B: 1 << 17,
 
-  HC_BLANK: 1<<18,
-  HG_BLANK: 1<<19,
+  HC_BLANK: 1 << 18,
+  HG_BLANK: 1 << 19,
 
-  HC_JAC_REP: 1<<20,
-  HC_RT_REP:  1<<21,
-  HG_RT_REP:  1<<22
+  HC_JAC_REP: 1 << 20,
+  HC_RT_REP: 1 << 21,
+  HG_RT_REP: 1 << 22
 }
 
 const SETTING = {
@@ -62,7 +293,7 @@ class Role {
 
   constructor(setting) {
     let rt_thresh = 0;
-    switch(setting) {
+    switch (setting) {
       case SETTING.LOW_1:
         // リテラルな整数値はそのフラグが 65536 個のフラグに対していくつ割り当てられるかを表す
         this.flag_thresh.push(40);                                                     // 0:  単独ドンBB
@@ -331,7 +562,6 @@ function convert_setting_enum_to_string(setting) {
 }
 
 function to_fixed(value, digits) {
-
   let fixed_value = value.toFixed(digits);
 
   if (!isFinite(fixed_value) || fixed_value != fixed_value) {
@@ -385,7 +615,7 @@ function digest_big_bonus(setting) {
 
   for (let i = 0; i < 29; ++i) {
     let flag = get_flag(65536);
-    switch(setting) {
+    switch (setting) {
       case SETTING.LOW_1:
       case SETTING.HIGH_5:
         if (0 <= flag && flag < 5958) {
@@ -399,7 +629,7 @@ function digest_big_bonus(setting) {
       case SETTING.LOW_2:
         if (0 <= flag && flag < 7282) {
           ++leaning_bell;
-        } else if (7282<= flag && flag < 7286) {
+        } else if (7282 <= flag && flag < 7286) {
           ++rare_bell;
         } else {
           ++horizontal_bell;
@@ -408,7 +638,7 @@ function digest_big_bonus(setting) {
       case SETTING.HIGH_6:
         if (0 <= flag && flag < 7282) {
           ++leaning_bell;
-        } else if (7282<= flag && flag < 7382) {
+        } else if (7282 <= flag && flag < 7382) {
           ++rare_bell;
         } else {
           ++horizontal_bell;
@@ -460,7 +690,7 @@ function digest_reg_bonus(setting) {
   for (let i = 0; i < 12; ++i) {
     ++in_medal;
     let flag = get_flag(65536);
-    switch(setting) {
+    switch (setting) {
       case SETTING.LOW_1:
       case SETTING.LOW_2:
         if (0 <= flag && flag < 8192) {
@@ -535,6 +765,14 @@ function digest_reg_bonus(setting) {
   }
 
   return data;
+}
+
+function calculate_replay_medal() {
+  let medal = 3
+  if (IS_REPLAY_ZERO_MEDAL_AS_CALC) {
+    medal = 0
+  }
+  return IS_REPLAY_ZERO_MEDAL_AS_CALC ? 0 : 3
 }
 
 // html 要素
@@ -696,8 +934,8 @@ let rb_push_order = document.querySelector('[name="rb-1st-order"]:checked').valu
 // let rb_center_1st_success_per_form = document.getElementById('rb-center-1st-success-per');
 let rb_push_order_group = document.getElementsByName('rb-1st-order');
 
-rb_push_order_group.forEach(function(e) {
-  e.addEventListener("click", function() {
+rb_push_order_group.forEach(function (e) {
+  e.addEventListener("click", function () {
     rb_push_order = document.querySelector('[name="rb-1st-order"]:checked').value;
     /* TODO
     if (rb_push_order == "center") {
@@ -710,18 +948,18 @@ rb_push_order_group.forEach(function(e) {
 });
 
 let graph = new Chart(context, {
-    type: 'line',
-    data: {
-      labels: [],
-      datasets: [{
-        label: "差枚数",
-        data: [],
-        borderColor: 'rgb(255, 99, 132)',
-      }],
-    }
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [{
+      label: "差枚数",
+      data: [],
+      borderColor: 'rgb(255, 99, 132)',
+    }],
+  }
 });
 
-select_setting.addEventListener('change', function(){
+select_setting.addEventListener('change', function () {
   var index = this.selectedIndex;
   if (this.options[index].value == "?") {
     setting_ratio_pane.style.display = "block";
@@ -765,25 +1003,180 @@ peace_visibility_button.onclick = () => {
 screen_shot_button.onclick = () => {
   screen_shot_button.disabled = true;
   htmlToImage.toPng(screen_shot_area)
-  .then(function (dataUrl) {
-    download(dataUrl, 'sim-hanabi-ss.png');
-    screen_shot_button.disabled = false;
-  })
-  .catch(function (error) {
-    err_msg_label.textContent = "スクショに失敗しました。";
-    err_msg_label.style.visibility = "visible";
-    simulate_button.disabled = false;
-  });
+    .then(function (dataUrl) {
+      download(dataUrl, 'sim-hanabi-ss.png');
+      screen_shot_button.disabled = false;
+    })
+    .catch(function (error) {
+      err_msg_label.textContent = "スクショに失敗しました。";
+      err_msg_label.style.visibility = "visible";
+      simulate_button.disabled = false;
+    });
 }
 
-simulate_button.onclick = () => {
+const worker = new Worker('simulate.js');
+worker.onmessage = (data) => {
+  data.section_total_medal.push(data.out_medal - data.in_medal);
+  data.section_total_medal_labels.push(data.cnt.toString());
 
+  data.bb = data.d_bb + data.r_bb;
+  data.bb_bell_count = data.bb * 29;
+
+  game_count.textContent = data.cnt + "G";
+  all_bonus_count.textContent = data.bb + data.rb + "回";
+  all_bonus_per.textContent = "1/" + to_fixed(data.cnt / (data.bb + data.rb), 1);
+  all_bb_count.textContent = data.bb + "回";
+  all_bb_per.textContent = "1/" + to_fixed(data.cnt / data.bb, 1);
+  don_bb_count.textContent = data.d_bb + "回";
+  don_bb_per.textContent = "1/" + to_fixed(data.cnt / data.d_bb, 1);
+  red_bb_count.textContent = data.r_bb + "回";
+  red_bb_per.textContent = "1/" + to_fixed(data.cnt / data.r_bb, 1);
+  rb_count.textContent = data.rb + "回";
+  rb_per.textContent = "1/" + to_fixed(data.cnt / data.rb, 1);
+
+  bb_hriz_bell_count.textContent = data.hriz_bell + "回";
+  bb_hriz_bell_per.textContent = "1/" + to_fixed(data.bb_bell_count / data.hriz_bell, 1);
+  bb_lean_bell_count.textContent = data.lean_bell + "回";
+  bb_lean_bell_per.textContent = "1/" + to_fixed(data.bb_bell_count / data.lean_bell, 1);
+  bb_rare_bell_count.textContent = data.rare_bell + "回";
+  bb_rare_bell_per.textContent = "1/" + to_fixed(data.bb_bell_count / data.rare_bell, 1);
+
+  rb_omr_count.textContent = data.rb_one_medal_role + "回";
+  rb_omr_per.textContent = "1/" + to_fixed(data.rb_game_count / data.rb_one_medal_role, 1);
+  rb_lean_ice_count.textContent = data.rb_lean_ice + "回";
+  rb_lean_ice_per.textContent = "1/" + to_fixed(data.rb_game_count / data.rb_lean_ice, 1);
+  rb_blank_count.textContent = data.rb_blank + "回";
+  rb_blank_per.textContent = "1/" + to_fixed(data.rb_game_count / data.rb_blank, 1);
+
+  rb_pank_lv_low_count.textContent = data.rb_pank_lv_low + "回";
+  rb_pank_lv_mid_count.textContent = data.rb_pank_lv_mid + "回";
+  rb_pank_lv_high_count.textContent = data.rb_pank_lv_high + "回";
+  rb_showed_peace_lv_low_count.textContent = data.rb_showed_peace_lv_low + "回";
+  rb_showed_peace_lv_mid_count.textContent = data.rb_showed_peace_lv_mid + "回";
+  rb_showed_peace_lv_high_count.textContent = data.rb_showed_peace_lv_high + "回";
+
+  rb_pank_lv_low_per.textContent = "1/" + to_fixed(data.rb / data.rb_pank_lv_low, 2);
+  rb_pank_lv_mid_per.textContent = "1/" + to_fixed(data.rb / data.rb_pank_lv_mid, 1);
+  rb_pank_lv_high_per.textContent = "1/" + to_fixed(data.rb / data.rb_pank_lv_high, 1);
+  rb_showed_peace_lv_low_per.textContent = "1/" + to_fixed(data.rb_pank_lv_low / data.rb_showed_peace_lv_low, 1);
+  rb_showed_peace_lv_mid_per.textContent = "1/" + to_fixed(data.rb_pank_lv_mid / data.rb_showed_peace_lv_mid, 1);
+  rb_showed_peace_lv_high_per.textContent = "1/" + to_fixed(data.rb_pank_lv_high / data.rb_showed_peace_lv_high, 1);
+
+  all_bell_count.textContent = data.bell_a + data.bell_b + "回";
+  all_bell_per.textContent = "1/" + to_fixed(data.cnt / (data.bell_a + data.bell_b), 1);
+  bell_a_count.textContent = data.bell_a + "回";
+  bell_a_per.textContent = "1/" + to_fixed(data.cnt / data.bell_a, 1);
+  bell_b_count.textContent = data.bell_b + "回";
+  bell_b_per.textContent = "1/" + to_fixed(data.cnt / data.bell_b, 1);
+
+  all_ice_count.textContent = data.ice_a + data.ice_b + "回";
+  all_ice_per.textContent = "1/" + to_fixed(data.cnt / (data.ice_a + data.ice_b), 1);
+  ice_a_count.textContent = data.ice_a + "回";
+  ice_a_per.textContent = "1/" + to_fixed(data.cnt / data.ice_a, 1);
+  ice_b_count.textContent = data.ice_b + "回";
+  ice_b_per.textContent = "1/" + to_fixed(data.cnt / data.ice_b, 1);
+
+  all_cher_count.textContent = data.cher_a1 + data.cher_a2 + data.cher_b + "回";
+  all_cher_per.textContent = "1/" + to_fixed(data.cnt / (data.cher_a1 + data.cher_a2 + data.cher_b), 1);
+  cher_a1_count.textContent = data.cher_a1 + "回";
+  cher_a1_per.textContent = "1/" + to_fixed(data.cnt / data.cher_a1, 1);
+  cher_a2_count.textContent = data.cher_a2 + "回";
+  cher_a2_per.textContent = "1/" + to_fixed(data.cnt / data.cher_a2, 1);
+  cher_b_count.textContent = data.cher_b + "回";
+  cher_b_per.textContent = "1/" + to_fixed(data.cnt / data.cher_b, 1);
+
+  hc_blank_count.textContent = data.hc_blank + "回";
+  hc_blank_per.textContent = "1/" + to_fixed(data.hc_game_count / data.hc_blank, 1);
+  hg_blank_count.textContent = data.hg_blank + "回";
+  hg_blank_per.textContent = "1/" + to_fixed(data.hg_game_count / data.hg_blank, 1);
+
+  longest_bonus_span.textContent = data.longest_bonus_span_game_count + "G";
+  longest_bb_span.textContent = data.longest_bb_span_game_count + "G";
+  longest_rb_span.textContent = data.longest_rb_span_game_count + "G";
+
+  alone_don_bb_count.textContent = data.alone_don_bb + "回";
+  alone_red_bb_count.textContent = data.alone_red_bb + "回";
+  alone_rb_count.textContent = data.alone_rb + "回";
+  alone_don_bb_per.textContent = "1/" + to_fixed(data.cnt / data.alone_don_bb, 1);
+  alone_red_bb_per.textContent = "1/" + to_fixed(data.cnt / data.alone_red_bb, 1);
+  alone_rb_per.textContent = "1/" + to_fixed(data.cnt / data.alone_rb, 1);
+
+  rt_rep_don_bb_count.textContent = data.rt_rep_don_bb + "回";
+  rt_rep_red_bb_count.textContent = data.rt_rep_red_bb + "回";
+  rt_rep_rb_count.textContent = data.rt_rep_rb + "回";
+  rt_rep_don_bb_per.textContent = "1/" + to_fixed(data.cnt / data.rt_rep_don_bb, 1);
+  rt_rep_red_bb_per.textContent = "1/" + to_fixed(data.cnt / data.rt_rep_red_bb, 1);
+  rt_rep_rb_per.textContent = "1/" + to_fixed(data.cnt / data.rt_rep_rb, 1);
+
+  jac_rep_don_bb_count.textContent = data.jac_rep_don_bb + "回";
+  jac_rep_red_bb_count.textContent = data.jac_rep_red_bb + "回";
+  jac_rep_don_bb_per.textContent = "1/" + to_fixed(data.cnt / data.jac_rep_don_bb, 1);
+  jac_rep_red_bb_per.textContent = "1/" + to_fixed(data.cnt / data.jac_rep_red_bb, 1);
+
+  cher_b_don_bb_count.textContent = data.cher_b_don_bb + "回";
+  cher_b_red_bb_count.textContent = data.cher_b_red_bb + "回";
+  cher_b_rb_count.textContent = data.cher_b_rb + "回";
+  cher_b_don_bb_per.textContent = "1/" + to_fixed(data.cnt / data.cher_b_don_bb, 1);
+  cher_b_red_bb_per.textContent = "1/" + to_fixed(data.cnt / data.cher_b_red_bb, 1);
+  cher_b_rb_per.textContent = "1/" + to_fixed(data.cnt / data.cher_b_rb, 1);
+
+  sp_a_don_bb_count.textContent = data.sp_a_don_bb + "回";
+  sp_a_red_bb_count.textContent = data.sp_a_red_bb + "回";
+  sp_a_don_bb_per.textContent = "1/" + to_fixed(data.cnt / data.sp_a_don_bb, 1);
+  sp_a_red_bb_per.textContent = "1/" + to_fixed(data.cnt / data.sp_a_red_bb, 1);
+
+  sp_b_don_bb_count.textContent = data.sp_b_don_bb + "回";
+  sp_b_rb_count.textContent = data.sp_b_rb + "回";
+  sp_b_don_bb_per.textContent = "1/" + to_fixed(data.cnt / data.sp_b_don_bb, 1);
+  sp_b_rb_per.textContent = "1/" + to_fixed(data.cnt / data.sp_b_rb, 1);
+
+  sp_c_red_bb_count.textContent = data.sp_c_red_bb + "回";
+  sp_c_red_bb_per.textContent = "1/" + to_fixed(data.cnt / data.sp_c_red_bb, 1);
+
+  sp_d_don_bb_count.textContent = data.sp_d_don_bb + "回";
+  sp_d_rb_count.textContent = data.sp_d_rb + "回";
+  sp_d_don_bb_per.textContent = "1/" + to_fixed(data.cnt / data.sp_d_don_bb, 1);
+  sp_d_rb_per.textContent = "1/" + to_fixed(data.cnt / data.sp_d_rb, 1);
+
+  sp_e_don_bb_count.textContent = data.sp_e_don_bb + "回";
+  sp_e_red_bb_count.textContent = data.sp_e_red_bb + "回";
+  sp_e_rb_count.textContent = data.sp_e_rb + "回";
+  sp_e_don_bb_per.textContent = "1/" + to_fixed(data.cnt / data.sp_e_don_bb, 1);
+  sp_e_red_bb_per.textContent = "1/" + to_fixed(data.cnt / data.sp_e_red_bb, 1);
+  sp_e_rb_per.textContent = "1/" + to_fixed(data.cnt / data.sp_e_rb, 1);
+
+  bell_b_don_bb_count.textContent = data.bell_b_don_bb + "回";
+  bell_b_don_bb_per.textContent = "1/" + to_fixed(data.cnt / data.bell_b_don_bb, 1);
+  cher_a1_red_bb_count.textContent = data.cher_a1_red_bb + "回";
+  cher_a1_red_bb_per.textContent = "1/" + to_fixed(data.cnt / data.cher_a1_red_bb, 1);
+
+  total_medal.textContent = (data.out_medal - data.in_medal) + "枚";
+  payout.textContent = to_fixed(data.out_medal / data.in_medal * 100, 2) + "%";
+
+  graph.destroy();
+  graph = new Chart(context, {
+    type: 'line',
+    data: {
+      labels: data.section_total_medal_labels,
+      datasets: [{
+        label: "差枚数",
+        data: data.section_total_medal,
+        borderColor: 'rgb(255, 99, 132)',
+      }],
+    }
+  })
+
+  simulate_button.disabled = false;
+};
+
+simulate_button.onclick = function () {
   simulate_button.disabled = true;
   err_msg_label.style.visibility = "hidden";
 
-  let simulate_game_count = simulate_game_count_form.value;
-  if (simulate_game_count <= 0 || simulate_game_count > 500000) {
-    err_msg_label.textContent = "無効なG数が指定されています (1 ~ 500000 の値を指定してください)";
+  const data = new DisplayInfo()
+  data.simulate_game_count = simulate_game_count_form.value;
+  if (data.simulate_game_count <= 0 || data.simulate_game_count > GAME_COUNT_THRESHOLD) {
+    err_msg_label.textContent = "無効なG数が指定されています (1 ~ " + GAME_COUNT_THRESHOLD + " の値を指定してください)";
     err_msg_label.style.visibility = "visible";
     simulate_button.disabled = false;
     return;
@@ -791,23 +1184,24 @@ simulate_button.onclick = () => {
 
   switch (select_setting.value) {
     case "1":
-      setting = SETTING.LOW_1;
+      data.setting = SETTING.LOW_1;
       break;
     case "2":
-      setting = SETTING.LOW_2;
+      data.setting = SETTING.LOW_2;
       break;
     case "5":
-      setting = SETTING.HIGH_5;
+      data.setting = SETTING.HIGH_5;
       break;
     case "6":
-      setting = SETTING.HIGH_6;
+      data.setting = SETTING.HIGH_6;
       break;
     case "?":
-      setting = get_random_setting(Number(setting_1_ratio_form.value),
-                                   Number(setting_2_ratio_form.value),
-                                   Number(setting_5_ratio_form.value),
-                                   Number(setting_6_ratio_form.value));
-      if (setting == SETTING.NOT_DEFINED) {
+      data.setting = get_random_setting(Number(setting_1_ratio_form.value),
+        Number(setting_2_ratio_form.value),
+        Number(setting_5_ratio_form.value),
+        Number(setting_6_ratio_form.value)
+      );
+      if (data.setting == SETTING.NOT_DEFINED) {
         err_msg_label.textContent = "設定配分が不正です";
         err_msg_label.style.visibility = "visible";
         simulate_button.disabled = false;
@@ -821,421 +1215,10 @@ simulate_button.onclick = () => {
       return;
   }
 
-  setting_text.textContent = convert_setting_enum_to_string(setting);
+  data.role = new Role(data.setting)
+  setting_text.textContent = convert_setting_enum_to_string(data.setting);
 
-  let in_medal = 0;
-  let out_medal = 0;
-  let section_unit = Math.trunc(simulate_game_count / 100);
-  let section_total_medal = new Array();
-  let section_total_medal_labels = new Array();
+  data.section_unit = Math.trunc(data.simulate_game_count / 100);
 
-  let d_bb = 0;
-  let r_bb = 0;
-  let rb = 0;
-
-  let bb_bell;
-  let hriz_bell = 0;
-  let lean_bell = 0;
-  let rare_bell = 0;
-  let rb_game_count = 0;
-  let rb_one_medal_role = 0;
-  let rb_lean_ice = 0;
-  let rb_blank = 0;
-  let rb_pank_lv_low = 0;
-  let rb_pank_lv_mid = 0;
-  let rb_pank_lv_high = 0;
-  let rb_showed_peace_lv_low = 0;
-  let rb_showed_peace_lv_mid = 0;
-  let rb_showed_peace_lv_high = 0;
-
-  let bell_a = 0;
-  let bell_b = 0;
-  let ice_a = 0;
-  let ice_b = 0;
-  let cher_a1 = 0;
-  let cher_a2 = 0;
-  let cher_b = 0;
-
-  let left_hc_game_count = 0;
-  let left_hg_game_count = 0;
-  let hc_blank = 0;
-  let hg_blank = 0;
-  let hc_game_count = 0;
-  let hg_game_count = 0;
-
-  let role = new Role(setting);
-
-  let longest_bonus_span_game_count = 0;
-  let longest_bb_span_game_count = 0;
-  let longest_rb_span_game_count = 0;
-  let bonus_span_game_count = 0;
-  let bb_span_game_count = 0;
-  let rb_span_game_count = 0;
-
-  let alone_don_bb = 0;
-  let alone_red_bb = 0;
-  let alone_rb = 0;
-
-  let rt_rep_don_bb = 0;
-  let rt_rep_red_bb = 0;
-  let rt_rep_rb = 0;
-
-  let jac_rep_don_bb = 0;
-  let jac_rep_red_bb = 0;
-
-  let cher_b_don_bb = 0;
-  let cher_b_red_bb = 0;
-  let cher_b_rb = 0;
-
-  let sp_a_don_bb = 0;
-  let sp_a_red_bb = 0;
-
-  let sp_b_don_bb = 0;
-  let sp_b_rb = 0;
-
-  let sp_c_red_bb = 0;
-
-  let sp_d_don_bb = 0;
-  let sp_d_rb = 0;
-
-  let sp_e_don_bb = 0;
-  let sp_e_red_bb = 0;
-  let sp_e_rb = 0;
-
-  let bell_b_don_bb = 0;
-  let cher_a1_red_bb = 0;
-
-  let cnt = 0;
-  for (; cnt < simulate_game_count; ++cnt) {
-    role_bit = role.get_role(get_flag(65536));
-    in_medal += 3;
-
-    // RT 中
-    if (left_hg_game_count > 0) {
-      --left_hg_game_count;
-      ++hg_game_count;
-      // print("left_hg: " + left_hg_game_count + ", hg: " + hg_game_count)
-      if ((role_bit & ROLE.HG_BLANK) != 0) {
-        ++hg_blank;
-      }
-      if ((role_bit & (ROLE.REP | ROLE.HG_RT_REP | ROLE.RT_REP | ROLE.JAC_REP)) != 0) {
-        // 0in0out の補正
-        in_medal -= 3;
-      }
-    } else if (left_hc_game_count > 0) {
-      --left_hc_game_count;
-      ++hc_game_count;
-      // print("left_hc: " + left_hc_game_count + ", hc: " + hc_game_count)
-      // jacin
-      if (((role_bit & ROLE.HC_JAC_REP) != 0) && left_hc_game_count <= 7) {
-        left_hg_game_count = 20;
-        left_hc_game_count = 0;
-      }
-      if ((role_bit & ROLE.HC_BLANK) != 0) {
-        ++hc_blank;
-      }
-      if ((role_bit & (ROLE.HC_RT_REP | ROLE.HC_JAC_REP | ROLE.RT_REP | ROLE.JAC_REP)) != 0) {
-        // 0in0out の補正
-        in_medal -= 3;
-      }
-    } else { // 通常時
-      if ((role_bit & (ROLE.REP | ROLE.RT_REP | ROLE.JAC_REP)) != 0) {
-        // 0in0out の補正
-        in_medal -= 3;
-      }
-    }
-
-    // 小役計数
-    if ((role_bit & ROLE.BELL_A) != 0) {
-      ++bell_a;
-      out_medal += 8;
-    } else if ((role_bit & ROLE.BELL_B) != 0) {
-      ++bell_b;
-      out_medal += 8;
-    } else if ((role_bit & ROLE.ICE_A) != 0) {
-      ++ice_a;
-      out_medal += 8;
-    } else if ((role_bit & ROLE.ICE_B) != 0) {
-      ++ice_b;
-      out_medal += 8;
-    } else if ((role_bit & ROLE.CHER_A1) != 0) {
-      ++cher_a1;
-      out_medal += 4;
-    } else if ((role_bit & ROLE.CHER_A2) != 0) {
-      ++cher_a2;
-      out_medal += 4;
-    } else if ((role_bit & ROLE.CHER_B) != 0) {
-      ++cher_b;
-      out_medal += 4;
-    }
-
-    ++bonus_span_game_count;
-    ++bb_span_game_count;
-    ++rb_span_game_count;
-    if (bonus_span_game_count > longest_bonus_span_game_count) {
-      longest_bonus_span_game_count = bonus_span_game_count;
-    }
-    if (bb_span_game_count > longest_bb_span_game_count) {
-      longest_bb_span_game_count = bb_span_game_count;
-    }
-    if (rb_span_game_count > longest_rb_span_game_count) {
-      longest_rb_span_game_count = rb_span_game_count;
-    }
-
-    // ボーナス消化開始
-    if ((role_bit & ROLE.D_BB) != 0) {
-      if (role_bit == ROLE.D_BB) {
-        ++alone_don_bb;
-      } else if ((role_bit & ROLE.RT_REP) != 0) {
-        ++rt_rep_don_bb;
-      } else if ((role_bit & ROLE.JAC_REP) != 0) {
-        ++jac_rep_don_bb;
-      } else if ((role_bit & ROLE.CHER_B) != 0) {
-        ++cher_b_don_bb;
-      } else if ((role_bit & ROLE.SP_A) != 0) {
-        ++sp_a_don_bb;
-      } else if ((role_bit & ROLE.SP_B) != 0) {
-        ++sp_b_don_bb;
-      } else if ((role_bit & ROLE.SP_D) != 0) {
-        ++sp_d_don_bb;
-      } else if ((role_bit & ROLE.SP_E) != 0) {
-        ++sp_e_don_bb;
-      } else if ((role_bit & ROLE.BELL_B) != 0) {
-        ++bell_b_don_bb;
-      }
-      ++d_bb;
-      in_medal += 1 + 3 * 29;
-      out_medal += 10 * 29;
-      bb_bell = digest_big_bonus(setting);
-      hriz_bell += bb_bell.horizontal_bell;
-      lean_bell += bb_bell.leaning_bell;
-      rare_bell += bb_bell.rare_bell;
-      left_hc_game_count = 20;
-      left_hg_game_count = 0;
-
-      bonus_span_game_count = 0;
-      bb_span_game_count = 0;
-    } else if ((role_bit & ROLE.R_BB) != 0) {
-      if (role_bit == ROLE.R_BB) {
-        ++alone_red_bb;
-      } else if ((role_bit & ROLE.RT_REP) != 0) {
-        ++rt_rep_red_bb;
-      } else if ((role_bit & ROLE.JAC_REP) != 0) {
-        ++jac_rep_red_bb;
-      } else if ((role_bit & ROLE.CHER_B) != 0) {
-        ++cher_b_red_bb;
-      } else if ((role_bit & ROLE.SP_A) != 0) {
-        ++sp_a_red_bb;
-      } else if ((role_bit & ROLE.SP_C) != 0) {
-        ++sp_c_red_bb;
-      } else if ((role_bit & ROLE.SP_E) != 0) {
-        ++sp_e_red_bb;
-      } else if ((role_bit & ROLE.CHER_A1) != 0) {
-        ++cher_a1_red_bb;
-      }
-      ++r_bb;
-      in_medal += 1 + 3 * 29;
-      out_medal += 10 * 29;
-      bb_bell = digest_big_bonus(setting);
-      hriz_bell += bb_bell.horizontal_bell;
-      lean_bell += bb_bell.leaning_bell;
-      rare_bell += bb_bell.rare_bell;
-      left_hc_game_count = 20;
-      left_hg_game_count = 0;
-
-      bonus_span_game_count = 0;
-      bb_span_game_count = 0;
-    } else if ((role_bit & ROLE.RB) != 0) {
-      if (role_bit == ROLE.RB) {
-        ++alone_rb;
-      } else if ((role_bit & ROLE.RT_REP) != 0) {
-        ++rt_rep_rb;
-      } else if ((role_bit & ROLE.CHER_B) != 0) {
-        ++cher_b_rb;
-      } else if ((role_bit & ROLE.SP_B) != 0) {
-        ++sp_b_rb;
-      } else if ((role_bit & ROLE.SP_D) != 0) {
-        ++sp_d_rb;
-      } else if ((role_bit & ROLE.SP_E) != 0) {
-        ++sp_e_rb;
-      }
-      ++rb;
-      rb_data = digest_reg_bonus(setting);
-      in_medal += 1 + rb_data.in_medal;
-      out_medal += rb_data.out_medal;
-
-      rb_game_count += rb_data.game_count;
-      rb_one_medal_role += rb_data.one_medal_role;
-      rb_lean_ice += rb_data.leaning_ice;
-      rb_blank += rb_data.blank;
-      rb_pank_lv_low += rb_data.pank_lv_low;
-      rb_pank_lv_mid += rb_data.pank_lv_mid;
-      rb_pank_lv_high += rb_data.pank_lv_high;
-      rb_showed_peace_lv_low += rb_data.showed_peace_lv_low;
-      rb_showed_peace_lv_mid += rb_data.showed_peace_lv_mid;
-      rb_showed_peace_lv_high += rb_data.showed_peace_lv_high;
-      left_hc_game_count = 0;
-      left_hg_game_count = 0;
-
-      bonus_span_game_count = 0;
-      rb_span_game_count = 0;
-    }
-
-    if (cnt % section_unit == 0) {
-      section_total_medal.push(out_medal - in_medal);
-      section_total_medal_labels.push(cnt.toString());
-    }
-  }
-
-  section_total_medal.push(out_medal - in_medal);
-  section_total_medal_labels.push(cnt.toString());
-
-  let bb = d_bb + r_bb;
-  let bb_bell_count = bb * 29;
-
-  game_count.textContent = cnt + "G";
-  all_bonus_count.textContent = bb + rb + "回";
-  all_bonus_per.textContent = "1/" + to_fixed(cnt / (bb + rb), 1);
-  all_bb_count.textContent = bb + "回";
-  all_bb_per.textContent = "1/" + to_fixed(cnt / bb, 1);
-  don_bb_count.textContent = d_bb + "回";
-  don_bb_per.textContent = "1/" + to_fixed(cnt / d_bb, 1);
-  red_bb_count.textContent = r_bb + "回";
-  red_bb_per.textContent = "1/" + to_fixed(cnt / r_bb, 1);
-  rb_count.textContent = rb + "回";
-  rb_per.textContent = "1/" + to_fixed(cnt / rb, 1);
-
-  bb_hriz_bell_count.textContent = hriz_bell + "回";
-  bb_hriz_bell_per.textContent = "1/" + to_fixed(bb_bell_count / hriz_bell, 1);
-  bb_lean_bell_count.textContent = lean_bell + "回";
-  bb_lean_bell_per.textContent = "1/" + to_fixed(bb_bell_count / lean_bell, 1);
-  bb_rare_bell_count.textContent = rare_bell + "回";
-  bb_rare_bell_per.textContent = "1/" + to_fixed(bb_bell_count / rare_bell, 1);
-
-  rb_omr_count.textContent = rb_one_medal_role + "回";
-  rb_omr_per.textContent = "1/" + to_fixed(rb_game_count / rb_one_medal_role, 1);
-  rb_lean_ice_count.textContent = rb_lean_ice + "回";
-  rb_lean_ice_per.textContent = "1/" + to_fixed(rb_game_count / rb_lean_ice, 1);
-  rb_blank_count.textContent = rb_blank + "回";
-  rb_blank_per.textContent = "1/" + to_fixed(rb_game_count / rb_blank, 1);
-
-  rb_pank_lv_low_count.textContent = rb_pank_lv_low + "回";
-  rb_pank_lv_mid_count.textContent = rb_pank_lv_mid + "回";
-  rb_pank_lv_high_count.textContent = rb_pank_lv_high + "回";
-  rb_showed_peace_lv_low_count.textContent = rb_showed_peace_lv_low + "回";
-  rb_showed_peace_lv_mid_count.textContent = rb_showed_peace_lv_mid + "回";
-  rb_showed_peace_lv_high_count.textContent = rb_showed_peace_lv_high + "回";
-
-  rb_pank_lv_low_per.textContent = "1/" + to_fixed(rb / rb_pank_lv_low, 2);
-  rb_pank_lv_mid_per.textContent = "1/" + to_fixed(rb / rb_pank_lv_mid, 1);
-  rb_pank_lv_high_per.textContent = "1/" + to_fixed(rb / rb_pank_lv_high, 1);
-  rb_showed_peace_lv_low_per.textContent = "1/" + to_fixed(rb_pank_lv_low / rb_showed_peace_lv_low, 1);
-  rb_showed_peace_lv_mid_per.textContent = "1/" + to_fixed(rb_pank_lv_mid / rb_showed_peace_lv_mid, 1);
-  rb_showed_peace_lv_high_per.textContent = "1/" + to_fixed(rb_pank_lv_high / rb_showed_peace_lv_high, 1);
-
-  all_bell_count.textContent = bell_a + bell_b + "回";
-  all_bell_per.textContent = "1/" + to_fixed(cnt / (bell_a + bell_b), 1);
-  bell_a_count.textContent = bell_a + "回";
-  bell_a_per.textContent = "1/" + to_fixed(cnt / bell_a, 1);
-  bell_b_count.textContent = bell_b + "回";
-  bell_b_per.textContent = "1/" + to_fixed(cnt / bell_b, 1);
-
-  all_ice_count.textContent = ice_a + ice_b + "回";
-  all_ice_per.textContent = "1/" + to_fixed(cnt / (ice_a + ice_b), 1);
-  ice_a_count.textContent = ice_a + "回";
-  ice_a_per.textContent = "1/" + to_fixed(cnt / ice_a, 1);
-  ice_b_count.textContent = ice_b + "回";
-  ice_b_per.textContent = "1/" + to_fixed(cnt / ice_b, 1);
-
-  all_cher_count.textContent = cher_a1 + cher_a2 + cher_b + "回";
-  all_cher_per.textContent = "1/" + to_fixed(cnt / (cher_a1 + cher_a2 + cher_b), 1);
-  cher_a1_count.textContent = cher_a1 + "回";
-  cher_a1_per.textContent = "1/" + to_fixed(cnt / cher_a1, 1);
-  cher_a2_count.textContent = cher_a2 + "回";
-  cher_a2_per.textContent = "1/" + to_fixed(cnt / cher_a2, 1);
-  cher_b_count.textContent = cher_b + "回";
-  cher_b_per.textContent = "1/" + to_fixed(cnt / cher_b, 1);
-
-  hc_blank_count.textContent = hc_blank + "回";
-  hc_blank_per.textContent = "1/" + to_fixed(hc_game_count / hc_blank, 1);
-  hg_blank_count.textContent = hg_blank + "回";
-  hg_blank_per.textContent = "1/" + to_fixed(hg_game_count / hg_blank, 1);
-
-  longest_bonus_span.textContent = longest_bonus_span_game_count + "G";
-  longest_bb_span.textContent = longest_bb_span_game_count + "G";
-  longest_rb_span.textContent = longest_rb_span_game_count + "G";
-
-  alone_don_bb_count.textContent = alone_don_bb + "回";
-  alone_red_bb_count.textContent = alone_red_bb + "回";
-  alone_rb_count.textContent = alone_rb + "回";
-  alone_don_bb_per.textContent = "1/" + to_fixed(cnt / alone_don_bb, 1);
-  alone_red_bb_per.textContent = "1/" + to_fixed(cnt / alone_red_bb, 1);
-  alone_rb_per.textContent = "1/" + to_fixed(cnt / alone_rb, 1);
-
-  rt_rep_don_bb_count.textContent = rt_rep_don_bb + "回";
-  rt_rep_red_bb_count.textContent = rt_rep_red_bb + "回";
-  rt_rep_rb_count.textContent = rt_rep_rb + "回";
-  rt_rep_don_bb_per.textContent = "1/" + to_fixed(cnt / rt_rep_don_bb, 1);
-  rt_rep_red_bb_per.textContent = "1/" + to_fixed(cnt / rt_rep_red_bb, 1);
-  rt_rep_rb_per.textContent = "1/" + to_fixed(cnt / rt_rep_rb, 1);
-
-  jac_rep_don_bb_count.textContent = jac_rep_don_bb + "回";
-  jac_rep_red_bb_count.textContent = jac_rep_red_bb + "回";
-  jac_rep_don_bb_per.textContent = "1/" + to_fixed(cnt / jac_rep_don_bb, 1);
-  jac_rep_red_bb_per.textContent = "1/" + to_fixed(cnt / jac_rep_red_bb, 1);
-
-  cher_b_don_bb_count.textContent = cher_b_don_bb + "回";
-  cher_b_red_bb_count.textContent = cher_b_red_bb + "回";
-  cher_b_rb_count.textContent = cher_b_rb + "回";
-  cher_b_don_bb_per.textContent = "1/" + to_fixed(cnt / cher_b_don_bb, 1);
-  cher_b_red_bb_per.textContent = "1/" + to_fixed(cnt / cher_b_red_bb, 1);
-  cher_b_rb_per.textContent = "1/" + to_fixed(cnt / cher_b_rb, 1);
-
-  sp_a_don_bb_count.textContent = sp_a_don_bb + "回";
-  sp_a_red_bb_count.textContent = sp_a_red_bb + "回";
-  sp_a_don_bb_per.textContent = "1/" + to_fixed(cnt / sp_a_don_bb, 1);
-  sp_a_red_bb_per.textContent = "1/" + to_fixed(cnt / sp_a_red_bb, 1);
-
-  sp_b_don_bb_count.textContent = sp_b_don_bb + "回";
-  sp_b_rb_count.textContent = sp_b_rb + "回";
-  sp_b_don_bb_per.textContent = "1/" + to_fixed(cnt / sp_b_don_bb, 1);
-  sp_b_rb_per.textContent = "1/" + to_fixed(cnt / sp_b_rb, 1);
-
-  sp_c_red_bb_count.textContent = sp_c_red_bb + "回";
-  sp_c_red_bb_per.textContent = "1/" + to_fixed(cnt / sp_c_red_bb, 1);
-
-  sp_d_don_bb_count.textContent = sp_d_don_bb + "回";
-  sp_d_rb_count.textContent = sp_d_rb + "回";
-  sp_d_don_bb_per.textContent = "1/" + to_fixed(cnt / sp_d_don_bb, 1);
-  sp_d_rb_per.textContent = "1/" + to_fixed(cnt / sp_d_rb, 1);
-
-  sp_e_don_bb_count.textContent = sp_e_don_bb + "回";
-  sp_e_red_bb_count.textContent = sp_e_red_bb + "回";
-  sp_e_rb_count.textContent = sp_e_rb + "回";
-  sp_e_don_bb_per.textContent = "1/" + to_fixed(cnt / sp_e_don_bb, 1);
-  sp_e_red_bb_per.textContent = "1/" + to_fixed(cnt / sp_e_red_bb, 1);
-  sp_e_rb_per.textContent = "1/" + to_fixed(cnt / sp_e_rb, 1);
-
-  bell_b_don_bb_count.textContent = bell_b_don_bb + "回";
-  bell_b_don_bb_per.textContent = "1/" + to_fixed(cnt / bell_b_don_bb, 1);
-  cher_a1_red_bb_count.textContent = cher_a1_red_bb + "回";
-  cher_a1_red_bb_per.textContent = "1/" + to_fixed(cnt / cher_a1_red_bb, 1);
-
-  total_medal.textContent = (out_medal - in_medal) + "枚";
-  payout.textContent = to_fixed(out_medal / in_medal * 100, 2) + "%";
-
-  graph.destroy();
-  graph = new Chart(context, {
-    type: 'line',
-    data: {
-      labels: section_total_medal_labels,
-      datasets: [{
-        label: "差枚数",
-        data: section_total_medal,
-        borderColor: 'rgb(255, 99, 132)',
-      }],
-    }
-  })
-
-  simulate_button.disabled = false;
+  worker.postMessage(data);
 }
