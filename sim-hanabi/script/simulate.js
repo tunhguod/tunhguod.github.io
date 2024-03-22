@@ -1,7 +1,6 @@
 importScripts('./const.js', './function.js')
 
 class Role {
-
     flag_thresh = new Array()
     hc_flag_thresh = new Array()
     hg_flag_thresh = new Array()
@@ -40,7 +39,7 @@ class Role {
         this.map_flag(this.flag_thresh, MAPPED_FLAG.BELL_B_DON[setting])
         this.map_flag(this.flag_thresh, MAPPED_FLAG.CHR_A_RED[setting])
         this.map_flag(this.flag_thresh, MAPPED_FLAG.BELL_A[setting])
-        this.map_flag(this.flag_thresh, MAPPED_FLAG.BELL_B[setting])
+        this.map_flag(this.flag_thresh, MAPPED_FLAG.BELL_B[setting] - MAPPED_FLAG.BELL_B_DON[setting])
         this.map_flag(this.flag_thresh, MAPPED_FLAG.ICE_A[setting])
         this.map_flag(this.flag_thresh, MAPPED_FLAG.ICE_B[setting])
         this.map_flag(this.flag_thresh, MAPPED_FLAG.CHR_A1[setting] - MAPPED_FLAG.CHR_A_RED[setting])

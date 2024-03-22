@@ -17,7 +17,7 @@ function convert_setting_enum_to_string(setting) {
         case SETTING.HIGH_6:
             return "6"
         default:
-            throw new Error("Not defined setting.")
+            throw new Error("not defined setting.")
     }
 }
 
@@ -224,5 +224,9 @@ function digest_reg_bonus(setting, rb_push_order) {
 }
 
 function calculate_replay_medal() {
+    let medal = 3
+    if (IS_REPLAY_ZERO_MEDAL_AS_CALC) {
+        medal = 0
+    }
     return IS_REPLAY_ZERO_MEDAL_AS_CALC ? 0 : 3
 }

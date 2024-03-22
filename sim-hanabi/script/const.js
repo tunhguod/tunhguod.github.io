@@ -36,7 +36,7 @@ const ROLE = {
 
     HC_JAC_REP: 1 << 19,
     HC_RT_REP: 1 << 20,
-    HG_RT_REP: 1 << 21
+    HG_RT_REP: 1 << 21,
 }
 
 const SETTING = {
