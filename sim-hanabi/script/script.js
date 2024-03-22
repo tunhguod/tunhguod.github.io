@@ -760,3 +760,8 @@ simulate_button.onclick = function () {
 
   worker.postMessage(data.toJson())
 }
+
+function is_bonus(flag) {
+  const bonus_flag = ROLE.D_BB | ROLE.R_BB | ROLE.RB
+  return (flag & bonus_flag)
+}
