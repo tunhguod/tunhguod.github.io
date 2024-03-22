@@ -755,8 +755,5 @@ simulate_button.onclick = function () {
       return
   }
 
-  // data.role = new Role(data.setting)
-
-
   worker.postMessage(data.toJson())
 }
