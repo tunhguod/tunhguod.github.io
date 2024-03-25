@@ -10,7 +10,7 @@
 * URL
   * [https://tunhguod.github.io/sim-hanabi/](https://tunhguod.github.io/sim-hanabi/)
 
-## sim-hanabi/
+## sim-vs/
 
 ユニメモ風バーサス・リヴァイズシミュレーター
 
