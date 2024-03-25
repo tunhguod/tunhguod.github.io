@@ -84,7 +84,7 @@ const STATE = {
     VG: 2
 }
 
-const GAME_COUNT_THRESHOLD = 50000000
+const GAME_COUNT_THRESHOLD = 10000000
 const IS_REPLAY_ZERO_MEDAL_AS_CALC = false
 const DEBUG_MODE = false
 const TEST_FLAG_LIST = [
