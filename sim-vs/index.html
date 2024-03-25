@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="HandheldFriendly" content="True" />
+
+  <title>sim-vs</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <div class="parent">
+    <label id="errmsg">初期テキスト</label>
+    <div class="settings">
+      <input id="game-count-form" type="number" name="" value="" class="input-form" placeholder="試行G数を入力"
+        onkeydown="return event.keyCode !== 69" />
+      <select id="select-setting" required>
+        <option value="" hidden>設定を選択</option>
+
+        <option value="1">設定1</option>
+        <option value="2">設定2</option>
+        <option value="5">設定5</option>
+        <option value="6">設定6</option>
+        <option value="?">設定?</option>
+      </select>
+    </div>
+    <div class="settings">
+      <button id="simulate-button" type="button">　実行　</button>
+      <button id="setting-visibility-button" type="button">設定を隠す</button>
+      <span style="display: none;"> <!-- TODO: hidden -->
+        <button id="redbelt-visibility-button" type="button">赤帯を隠す</button>
+      </span>
+      <button id="screen-shot-button" type="button">スクショ</button>
+    </div>
+    <div>
+      <details>
+        <summary>RB 中設定</summary>
+        <form id="rb-order-group">
+          <input type="radio" name="rb-1st-order" value="left">順押し</input>
+          <input type="radio" name="rb-1st-order" value="center" checked>中1st</input>
+          <input type="radio" name="rb-1st-order" value="right">逆押し</input>
+        </form>
+        <!-- TODO
+    <input id="rb-center-1st-success-per" type="text" name="" value="" class="input-form"
+      placeholder="2コマ目押し成功率 (3 リール全て成功する確率, デフォルトは100%)" />
+    -->
+      </details>
+    </div>
+    <div id="setting-ratio-pane">
+      <label>設定投入比率:</label>
+      <div class="settings">
+        <input id="low-1-ratio" type="text" name="" value="" class="input-form" placeholder="設定1投入比率" />
+        <input id="low-2-ratio" type="text" name="" value="" class="input-form" placeholder="設定2投入比率" />
+        <input id="high-5-ratio" type="text" name="" value="" class="input-form" placeholder="設定5投入比率" />
+        <input id="high-6-ratio" type="text" name="" value="" class="input-form" placeholder="設定6投入比率" />
+      </div>
+      <span>合計が100になるように割り振ってください。<br>0 or 空値が入力された設定は使用されません。<br>全て0 or 空値の場合は均等に割り振ります。</span>
+    </div>
+  </div>
+
+  <div id="screen-shot-area">
+    <canvas id="slump-graph"></canvas>
+    <table>
+      <!-- 基本情報 -->
+      <thead>
+        <tr>
+          <th colspan="2">基本情報</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="setting-row">
+          <td class="key">設定</td>
+          <td class="value" id="setting"></td>
+        </tr>
+        <!-- 総プレイ数 -->
+        <tr>
+          <td class="key">総プレイ数</td>
+          <td class="value" id="game-count"></td>
+        </tr>
+        <!-- 総ボーナス -->
+        <tr>
+          <td class="key" rowspan="3">総ボーナス</td>
+          <td class="value" id="all-bonus-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="all-bonus-per"></td>
+        </tr>
+        <!-- 総BB -->
+        <tr>
+          <td class="key" rowspan="3">総BB</td>
+          <td class="value" id="all-bb-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="all-bb-per"></td>
+        </tr>
+        <!-- XBB -->
+        <tr>
+          <td class="key nest" rowspan="3">XBB</td>
+          <td class="value" id="x-bb-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="x-bb-per"></td>
+        </tr>
+        <!-- 赤七BB -->
+        <tr>
+          <td class="key nest" rowspan="3">赤七BB</td>
+          <td class="value" id="red-bb-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="red-bb-per"></td>
+        </tr>
+        <!-- RB -->
+        <tr>
+          <td class="key" rowspan="3">RB</td>
+          <td class="value" id="rb-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="rb-per"></td>
+        </tr>
+
+        <tr>
+          <td class="key" rowspan="3">差枚数</td>
+          <td class="value" id="payout"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="total-medal"></td>
+        </tr>
+
+        <tr>
+          <td class="key">最大ハマり</td>
+          <td class="value" id="longest-b-span"></td>
+        </tr>
+        <tr>
+          <td class="key nest">BB間</td>
+          <td class="value" id="longest-bb-span"></td>
+        </tr>
+        <tr>
+          <td class="key nest">RB間</td>
+          <td class="value" id="longest-rb-span"></td>
+        </tr>
+      </tbody>
+
+      <!-- 小役関連 -->
+      <thead>
+        <tr>
+          <th colspan="2">小役関連</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 風鈴合算 -->
+        <tr>
+          <td class="key" rowspan="3">ベル合算</td>
+          <td class="value" id="all-bell-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="all-bell-per"></td>
+        </tr>
+        <tr>
+          <td class="key nest" rowspan="3">ベルA</td>
+          <td class="value" id="bell-a-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="bell-a-per"></td>
+        </tr>
+        <tr>
+          <td class="key nest" rowspan="3">ベルB</td>
+          <td class="value" id="bell-b-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="bell-b-per"></td>
+        </tr>
+        <!-- 氷合算 -->
+        <tr>
+          <td class="key" rowspan="3">スイカ合算</td>
+          <td class="value" id="all-ice-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="all-ice-per"></td>
+        </tr>
+
+        <tr>
+          <td class="key nest" rowspan="3">スイカA</td>
+          <td class="value" id="ice-a-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="ice-a-per"></td>
+        </tr>
+        <tr>
+          <td class="key nest" rowspan="3">スイカB</td>
+          <td class="value" id="ice-b-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="ice-b-per"></td>
+        </tr>
+        <!-- チェリー合算 -->
+        <tr>
+          <td class="key" rowspan="3">チェリー合算</td>
+          <td class="value" id="all-cher-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="all-cher-per"></td>
+        </tr>
+        <tr>
+          <td class="key nest" rowspan="3">チェリーA</td>
+          <td class="value" id="cher-a-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="cher-a-per"></td>
+        </tr>
+        <tr>
+          <td class="key nest" rowspan="3">チェリーB</td>
+          <td class="value" id="cher-b-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="cher-b-per"></td>
+        </tr>
+      </tbody>
+      <!-- RT詳細 -->
+      <thead>
+        <tr>
+          <th colspan="2">RT詳細</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="key" rowspan="3">VSチャンス中はずれ</td>
+          <td class="value" id="vc-blank-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="vc-blank-per"></td>
+        </tr>
+        <tr>
+          <td class="key" rowspan="3">VSGAME中はずれ</td>
+          <td class="value" id="vg-blank-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="vg-blank-per"></td>
+        </tr>
+      </tbody>
+      <!-- BB中詳細 -->
+      <thead>
+        <tr>
+          <th colspan="2">BB中詳細</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="key" rowspan="3">ベル</td>
+          <td class="value" id="bb-bell-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="bb-bell-per"></td>
+        </tr>
+        <tr>
+          <td class="key" rowspan="3">チェリー+ベル揃い</td>
+          <td class="value" id="bb-cherry-bell-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="bb-cherry-bell-per"></td>
+        </tr>
+        <tr>
+          <td class="key" rowspan="3">チェリー+ベルはずれ</td>
+          <td class="value" id="bb-cherry-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="bb-cherry-per"></td>
+        </tr>
+        <tr>
+          <td class="key" rowspan="3">中段チェリー</td>
+          <td class="value" id="bb-high-cherry-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="bb-high-cherry-per"></td>
+        </tr>
+      </tbody>
+      <!-- RB中詳細 -->
+      <thead>
+        <tr>
+          <th colspan="2">RB中詳細</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="key" rowspan="3">1枚役</td>
+          <td class="value" id="rb-omr-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="rb-omr-per"></td>
+        </tr>
+        <tr>
+          <td class="key" rowspan="3">Xベル</td>
+          <td class="value" id="rb-x-bell-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="rb-x-bell-per"></td>
+        </tr>
+        <tr>
+          <td class="key" rowspan="3">はずれ</td>
+          <td class="value" id="rb-blank-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="rb-blank-per"></td>
+        </tr>
+        <!-- TODO: hidden -->
+        <!-- <tr>
+          <td class="key" rowspan="3">15枚役以外成立1回以下</td>
+          <td class="value" id="rb-pank-lv-1-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="rb-pank-lv-1-per"></td>
+        </tr>
+        <tr>
+          <td class="key nest" rowspan="3">赤帯出現</td>
+          <td class="value" id="rb-showed-redbelt-lv-1-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="rb-showed-redbelt-lv-1-per"></td>
+        </tr>
+
+        <tr>
+          <td class="key" rowspan="3">15枚役以外成立2回</td>
+          <td class="value" id="rb-pank-lv-2-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="rb-pank-lv-2-per"></td>
+        </tr>
+        <tr>
+          <td class="key nest" rowspan="3">赤帯出現</td>
+          <td class="value" id="rb-showed-redbelt-lv-2-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="rb-showed-redbelt-lv-2-per"></td>
+        </tr>
+
+        <tr>
+          <td class="key" rowspan="3">15枚役以外成立2回</td>
+          <td class="value" id="rb-pank-lv-2-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="rb-pank-lv-2-per"></td>
+        </tr>
+        <tr>
+          <td class="key nest" rowspan="3">赤帯出現</td>
+          <td class="value" id="rb-showed-redbelt-lv-2-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="rb-showed-redbelt-lv-2-per"></td>
+        </tr>
+
+        <tr>
+          <td class="key" rowspan="3">15枚役以外成立3回</td>
+          <td class="value" id="rb-pank-lv-3-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="rb-pank-lv-3-per"></td>
+        </tr>
+        <tr>
+          <td class="key nest" rowspan="3">赤帯出現</td>
+          <td class="value" id="rb-showed-redbelt-lv-3-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="rb-showed-redbelt-lv-3-per"></td>
+        </tr>
+
+        <tr>
+          <td class="key" rowspan="3">15枚役以外成立4回</td>
+          <td class="value" id="rb-pank-lv-4-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="rb-pank-lv-4-per"></td>
+        </tr>
+        <tr>
+          <td class="key nest" rowspan="3">赤帯出現</td>
+          <td class="value" id="rb-showed-redbelt-lv-4-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="rb-showed-redbelt-lv-4-per"></td>
+        </tr>
+
+        <tr>
+          <td class="key" rowspan="3">15枚役以外成立5回以上</td>
+          <td class="value" id="rb-pank-lv-5-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="rb-pank-lv-5-per"></td>
+        </tr>
+        <tr>
+          <td class="key nest" rowspan="3">赤帯出現</td>
+          <td class="value" id="rb-showed-redbelt-lv-5-count"></td>
+        </tr>
+        <tr>
+          <td class="dummy-elem">
+        </tr>
+        <tr>
+          <td class="value" id="rb-showed-redbelt-lv-5-per"></td>
+        </tr> -->
+
+      </tbody>
+    </table>
+
+    <table id="bonus-info">
+      <thead>
+        <tr>
+          <th colspan="2">ボーナス詳細</th>
+        </tr>
+      </thead>
+
+      <tr>
+        <td class="key" rowspan="3">単独XBB</td>
+        <td class="value" id="alone-x-bb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="alone-x-bb-per"></td>
+      </tr>
+      <tr>
+        <td class="key" rowspan="3">単独赤七BB</td>
+        <td class="value" id="alone-red-bb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="alone-red-bb-per"></td>
+      </tr>
+      <tr>
+        <td class="key" rowspan="3">単独RB</td>
+        <td class="value" id="alone-rb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="alone-rb-per"></td>
+      </tr>
+      <tr>
+        <td class="key" rowspan="3">RTリプ + XBB</td>
+        <td class="value" id="rt-rep-x-bb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="rt-rep-x-bb-per"></td>
+      </tr>
+      <tr>
+        <td class="key" rowspan="3">RTリプ + 赤七BB</td>
+        <td class="value" id="rt-rep-red-bb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="rt-rep-red-bb-per"></td>
+      </tr>
+      <tr>
+        <td class="key" rowspan="3">RTリプ + RB</td>
+        <td class="value" id="rt-rep-rb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="rt-rep-rb-per"></td>
+      </tr>
+      <tr>
+        <td class="key" rowspan="3">JACリプ + XBB</td>
+        <td class="value" id="jac-rep-x-bb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="jac-rep-x-bb-per"></td>
+      </tr>
+      <tr>
+        <td class="key" rowspan="3">JACリプ + 赤七BB</td>
+        <td class="value" id="jac-rep-red-bb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="jac-rep-red-bb-per"></td>
+      </tr>
+      <tr>
+        <td class="key" rowspan="3">チェリーB + XBB</td>
+        <td class="value" id="cher-b-x-bb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="cher-b-x-bb-per"></td>
+      </tr>
+      <tr>
+        <td class="key" rowspan="3">チェリーB + 赤七BB</td>
+        <td class="value" id="cher-b-red-bb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="cher-b-red-bb-per"></td>
+      </tr>
+      <tr>
+        <td class="key" rowspan="3">チェリーB + RB</td>
+        <td class="value" id="cher-b-rb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="cher-b-rb-per"></td>
+      </tr>
+      <tr>
+        <td class="key" rowspan="3">特殊役A + 赤七BB</td>
+        <td class="value" id="sp-a-red-bb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="sp-a-red-bb-per"></td>
+      </tr>
+      <tr>
+        <td class="key" rowspan="3">特殊役B + 赤七BB</td>
+        <td class="value" id="sp-b-red-bb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="sp-b-red-bb-per"></td>
+      </tr>
+      <tr>
+        <td class="key" rowspan="3">特殊役C + 赤七BB</td>
+        <td class="value" id="sp-c-red-bb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="sp-c-red-bb-per"></td>
+      </tr>
+
+      <tr>
+        <td class="key" rowspan="3">特殊役D + XBB</td>
+        <td class="value" id="sp-d-x-bb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="sp-d-x-bb-per"></td>
+      </tr>
+      <tr>
+        <td class="key" rowspan="3">特殊役D + RB</td>
+        <td class="value" id="sp-d-rb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="sp-d-rb-per"></td>
+      </tr>
+
+      <tr>
+        <td class="key" rowspan="3">特殊役E + XBB</td>
+        <td class="value" id="sp-e-x-bb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="sp-e-x-bb-per"></td>
+      </tr>
+      <tr>
+        <td class="key" rowspan="3">特殊役E + RB</td>
+        <td class="value" id="sp-e-rb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="sp-e-rb-per"></td>
+      </tr>
+
+      <tr>
+        <td class="key" rowspan="3">風鈴A + XBB</td>
+        <td class="value" id="bell-a-x-bb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="bell-a-x-bb-per"></td>
+      </tr>
+      <tr>
+        <td class="key" rowspan="3">チェリーA + 赤七BB</td>
+        <td class="value" id="cher-a-red-bb-count"></td>
+      </tr>
+      <tr>
+        <td class="dummy-elem">
+      </tr>
+      <tr>
+        <td class="value" id="cher-a-red-bb-per"></td>
+      </tr>
+
+    </table>
+  </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.7/download.js"></script>
+<script type="text/javascript" src="script/const.js"></script>
+<script type="text/javascript" src="script/function.js"></script>
+<script type="text/javascript" src="script/script.js"></script>
+
+</html>
