@@ -9,7 +9,17 @@
 
 * URL
   * [https://tunhguod.github.io/sim-hanabi/](https://tunhguod.github.io/sim-hanabi/)
- 
+
+## sim-hanabi/
+
+ユニメモ風バーサス・リヴァイズシミュレーター
+
+* Doc Root
+  * [sim-vs/](https://github.com/tunhguod/tunhguod.github.io/blob/main/sim-vs)
+
+* URL
+  * [https://tunhguod.github.io/sim-vs/](https://tunhguod.github.io/sim-vs/)
+
 ## hanapay/
 
 新ハナビ差枚計算機
