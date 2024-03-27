@@ -154,7 +154,8 @@ self.addEventListener("message", (e) => {
     const simulate_game_count = DEBUG_MODE ? TEST_FLAG_LIST.length : data.simulate_game_count
     var section_unit = Math.trunc(simulate_game_count / 100)
     let role_bit = 0x00
-    for (; data.cnt < simulate_game_count; ++data.cnt) {
+    do {
+        ++data.cnt
         if (data.left_vg_game_count > 0) { // VG 中
             role_bit = role.get_role(get_flag(65536), STATE.VG)
             --data.left_vg_game_count
@@ -314,10 +315,15 @@ self.addEventListener("message", (e) => {
             data.rb_span_game_count = 0
         }
 
-        if (data.cnt % section_unit == 0) {
+        if ((section_unit < 1) || (data.cnt % section_unit) == 0) {
             data.section_total_medal.push(data.out_medal - data.in_medal)
             data.section_total_medal_labels.push(data.cnt.toString())
         }
+    } while (data.cnt < simulate_game_count)
+
+    if ((section_unit >= 1) && (data.cnt % section_unit) != 0) {
+        data.section_total_medal.push(data.out_medal - data.in_medal)
+        data.section_total_medal_labels.push(data.cnt.toString())
     }
 
     self.postMessage(data)
