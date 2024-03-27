@@ -1,4 +1,4 @@
-class DisplayInfo {
+class SerializableGameData {
   #in_medal = 0
   #out_medal = 0
   #section_total_medal = new Array()
@@ -709,7 +709,7 @@ simulate_button.onclick = function () {
   simulate_button.disabled = true
   err_msg_label.style.visibility = "hidden"
 
-  const data = new DisplayInfo()
+  const data = new SerializableGameData()
   data.rb_push_order = rb_push_order
   data.simulate_game_count = simulate_game_count_form.value
   if (data.simulate_game_count <= 0 || data.simulate_game_count > GAME_COUNT_THRESHOLD) {
