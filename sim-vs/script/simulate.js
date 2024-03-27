@@ -82,59 +82,59 @@ class Role {
             return role
         }
 
-        if (0 <= flag && flag < this.flag_thresh[0]) {
+        if (flag < this.flag_thresh[0]) {
             role = ROLE.X_BB
-        } else if (this.flag_thresh[0] <= flag && flag < this.flag_thresh[1]) {
+        } else if (flag < this.flag_thresh[1]) {
             role = ROLE.R_BB
-        } else if (this.flag_thresh[1] <= flag && flag < this.flag_thresh[2]) {
+        } else if (flag < this.flag_thresh[2]) {
             role = ROLE.RB
-        } else if (this.flag_thresh[2] <= flag && flag < this.flag_thresh[3]) {
+        } else if (flag < this.flag_thresh[3]) {
             role = ROLE.X_BB | ROLE.RT_REP
-        } else if (this.flag_thresh[3] <= flag && flag < this.flag_thresh[4]) {
+        } else if (flag < this.flag_thresh[4]) {
             role = ROLE.R_BB | ROLE.RT_REP
-        } else if (this.flag_thresh[4] <= flag && flag < this.flag_thresh[5]) {
+        } else if (flag < this.flag_thresh[5]) {
             role = ROLE.RB | ROLE.RT_REP
-        } else if (this.flag_thresh[5] <= flag && flag < this.flag_thresh[6]) {
+        } else if (flag < this.flag_thresh[6]) {
             role = ROLE.X_BB | ROLE.JAC_REP
-        } else if (this.flag_thresh[6] <= flag && flag < this.flag_thresh[7]) {
+        } else if (flag < this.flag_thresh[7]) {
             role = ROLE.R_BB | ROLE.JAC_REP
-        } else if (this.flag_thresh[7] <= flag && flag < this.flag_thresh[8]) {
+        } else if (flag < this.flag_thresh[8]) {
             role = ROLE.X_BB | ROLE.CHER_B
-        } else if (this.flag_thresh[8] <= flag && flag < this.flag_thresh[9]) {
+        } else if (flag < this.flag_thresh[9]) {
             role = ROLE.R_BB | ROLE.CHER_B
-        } else if (this.flag_thresh[9] <= flag && flag < this.flag_thresh[10]) {
+        } else if (flag < this.flag_thresh[10]) {
             role = ROLE.RB | ROLE.CHER_B
-        } else if (this.flag_thresh[10] <= flag && flag < this.flag_thresh[11]) {
+        } else if (flag < this.flag_thresh[11]) {
             role = ROLE.R_BB | ROLE.SP_A
-        } else if (this.flag_thresh[11] <= flag && flag < this.flag_thresh[12]) {
+        } else if (flag < this.flag_thresh[12]) {
             role = ROLE.R_BB | ROLE.SP_B
-        } else if (this.flag_thresh[12] <= flag && flag < this.flag_thresh[13]) {
+        } else if (flag < this.flag_thresh[13]) {
             role = ROLE.R_BB | ROLE.SP_C
-        } else if (this.flag_thresh[13] <= flag && flag < this.flag_thresh[14]) {
+        } else if (flag < this.flag_thresh[14]) {
             role = ROLE.X_BB | ROLE.SP_D
-        } else if (this.flag_thresh[14] <= flag && flag < this.flag_thresh[15]) {
+        } else if (flag < this.flag_thresh[15]) {
             role = ROLE.RB | ROLE.SP_D
-        } else if (this.flag_thresh[15] <= flag && flag < this.flag_thresh[16]) {
+        } else if (flag < this.flag_thresh[16]) {
             role = ROLE.X_BB | ROLE.SP_E
-        } else if (this.flag_thresh[16] <= flag && flag < this.flag_thresh[17]) {
+        } else if (flag < this.flag_thresh[17]) {
             role = ROLE.RB | ROLE.SP_E
-        } else if (this.flag_thresh[17] <= flag && flag < this.flag_thresh[18]) {
+        } else if (flag < this.flag_thresh[18]) {
             role = ROLE.X_BB | ROLE.BELL_A
-        } else if (this.flag_thresh[18] <= flag && flag < this.flag_thresh[19]) {
+        } else if (flag < this.flag_thresh[19]) {
             role = ROLE.R_BB | ROLE.CHER_A
-        } else if (this.flag_thresh[19] <= flag && flag < this.flag_thresh[20]) {
+        } else if (flag < this.flag_thresh[20]) {
             role = ROLE.BELL_A
-        } else if (this.flag_thresh[20] <= flag && flag < this.flag_thresh[21]) {
+        } else if (flag < this.flag_thresh[21]) {
             role = ROLE.BELL_B
-        } else if (this.flag_thresh[21] <= flag && flag < this.flag_thresh[22]) {
+        } else if (flag < this.flag_thresh[22]) {
             role = ROLE.ICE_A
-        } else if (this.flag_thresh[22] <= flag && flag < this.flag_thresh[23]) {
+        } else if (flag < this.flag_thresh[23]) {
             role = ROLE.ICE_B
-        } else if (this.flag_thresh[23] <= flag && flag < this.flag_thresh[24]) {
+        } else if (flag < this.flag_thresh[24]) {
             role = ROLE.CHER_A
-        } else if (this.flag_thresh[24] <= flag && flag < this.flag_thresh[25]) {
+        } else if (flag < this.flag_thresh[25]) {
             role = ROLE.CHER_B
-        } else if (this.flag_thresh[25] <= flag && flag < this.flag_thresh[26]) {
+        } else if (flag < this.flag_thresh[26]) {
             role = ROLE.REP
         } else { // blank
             if (state == STATE.NORMAL) {
