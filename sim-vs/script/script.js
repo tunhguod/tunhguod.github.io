@@ -1,8 +1,8 @@
 class SerializableGameData {
   #in_medal = 0
   #out_medal = 0
-  #section_total_medal = new Array()
-  #section_total_medal_labels = new Array()
+  #section_total_medal = [0]
+  #section_total_medal_labels = ["0"]
 
   #x_bb = 0
   #r_bb = 0
@@ -555,8 +555,7 @@ screen_shot_button.onclick = () => {
 const worker = new Worker('./script/simulate.js')
 worker.onmessage = function (e) {
   const data = e.data
-  data.section_total_medal.push(data.out_medal - data.in_medal)
-  data.section_total_medal_labels.push(data.cnt.toString())
+
   data.rb_push_order = rb_push_order.value
   data.bb_game_count = (data.x_bb + data.r_bb) * 25
 
