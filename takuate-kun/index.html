@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>択当てくん</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #f3e7e9, #e3eeff);
+    }
+    .container {
+      text-align: center;
+      background: #fff;
+      border-radius: 10px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .number-display {
+      font-size: 72px;
+      margin: 20px 0;
+      color: #007BFF;
+      font-weight: bold;
+    }
+    .radio-group {
+      margin-bottom: 20px;
+    }
+    .radio-group label {
+      font-size: 18px;
+      margin-right: 15px;
+    }
+    .random-btn {
+      padding: 10px 30px;
+      font-size: 18px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .random-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>択当てくん</h1>
+
+    <div class="radio-group">
+      <label><input type="radio" name="choices" value="three-choices" checked>3択</label>
+      <label><input type="radio" name="choices" value="five-choices">5択</label>
+      <label><input type="radio" name="choices" value="six-choices">6択</label>
+    </div>
+
+    <div class="number-display" id="pattern">‐‐‐</div>
+
+    <button class="random-btn" onclick="generateNumber()">ねだる</button>
+  </div>
+
+  <script>
+    const list_t = ['①‐‐', '‐①‐', '‐‐①']
+    const list_f = ['①②③', '①③②', '‐①‐', '③②①', '②③①']
+    const list_s = ['①②③', '①③②', '②①③', '③①②', '③②①', '②③①']
+
+    function getPattern(num) {
+      let idx = Math.floor(Math.random() * num);
+      
+      switch (num) {
+        case 3:
+          return list_t[idx];
+        case 5:
+          return list_f[idx];
+        case 6:
+          return list_s[idx];
+      } 
+    }
+
+    function generateNumber() {
+      const numstr = document.querySelector('input[name="choices"]:checked').value;
+      let pattern;
+
+      if (numstr === 'three-choices') {
+        pattern = getPattern(3);
+      } else if (numstr === 'five-choices') {
+        pattern = getPattern(5);
+      } else if (numstr === 'six-choices') {
+        pattern = getPattern(6);
+      }
+
+      document.getElementById('pattern').innerText = pattern;
+    }
+  </script>
+</body>
+</html>
