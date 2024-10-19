@@ -66,6 +66,7 @@
     <h1>シン・択当てくん</h1>
 
     <div class="radio-group">
+      <label><input type="radio" name="choices" value="two-choices" checked>2択</label>
       <label><input type="radio" name="choices" value="three-choices" checked>3択</label>
       <label><input type="radio" name="choices" value="five-choices">5択</label>
       <label><input type="radio" name="choices" value="six-choices">6択</label>
@@ -77,7 +78,8 @@
   </div>
 
   <script>
-    const list_t = ['①‐‐', '‐①‐', '‐‐①']
+    const list_tw = ['①‐', '‐①']
+    const list_th = ['①‐‐', '‐①‐', '‐‐①']
     const list_f = ['①②③', '①③②', '‐①‐', '③②①', '②③①']
     const list_s = ['①②③', '①③②', '②①③', '③①②', '③②①', '②③①']
     const colors = ['#007BFF', '#FF6F61', '#28A745', '#6F42C1', '#FFC107'];
@@ -99,29 +101,18 @@
       return [...remaining][0];
     }
 
-    function getPattern(num) {
-      let idx = Math.floor(Math.random() * num);
-      
-      switch (num) {
-        case 3:
-          return getSurplus(list_t);
-        case 5:
-          return getSurplus(list_f);
-        case 6:
-          return getSurplus(list_s);
-      } 
-    }
-
     function generateNumber() {
       const numstr = document.querySelector('input[name="choices"]:checked').value;
       let pattern;
 
-      if (numstr === 'three-choices') {
-        pattern = getPattern(3);
+      if (numstr === 'two-choices') {
+        pattern = getSurplus(list_tw);
+      } else if (numstr === 'three-choices') {
+        pattern = getSurplus(list_th);
       } else if (numstr === 'five-choices') {
-        pattern = getPattern(5);
+        pattern = getSurplus(list_f);
       } else if (numstr === 'six-choices') {
-        pattern = getPattern(6);
+        pattern = getSurplus(list_s);
       }
 
       document.getElementById('pattern').innerText = pattern;
