@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>択当てくん</title>
+  <title>シン・択当てくん</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -63,7 +63,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>択当てくん</h1>
+    <h1>シン・択当てくん</h1>
 
     <div class="radio-group">
       <label><input type="radio" name="choices" value="three-choices" checked>3択</label>
@@ -83,17 +83,32 @@
     const colors = ['#007BFF', '#FF6F61', '#28A745', '#6F42C1', '#FFC107'];
 
     let cnt = 0;
+    
+    function getSurplus(list) {
+	  let remaining = new Set(list);
+
+	  while (remaining.size > 1) {
+	    const randomIndex = Math.floor(Math.random() * list.length);
+	    const selected = list[randomIndex];
+
+	    if (remaining.has(selected)) {
+	      remaining.delete(selected);
+	    }
+	  }
+	  
+	  return [...remaining][0];
+	}
 
     function getPattern(num) {
       let idx = Math.floor(Math.random() * num);
       
       switch (num) {
         case 3:
-          return list_t[idx];
+          return getSurplus(list_t);
         case 5:
-          return list_f[idx];
+          return getSurplus(list_f);
         case 6:
-          return list_s[idx];
+          return getSurplus(list_s);
       } 
     }
 
