@@ -85,19 +85,19 @@
     let cnt = 0;
     
     function getSurplus(list) {
-	  let remaining = new Set(list);
+      let remaining = new Set(list);
 
-	  while (remaining.size > 1) {
-	    const randomIndex = Math.floor(Math.random() * list.length);
-	    const selected = list[randomIndex];
+      while (remaining.size > 1) {
+        const randomIndex = Math.floor(Math.random() * list.length);
+        const selected = list[randomIndex];
 
-	    if (remaining.has(selected)) {
-	      remaining.delete(selected);
-	    }
-	  }
-	  
-	  return [...remaining][0];
-	}
+        if (remaining.has(selected)) {
+          remaining.delete(selected);
+        }
+      }
+
+      return [...remaining][0];
+    }
 
     function getPattern(num) {
       let idx = Math.floor(Math.random() * num);
