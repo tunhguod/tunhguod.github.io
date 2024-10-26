@@ -105,23 +105,24 @@
       const numstr = document.querySelector('input[name="choices"]:checked').value;
       let pattern;
 
-      // Shifting the index by one is a spell.
+      // Shifting the index is a spell.
       let idx;
+      let unix_sec = Date.now()
       if (numstr === 'two-choices') {
         idx = list_tw.indexOf(getSurplus(list_tw));
-        idx = (idx + 1) % 2;
+        idx = Math.round((idx + unix_sec) / 7) % 2;
         pattern = list_tw[idx];
       } else if (numstr === 'three-choices') {
         idx = list_th.indexOf(getSurplus(list_th));
-        idx = (idx + 1) % 3;
+        idx = Math.round((idx + unix_sec) / 7) % 3;
         pattern = list_th[idx];
       } else if (numstr === 'five-choices') {
         idx = list_f.indexOf(getSurplus(list_f));
-        idx = (idx + 1) % 5;
+        idx = Math.round((idx + unix_sec) / 7) % 5;
         pattern = list_f[idx];
       } else if (numstr === 'six-choices') {
         idx = list_s.indexOf(getSurplus(list_s));
-        idx = (idx + 1) % 6;
+        idx = Math.round((idx + unix_sec) / 7) % 6;
         pattern = list_s[idx];
       }
 
