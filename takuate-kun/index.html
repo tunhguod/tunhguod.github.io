@@ -66,10 +66,10 @@
     <h1>シン・択当てくん</h1>
 
     <div class="radio-group">
-      <label><input type="radio" name="choices" value="two-choices" checked>2択</label>
-      <label><input type="radio" name="choices" value="three-choices" checked>3択</label>
+      <label><input type="radio" name="choices" value="two-choices">2択</label>
+      <label><input type="radio" name="choices" value="three-choices">3択</label>
       <label><input type="radio" name="choices" value="five-choices">5択</label>
-      <label><input type="radio" name="choices" value="six-choices">6択</label>
+      <label><input type="radio" name="choices" value="six-choices" checked>6択</label>
     </div>
 
     <div class="number-display" id="pattern">‐‐‐</div>
@@ -110,19 +110,19 @@
       let unix_sec = Date.now()
       if (numstr === 'two-choices') {
         idx = list_tw.indexOf(getSurplus(list_tw));
-        idx = Math.round((idx + unix_sec) / 7) % 2;
+        idx = Math.round(idx + unix_sec) % 2;
         pattern = list_tw[idx];
       } else if (numstr === 'three-choices') {
         idx = list_th.indexOf(getSurplus(list_th));
-        idx = Math.round((idx + unix_sec) / 7) % 3;
+        idx = Math.round(idx + unix_sec) % 3;
         pattern = list_th[idx];
       } else if (numstr === 'five-choices') {
         idx = list_f.indexOf(getSurplus(list_f));
-        idx = Math.round((idx + unix_sec) / 7) % 5;
+        idx = Math.round(idx + unix_sec) % 5;
         pattern = list_f[idx];
       } else if (numstr === 'six-choices') {
         idx = list_s.indexOf(getSurplus(list_s));
-        idx = Math.round((idx + unix_sec) / 7) % 6;
+        idx = Math.round(idx + unix_sec) % 6;
         pattern = list_s[idx];
       }
 
