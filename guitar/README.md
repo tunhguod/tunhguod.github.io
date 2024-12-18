@@ -1,6 +1,18 @@
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">最近良く打ってるのでこのすば🎹(transpose:-4)　<a href="https://twitter.com/hashtag/%E9%83%A8%E5%B1%8B%E5%AF%92%E3%81%99%E3%81%8E?src=hash&amp;ref_src=twsrc%5Etfw">#部屋寒すぎ</a>😡 <a href="https://t.co/4KowO0ONbG">pic.twitter.com/4KowO0ONbG</a></p>&mdash; どなつ (@doughnut_777) <a href="https://twitter.com/doughnut_777/status/1868606394506879464?ref_src=twsrc%5Etfw">December 16, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+fantastic dreamer / このすば
+
+---
+
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">3日で12万負けのエウレカARTで1度だけ聴けた曲を弾きました (Transpose: -5)<br>哀しみのあまりやや強弾いてしまいました😑<a href="https://twitter.com/hashtag/%E5%8A%A9%E3%81%91%E3%81%A6?src=hash&amp;ref_src=twsrc%5Etfw">#助けて</a><a href="https://twitter.com/hashtag/HELPME?src=hash&amp;ref_src=twsrc%5Etfw">#HELPME</a><a href="https://twitter.com/hashtag/%E6%95%91%E6%95%91%E6%88%91?src=hash&amp;ref_src=twsrc%5Etfw">#救救我</a> <a href="https://t.co/nJV0rHEcac">pic.twitter.com/nJV0rHEcac</a></p>&mdash; どなつ (@doughnut_777) <a href="https://twitter.com/doughnut_777/status/1840738715913834768?ref_src=twsrc%5Etfw">September 30, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+秘密基地 / エウレカART
+
+---
+
 <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">アオハソング（適当） <a href="https://t.co/d5jYiCF8Pp">pic.twitter.com/d5jYiCF8Pp</a></p>&mdash; どなつ (@doughnut_777) <a href="https://twitter.com/doughnut_777/status/1827739006953505170?ref_src=twsrc%5Etfw">August 25, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-アオハライド / アオハル操
+アオハソング / アオハル操
 
 ---
 
