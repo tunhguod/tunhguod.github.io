@@ -134,8 +134,8 @@ function simulate_reg_push(setting, rb_push_order, rb_bita_accuracy) {
             } else {
                 switch (setting) {
                     case SETTING.LOW_1:
-                        flag = get_flag(350)
                     case SETTING.LOW_2:
+                        flag = get_flag(350)
                         break
                     default: // 5 or 6
                         flag = get_flag(360)
