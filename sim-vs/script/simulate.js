@@ -293,7 +293,7 @@ self.addEventListener("message", (e) => {
                 ++data.sp_e_rb
             }
             ++data.rb
-            let rb_data = digest_reg_bonus(data.setting, data.rb_push_order)
+            let rb_data = digest_reg_bonus(data.setting, data.rb_push_order, data.rb_bita_accuracy)
             data.in_medal += 1 + rb_data.in_medal
             data.out_medal += rb_data.out_medal
 
