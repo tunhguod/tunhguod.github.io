@@ -120,15 +120,33 @@ function digest_big_bonus(setting) {
     return data
 }
 
-function simulate_reg_push(rb_push_order) {
+function simulate_reg_push(setting, rb_push_order, rb_bita_accuracy) {
     let medal, flag
     switch (rb_push_order) {
         case "left":
             medal = 10
             break
         case "center":
-            // TODO
-            medal = 15
+            rb_bita_accuracy *= 10
+            flag = get_flag(1000)
+            if (flag < rb_bita_accuracy) {
+                medal = 15
+            } else {
+                switch (setting) {
+                    case SETTING.LOW_1:
+                        flag = get_flag(350)
+                    case SETTING.LOW_2:
+                        break
+                    default: // 5 or 6
+                        flag = get_flag(360)
+                        break
+                }
+                if (flag < 100) {
+                    medal = 15
+                } else {
+                    medal = 4
+                }
+            }
             break
         case "right":
             flag = get_flag(65536)
@@ -142,7 +160,7 @@ function simulate_reg_push(rb_push_order) {
     return medal
 }
 
-function digest_reg_bonus(setting, rb_push_order) {
+function digest_reg_bonus(setting, rb_push_order, rb_bita_accuracy) {
     let data = {}
 
     let one_medal_role = 0
@@ -166,7 +184,7 @@ function digest_reg_bonus(setting, rb_push_order) {
                     out_medal += 15
                 } else {
                     ++ice
-                    out_medal += simulate_reg_push(rb_push_order)
+                    out_medal += simulate_reg_push(setting, rb_push_order, rb_bita_accuracy)
                 }
                 break
             case SETTING.HIGH_5:
@@ -180,7 +198,7 @@ function digest_reg_bonus(setting, rb_push_order) {
                     ++blank
                 } else {
                     ++ice
-                    out_medal += simulate_reg_push(rb_push_order)
+                    out_medal += simulate_reg_push(setting, rb_push_order, rb_bita_accuracy)
                 }
                 break
         }

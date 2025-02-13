@@ -80,6 +80,7 @@ class SerializableGameData {
   #setting = SETTING.NOT_DEFINED
 
   #rb_push_order = "center"
+  #rb_bita_accuracy = 100.0
 
   get in_medal() { return this.#in_medal }
   get out_medal() { return this.#out_medal }
@@ -147,6 +148,7 @@ class SerializableGameData {
   get simulate_game_count() { return this.#simulate_game_count }
   get setting() { return this.#setting }
   get rb_push_order() { return this.#rb_push_order }
+  get rb_bita_accuracy() { return this.#rb_bita_accuracy }
 
   set in_medal(value) { return this.#in_medal = value }
   set out_medal(value) { this.#out_medal = value }
@@ -213,6 +215,7 @@ class SerializableGameData {
   set simulate_game_count(value) { this.#simulate_game_count = value }
   set setting(value) { this.#setting = value }
   set rb_push_order(value) { this.#rb_push_order = value }
+  set rb_bita_accuracy(value) { this.#rb_bita_accuracy = value }
 
   toJson() {
     return {
@@ -299,7 +302,8 @@ class SerializableGameData {
       simulate_game_count: this.simulate_game_count,
       setting: this.setting,
 
-      rb_push_order: this.#rb_push_order
+      rb_push_order: this.#rb_push_order,
+      rb_bita_accuracy: this.#rb_bita_accuracy
     }
   }
 }
@@ -464,18 +468,31 @@ let rb_push_order = document.querySelector('[name="rb-1st-order"]:checked').valu
 // let rb_center_1st_success_per_form = document.getElementById('rb-center-1st-success-per')
 let rb_push_order_group = document.getElementsByName('rb-1st-order')
 
+let rb_bita_block = document.getElementById('rb-bita-block')
+let rb_bita_accuracy_per = document.getElementById('bita-accuracy-per')
+let rb_bita_accuracy_text = document.getElementById('bita-accuracy-text')
+
+const setCurrentValue = (val) => {
+  rb_bita_accuracy_text.innerText = val;
+}
+
+const rangeOnChange = (e) =>{
+  setCurrentValue(e.target.value);
+}
+
 rb_push_order_group.forEach(function (e) {
   e.addEventListener("click", function () {
     rb_push_order = document.querySelector('[name="rb-1st-order"]:checked').value
-    /* TODO
     if (rb_push_order == "center") {
-      rb_center_1st_success_per_form.style.display = "block"
+      rb_bita_block.style.display = "block"
     } else {
-      rb_center_1st_success_per_form.style.display = "none"
+      rb_bita_block.style.display = "none"
     }
-    */
   })
 })
+
+rb_bita_accuracy_per.addEventListener('input', rangeOnChange);
+setCurrentValue(rb_bita_accuracy_per.value);
 
 let graph = new Chart(context, {
   type: 'line',
@@ -709,6 +726,7 @@ simulate_button.onclick = function () {
   err_msg_label.style.visibility = "hidden"
 
   const data = new SerializableGameData()
+  data.rb_bita_accuracy = rb_bita_accuracy_per.value
   data.rb_push_order = rb_push_order
   data.simulate_game_count = simulate_game_count_form.value
   if (data.simulate_game_count <= 0 || data.simulate_game_count > GAME_COUNT_THRESHOLD) {
