@@ -1,8 +1,8 @@
-const SPREADSHEET_ID = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+const SPREADSHEET_ID = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 const BB_CELL_COLOR_CODE = "#f9cb9c"
 const UNDEF_BB_CELL_COLOR_CODE = "#fbe5d5"
 const RB_CELL_COLOR_CODE = "#a4c2f4"
-const UNDEF_RB_CELL_COLOR_CODE = "#a4c2f4"
+const UNDEF_RB_CELL_COLOR_CODE = "#deebf6"
 
 const ColumnMap = Object.freeze({
   A: "D",
@@ -32,17 +32,46 @@ const ColumnMap = Object.freeze({
   W: "AB"
 });
 
-function addHistory(sheet, flag, reelIdx, o, n) {
-  var msg
-  if (o != null) {
-    msg = flag + reelIdx + ': ' + o + ' -> ' + n
-  } else {
-    msg = flag + reelIdx + ': ' + n
+function isBigFlag(flag) {
+  var bool = true
+
+  if (flag == 'R') {
+    bool = false
+  } else if (flag >= 'T') {
+    bool = false
   }
 
-  sheet.insertRowBefore(1)
-  sheet.getRange('A1').setValue(new Date())
-  sheet.getRange('B1').setValue(msg)
+  return bool
+}
+
+function addHistory(sheet, flag, reelIdx, oValue, oColor, nValue) {
+  const date = new Date()
+  date.setHours(date.getHours() + 16);
+
+  sheet.insertRowBefore(2)
+  sheet.getRange('A2').setValue(date)
+  sheet.getRange('B2').setValue(flag + reelIdx)
+  sheet.getRange('C2').setValue(oValue)
+  sheet.getRange('D2').setValue((nValue == 'X') ? '' : nValue)
+
+  sheet.getRange('C2').setBackground(oColor)
+
+  var color
+  if (nValue == 'X') {
+    if (isBigFlag(flag)) {
+      color = UNDEF_BB_CELL_COLOR_CODE
+    } else {
+      color = UNDEF_RB_CELL_COLOR_CODE
+    }
+  } else {
+    if (isBigFlag(flag)) {
+      color = BB_CELL_COLOR_CODE
+    } else {
+      color = RB_CELL_COLOR_CODE
+    }
+  }
+
+  sheet.getRange('D2').setBackground(color)
 }
 
 function getCtrlNumber(sheet, cell) {
@@ -56,15 +85,11 @@ function getCtrlNumber(sheet, cell) {
 
 function setCtrlNumber(sheet, flag, cell, value) {
   var bgColor
-  if (flag <= 'Q') {
+  if (isBigFlag(flag)) {
     bgColor = BB_CELL_COLOR_CODE
-  } else if (flag == 'R') {
+  } else {
     bgColor = RB_CELL_COLOR_CODE
-  } else if (flag == 'S') {
-    bgColor = BB_CELL_COLOR_CODE
-  } else { // T ~
-    bgColor = RB_CELL_COLOR_CODE
-  }
+  } 
 
   sheet.getRange(cell).setValue(value)
   sheet.getRange(cell).setBackground(bgColor)
@@ -72,20 +97,15 @@ function setCtrlNumber(sheet, flag, cell, value) {
 
 function delCtrlNumber(sheet, flag, cell) {
   var bgColor
-  if (flag <= 'Q') {
+  if (isBigFlag(flag)) {
     bgColor = UNDEF_BB_CELL_COLOR_CODE
-  } else if (flag == 'R') {
+  } else {
     bgColor = UNDEF_RB_CELL_COLOR_CODE
-  } else if (flag == 'S') {
-    bgColor = UNDEF_BB_CELL_COLOR_CODE
-  } else { // T ~
-    bgColor = UNDEF_RB_CELL_COLOR_CODE
-  }
+  } 
 
   sheet.getRange(cell).setValue('')
   sheet.getRange(cell).setBackground(bgColor)
 }
-
 
 function updateCtrlNumber(spreadSheet, flag, reelIdx, ctrlNumber) {
   const masterSheet = spreadSheet.getSheetByName('master')
@@ -97,6 +117,7 @@ function updateCtrlNumber(spreadSheet, flag, reelIdx, ctrlNumber) {
   const cell = col + row
 
   const oldCtrlNumber = getCtrlNumber(masterSheet, cell)
+  const oldCtrlColor = masterSheet.getRange(cell).getBackground()
   if (ctrlNumber == 'X') {
     delCtrlNumber(masterSheet, flag, cell)
     delCtrlNumber(masterWithoutTBCSheet, flag, cell)
@@ -104,7 +125,7 @@ function updateCtrlNumber(spreadSheet, flag, reelIdx, ctrlNumber) {
     setCtrlNumber(masterSheet, flag, cell, ctrlNumber)
     setCtrlNumber(masterWithoutTBCSheet, flag, cell, ctrlNumber)
   }
-  addHistory(historySheet, flag, reelIdx, oldCtrlNumber, ctrlNumber)
+  addHistory(historySheet, flag, reelIdx, oldCtrlNumber, oldCtrlColor, ctrlNumber)
 }
 
 function doPost(e) {
