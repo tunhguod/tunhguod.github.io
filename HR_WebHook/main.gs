@@ -89,7 +89,7 @@ function setCtrlNumber(sheet, flag, cell, value) {
     bgColor = BB_CELL_COLOR_CODE
   } else {
     bgColor = RB_CELL_COLOR_CODE
-  } 
+  }
 
   sheet.getRange(cell).setValue(value)
   sheet.getRange(cell).setBackground(bgColor)
@@ -101,13 +101,13 @@ function delCtrlNumber(sheet, flag, cell) {
     bgColor = UNDEF_BB_CELL_COLOR_CODE
   } else {
     bgColor = UNDEF_RB_CELL_COLOR_CODE
-  } 
+  }
 
   sheet.getRange(cell).setValue('')
   sheet.getRange(cell).setBackground(bgColor)
 }
 
-function updateCtrlNumber(spreadSheet, flag, reelIdx, ctrlNumber) {
+function updateCtrlNumber(spreadSheet, flag, reelIdx, ctrlNumber, hasDryRun = false) {
   const masterSheet = spreadSheet.getSheetByName('master')
   const masterWithoutTBCSheet = spreadSheet.getSheetByName('master_w/o_TBC')
   const historySheet = spreadSheet.getSheetByName('history')
@@ -118,42 +118,59 @@ function updateCtrlNumber(spreadSheet, flag, reelIdx, ctrlNumber) {
 
   const oldCtrlNumber = getCtrlNumber(masterSheet, cell)
   const oldCtrlColor = masterSheet.getRange(cell).getBackground()
-  if (ctrlNumber == 'X') {
-    delCtrlNumber(masterSheet, flag, cell)
-    delCtrlNumber(masterWithoutTBCSheet, flag, cell)
-  } else {
-    setCtrlNumber(masterSheet, flag, cell, ctrlNumber)
-    setCtrlNumber(masterWithoutTBCSheet, flag, cell, ctrlNumber)
+
+  if (!hasDryRun) {
+    if (ctrlNumber == 'X') {
+      delCtrlNumber(masterSheet, flag, cell)
+      delCtrlNumber(masterWithoutTBCSheet, flag, cell)
+    } else {
+      setCtrlNumber(masterSheet, flag, cell, ctrlNumber)
+      setCtrlNumber(masterWithoutTBCSheet, flag, cell, ctrlNumber)
+    }
   }
+
   addHistory(historySheet, flag, reelIdx, oldCtrlNumber, oldCtrlColor, ctrlNumber)
 }
 
 function doPost(e) {
-  const spreadSheet = SpreadsheetApp.openById(SPREADSHEET_ID)
-  const data = JSON.parse(e.postData.contents)
+  const lock = LockService.getScriptLock()
 
-  const msgType = data.events[0].message.type
-  if (msgType == "text") {
-    const text = data.events[0].message.text
-    const match = text.match(/^([A-W]|HH|LL)([1-9]|1[0-9]|20|21)_(\d|X)$/);
-    if (match) {
-      const flag = match[1]
-      const reelIdx = match[2]
-      const ctrlNumber = match[3]
+  if (!lock.tryLock(10000)) {
+    return ContentService.createTextOutput("err: failed to get lock.")
+  }
 
-      if (flag >= 'A' && flag <= 'W' && reelIdx >= 1 && reelIdx <= 21 && (ctrlNumber >= 0 && ctrlNumber <= 4) || ctrlNumber == 'X') {
-        if (flag != 'H' && flag != 'L' && flag != 'HH' && flag != 'LL') {
-          updateCtrlNumber(spreadSheet, flag, reelIdx, ctrlNumber)
-          if (flag == 'Q') {
-            updateCtrlNumber(spreadSheet, 'T', reelIdx, ctrlNumber)
-          } else if (flag == 'T') {
-            updateCtrlNumber(spreadSheet, 'Q', reelIdx, ctrlNumber)
+  try {
+    const spreadSheet = SpreadsheetApp.openById(SPREADSHEET_ID)
+    const data = JSON.parse(e.postData.contents)
+
+    const msgType = data.events[0].message.type
+    if (msgType == "text") {
+      const text = data.events[0].message.text
+      const match = text.match(/^([A-W]|HH|LL)([1-9]|1[0-9]|20|21)_(\d|X)$/);
+      if (match) {
+        const flag = match[1]
+        const reelIdx = match[2]
+        const ctrlNumber = match[3]
+
+        if (flag >= 'A' && flag <= 'W' && reelIdx >= 1 && reelIdx <= 21 && (ctrlNumber >= 0 && ctrlNumber <= 4) || ctrlNumber == 'X') {
+          if (flag != 'H' && flag != 'L' && flag != 'HH' && flag != 'LL') {
+            updateCtrlNumber(spreadSheet, flag, reelIdx, ctrlNumber)
+            if (flag == 'Q') {
+              updateCtrlNumber(spreadSheet, 'T', reelIdx, ctrlNumber)
+            } else if (flag == 'T') {
+              updateCtrlNumber(spreadSheet, 'Q', reelIdx, ctrlNumber)
+            }
+          } else {
+            updateCtrlNumber(spreadSheet, flag, reelIdx, ctrlNumber, hasDryRun = true)
           }
         }
       }
     }
-  }
 
-  return ContentService.createTextOutput(JSON.stringify({ status: "success" }))
-    .setMimeType(ContentService.MimeType.JSON)
+    return ContentService.createTextOutput("success")
+  } catch (err) {
+    return ContentService.createTextOutput("err: " + err)
+  } finally {
+    lock.releaseLock()
+  }
 }
