@@ -33,4 +33,4 @@
 押し順択当て（ジョーク）アプリ
 
 * URL
-  * [https://tunhguod.github.io/vspay/](https://tunhguod.github.io/vspay/)
+  * [https://tunhguod.github.io/takuate-kun/](https://tunhguod.github.io/takuate-kun/)
