@@ -4,18 +4,12 @@
 
 ユニメモ風新ハナビシミュレーター
 
-* Doc Root
-  * [sim-hanabi/](https://github.com/tunhguod/tunhguod.github.io/blob/main/sim-hanabi)
-
 * URL
   * [https://tunhguod.github.io/sim-hanabi/](https://tunhguod.github.io/sim-hanabi/)
 
 ## sim-vs/
 
 ユニメモ風バーサス・リヴァイズシミュレーター
-
-* Doc Root
-  * [sim-vs/](https://github.com/tunhguod/tunhguod.github.io/blob/main/sim-vs)
 
 * URL
   * [https://tunhguod.github.io/sim-vs/](https://tunhguod.github.io/sim-vs/)
@@ -24,9 +18,6 @@
 
 新ハナビ差枚計算機
 
-* Doc Root
-  * [hanapay/](https://github.com/tunhguod/tunhguod.github.io/blob/main/hanapay)
-
 * URL
   * [https://tunhguod.github.io/hanapay/](https://tunhguod.github.io/hanapay/)
 
@@ -34,8 +25,12 @@
 
 バーサスリヴァイズ差枚計算機
 
-* Doc Root
-  * [vspay/](https://github.com/tunhguod/tunhguod.github.io/blob/main/vspay)
+* URL
+  * [https://tunhguod.github.io/vspay/](https://tunhguod.github.io/vspay/)
+
+## takuate-kun/
+
+押し順択当て（ジョーク）アプリ
 
 * URL
   * [https://tunhguod.github.io/vspay/](https://tunhguod.github.io/vspay/)
