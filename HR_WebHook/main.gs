@@ -146,13 +146,16 @@ function doPost(e) {
     const msgType = data.events[0].message.type
     if (msgType == "text") {
       const text = data.events[0].message.text
-      const match = text.match(/^([A-W]|HH|LL)([1-9]|1[0-9]|20|21)_(\d|X)$/);
+      const match = text.match(/^([a-w]|[A-W]|HH|LL|hh|ll)([1-9]|1[0-9]|20|21)_(\d|X)$/);
       if (match) {
-        const flag = match[1]
+        const flag = match[1].toUpperCase()
         const reelIdx = match[2]
         const ctrlNumber = match[3]
 
-        if (flag >= 'A' && flag <= 'W' && reelIdx >= 1 && reelIdx <= 21 && (ctrlNumber >= 0 && ctrlNumber <= 4) || ctrlNumber == 'X') {
+        if (flag >= 'A' && flag <= 'W' && reelIdx >= 1
+          && reelIdx <= 21
+          && (ctrlNumber >= 0 && ctrlNumber <= 4)
+          || ctrlNumber == 'X') {
           if (flag != 'H' && flag != 'L' && flag != 'HH' && flag != 'LL') {
             updateCtrlNumber(spreadSheet, flag, reelIdx, ctrlNumber)
             if (flag == 'Q') {
