@@ -118,24 +118,27 @@
 
       return closestIndex;
     }
+    
+    function loadCounterValue(rowId, type) {
+      const val = localStorage.getItem(`counter-${rowId}-${type}`) || 0;
+      return val;
+    }
 
     function initRow(row) {
-      const values = row.dataset.values.split(",").map(Number);
-      const a = Number(row.querySelector(".counter-a").value || 0);
-      const b = Number(row.querySelector(".counter-b").value || 0);
-
-      values.forEach((v, i) => {
-        const computed = v + a - b;
-        const cell = row.querySelector(`.val-${i}`);
-        cell.textContent = `${computed}%`;
-        cell.className = getColorClass(computed);
-      });
+      const rowId = row.dataset.rowId;
+      row.querySelector(".counter-a").value = loadCounterValue(row.dataset.rowId, "a");
+      row.querySelector(".counter-b").value = loadCounterValue(row.dataset.rowId, "b");
+      updateRow(row);
     }
     
     function updateRow(row) {
+      const rowId = row.dataset.rowId;
       const values = row.dataset.values.split(",").map(Number);
       const a = Number(row.querySelector(".counter-a").value || 0);
       const b = Number(row.querySelector(".counter-b").value || 0);
+
+      localStorage.setItem(`counter-${rowId}-a`, a);
+      localStorage.setItem(`counter-${rowId}-b`, b);
 
       const c = (a / (a + b)) * 100;
       const tgt_i = findClosestIndex(values, c);
@@ -203,6 +206,7 @@
 
     fixedData.forEach((values, rowIndex) => {
       const tr = document.createElement("tr");
+      tr.dataset.rowId = `eureka-row${rowIndex}`;
       tr.dataset.values = values.join(",");
 
       const labelTd = document.createElement("td");
@@ -219,6 +223,8 @@
 
       tr.appendChild(createCounterCell("counter-a", tr));
       tr.appendChild(createCounterCell("counter-b", tr));
+
+      initRow(tr);
 
       tableBody.appendChild(tr);
     });
