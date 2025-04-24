@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>例のアレ</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      margin-top: 1em;
+    }
+    td, th {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+    .highlight-green {
+      background-color: #a7f3d0;
+    }
+    .highlight-yellow {
+      background-color: #fde68a;
+    }
+    button {
+      margin: 0 2px;
+    }
+    .row-label {
+      font-weight: bold;
+      background-color: #f0f0f0;
+    }
+    .counter-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2px;
+    }
+    .counter-container input {
+      width: 40px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="resetAllCounters()">すべてクリア</button>
+  <table id="data-table">
+    <thead>
+      <tr>
+        <th>ptn/stg</th>
+        <th>設定1</th>
+        <th>設定2</th>
+        <th>設定3</th>
+        <th>設定4</th>
+        <th>設定5</th>
+        <th>設定6</th>
+        <th>ストック有</th>
+        <th>ストック無</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const tableBody = document.querySelector("#data-table tbody");
+
+    const fixedData = [
+      [1.98, 3.94, 5.86, 7.75, 9.61, 10.98],
+      [7.75, 9.61, 27.77, 29.30, 30.43, 31.91],
+      [6.62, 8.50, 23.84, 25.44, 26.69, 28.16],
+      [5.48, 7.38, 19.70, 21.36, 22.75, 24.21],
+      [4.33, 6.25, 15.33, 17.06, 18.60, 20.03],
+      [3.16, 5.10, 10.72, 12.53, 14.22, 15.63],
+      [40.18, 41.50, 53.35, 60.23, 61.14, 62.64],
+      [33.34, 34.77, 47.96, 54.08, 55.05, 56.59],
+      [25.71, 27.28, 41.95, 46.98, 48.01, 49.56],
+      [17.22, 18.92, 35.25, 38.77, 39.86, 41.40],
+      [32.53, 33.98, 45.13, 51.57, 52.63, 54.20],	
+      [24.81, 26.39, 38.79, 44.08, 45.21, 46.79],
+      [16.21, 17.93, 31.73, 35.43, 36.62, 38.17],
+      [23.89, 25.49, 35.46, 41.02, 42.26, 43.85],
+      [15.19, 16.93, 28.01, 31.90, 33.22, 34.77],
+      [14.15, 15.91, 24.09, 28.17, 29.63, 31.17],
+    ];
+    
+    const ptnData = [
+      "✕✕✕✕✕",
+      "○✕✕✕✕",
+      "✕○✕✕✕",
+      "✕✕○✕✕",
+      "✕✕✕○✕",
+      "✕✕✕✕○",
+      "○○✕✕✕",
+      "○✕○✕✕",
+      "○✕✕○✕",
+      "○✕✕✕○",
+      "✕○○✕✕",
+      "✕○✕○✕",
+      "✕○✕✕○",
+      "✕✕○○✕",
+      "✕✕○✕○",
+      "✕✕✕○○",
+    ]
+
+    function getColorClass(value) {
+      if (value > 150) return "highlight-green";
+      if (value > 100) return "highlight-yellow";
+      return "";
+    }
+
+    function findClosestIndex(arr, target) {
+      let closestIndex = 0;
+      let minDiff = Math.abs(arr[0] - target);
+
+      for (let i = 1; i < arr.length; i++) {
+        let diff = Math.abs(arr[i] - target);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestIndex = i;
+        }
+      }
+
+      return closestIndex;
+    }
+
+    function initRow(row) {
+      const values = row.dataset.values.split(",").map(Number);
+      const a = Number(row.querySelector(".counter-a").value || 0);
+      const b = Number(row.querySelector(".counter-b").value || 0);
+
+      values.forEach((v, i) => {
+        const computed = v + a - b;
+        const cell = row.querySelector(`.val-${i}`);
+        cell.textContent = `${computed}%`;
+        cell.className = getColorClass(computed);
+      });
+    }
+    
+    function updateRow(row) {
+      const values = row.dataset.values.split(",").map(Number);
+      const a = Number(row.querySelector(".counter-a").value || 0);
+      const b = Number(row.querySelector(".counter-b").value || 0);
+
+      const c = (a / (a + b)) * 100;
+      const tgt_i = findClosestIndex(values, c);
+
+      values.forEach((v, i) => {
+        const cell = row.querySelector(`.val-${i}`);
+        cell.style.backgroundColor = "";
+      });
+      
+      if (a === 0 && b === 0) return;
+      
+      const cell = row.querySelector(`.val-${tgt_i}`);
+      cell.style.backgroundColor = "#e6f0e6";
+    }
+
+    function resetAllCounters() {
+      document.querySelectorAll(".counter-a, .counter-b").forEach(input => input.value = 0);
+      document.querySelectorAll("tbody tr").forEach(row => updateRow(row));
+    }
+
+    function createCounterCell(className, row) {
+      const td = document.createElement("td");
+      const container = document.createElement("div");
+      container.className = "counter-container";
+
+      const input = document.createElement("input");
+      input.type = "number";
+      input.min = "0";
+      input.classList.add(className);
+      input.value = 0;
+      input.oninput = () => {
+        if (input.value < 0) input.value = 0;
+        initRow(row);
+      };
+
+      const btnMinus = document.createElement("button");
+      btnMinus.textContent = "−";
+      btnMinus.onclick = () => {
+        input.value = Math.max(0, parseInt(input.value) - 1);
+        updateRow(row);
+      };
+
+      const btnPlus = document.createElement("button");
+      btnPlus.textContent = "+";
+      btnPlus.onclick = () => {
+        input.value = parseInt(input.value) + 1;
+        updateRow(row);
+      };
+
+      const btnClear = document.createElement("button");
+      btnClear.textContent = "C";
+      btnClear.title = "クリア";
+      btnClear.onclick = () => {
+        input.value = 0;
+        updateRow(row);
+      };
+
+      container.appendChild(btnMinus);
+      container.appendChild(input);
+      container.appendChild(btnPlus);
+      container.appendChild(btnClear);
+      td.appendChild(container);
+      return td;
+    }
+
+    fixedData.forEach((values, rowIndex) => {
+      const tr = document.createElement("tr");
+      tr.dataset.values = values.join(",");
+
+      const labelTd = document.createElement("td");
+      labelTd.textContent = ptnData[rowIndex];
+      labelTd.className = "row-label";
+      tr.appendChild(labelTd);
+
+      values.forEach((val, idx) => {
+        const td = document.createElement("td");
+        td.textContent = `${val}%`;
+        td.classList.add(`val-${idx}`);
+        tr.appendChild(td);
+      });
+
+      tr.appendChild(createCounterCell("counter-a", tr));
+      tr.appendChild(createCounterCell("counter-b", tr));
+
+      tableBody.appendChild(tr);
+    });
+  </script>
+</body>
+</html>
