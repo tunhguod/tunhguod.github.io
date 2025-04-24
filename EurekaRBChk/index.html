@@ -156,6 +156,7 @@
     
     function calcExpectValue(isLowest = false) {
       var expectedArr = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+      
       document.querySelectorAll(".counter-a").forEach((v, i) => {
         for (let j = 0; j < 6; ++j) {
           if (isLowest) {
@@ -189,6 +190,15 @@
         const cell = row.querySelector(`.val-${i}`);
         cell.textContent = "> " + (exceptedArr[i] / 100).toFixed(1);
       });
+      
+      const td = document.getElementById("sum-success-rb");
+      let num = 0;
+      document.querySelectorAll(".counter-a").forEach((v, i) => {
+        num += Number(v.value);
+      });
+      console.log(num);
+      
+      td.textContent = num;
     }
 
     function updateRow(row) {
@@ -235,7 +245,6 @@
         td.classList.add(`val-${idx}`);
         tr.appendChild(td);
       });
-      const td = document.createElement("td");
       tr.id = "expected-amt-tr";
       tableBody.appendChild(tr);
     }
@@ -255,6 +264,9 @@
         tr.appendChild(td);
       });
       const td = document.createElement("td");
+      td.textContent = 0;
+      td.id = "sum-success-rb"
+      tr.appendChild(td);
       tr.id = "expected-prob-tr";
       tableBody.appendChild(tr);
     }
@@ -312,7 +324,7 @@
 
       values.forEach((val, idx) => {
         const td = document.createElement("td");
-        td.textContent = `${val}%`;
+        td.textContent = `${val.toFixed(2)}%`;
         td.classList.add(`val-${idx}`);
         tr.appendChild(td);
       });
@@ -327,6 +339,8 @@
     
     createExpectedStockProbRow(tableBody);
     createExpectedStockAmtRow(tableBody);
+    refreshExpectedValue(isLowest = true);
+    refreshExpectedValue(isLowest = false);
   </script>
 </body>
 </html>
