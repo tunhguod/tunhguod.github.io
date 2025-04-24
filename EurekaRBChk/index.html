@@ -98,12 +98,6 @@
       "✕✕✕○○",
     ]
 
-    function getColorClass(value) {
-      if (value > 150) return "highlight-green";
-      if (value > 100) return "highlight-yellow";
-      return "";
-    }
-
     function findClosestIndex(arr, target) {
       let closestIndex = 0;
       let minDiff = Math.abs(arr[0] - target);
