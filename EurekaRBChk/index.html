@@ -90,7 +90,6 @@
       const b = (onePnt == 0) ? 1 : Math.pow(1 - (raffleData[1][stg - 1] / 100), onePnt);
       const c = (twoPnt == 0) ? 1 : Math.pow(1 - (raffleData[2][stg - 1] / 100), twoPnt);
       
-      console.log((1 - Math.pow((raffleData[0][stg - 1] / 100), zeroPnt)) * 100);
       return (1 - a * b * c) * 100;
     }
 
