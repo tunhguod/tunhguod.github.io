@@ -231,7 +231,6 @@
       const values = row.dataset.values.split(",").map(Number);
 
       const num = Number(document.getElementById("sum-success-rb").textContent);
-      console.log(num * 100);
       const tgt_i = findClosestIndex(values, num * 100);
 
       values.forEach((v, i) => {
