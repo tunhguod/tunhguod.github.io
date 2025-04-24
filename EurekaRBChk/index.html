@@ -110,7 +110,7 @@
     
     const expectedData = [
       [getExpectValue(1, 5, 0, 0), getExpectValue(2, 5, 0, 0), getExpectValue(3, 5, 0, 0), getExpectValue(4, 5, 0, 0), getExpectValue(5, 5, 0, 0), getExpectValue(6, 5, 0, 0)],
-      [getExpectValue(1, 0, 5, 0), getExpectValue(2, 0, 5, 0), getExpectValue(3, 0, 5, 0), getExpectValue(4, 0, 5, 0), getExpectValue(5, 5, 0, 0), getExpectValue(6, 0, 5, 0)],
+      [getExpectValue(1, 0, 5, 0), getExpectValue(2, 0, 5, 0), getExpectValue(3, 0, 5, 0), getExpectValue(4, 0, 5, 0), getExpectValue(5, 0, 5, 0), getExpectValue(6, 0, 5, 0)],
       [getExpectValue(1, 1, 4, 0), getExpectValue(2, 1, 4, 0), getExpectValue(3, 1, 4, 0), getExpectValue(4, 1, 4, 0), getExpectValue(5, 1, 4, 0), getExpectValue(6, 1, 4, 0)],
       [getExpectValue(1, 2, 3, 0), getExpectValue(2, 2, 3, 0), getExpectValue(3, 2, 3, 0), getExpectValue(4, 2, 3, 0), getExpectValue(5, 2, 3, 0), getExpectValue(6, 2, 3, 0)],
       [getExpectValue(1, 3, 2, 0), getExpectValue(2, 3, 2, 0), getExpectValue(3, 3, 2, 0), getExpectValue(4, 3, 2, 0), getExpectValue(5, 3, 2, 0), getExpectValue(6, 3, 2, 0)],
@@ -188,7 +188,7 @@
 
       values.forEach((v, i) => {
         const cell = row.querySelector(`.val-${i}`);
-        cell.textContent = "> " + (exceptedArr[i] / 100).toFixed(1);
+        cell.textContent = (exceptedArr[i] / 100).toFixed(1);
       });
       
       const td = document.getElementById("sum-success-rb");
@@ -196,9 +196,12 @@
       document.querySelectorAll(".counter-a").forEach((v, i) => {
         num += Number(v.value);
       });
-      console.log(num);
       
       td.textContent = num;
+      
+      row.dataset.values = exceptedArr.join(",");
+      
+      if (isLowest) updateExpectedRow(row);
     }
 
     function updateRow(row) {
@@ -224,6 +227,24 @@
       cell.style.backgroundColor = "#e6f0e6";
     }
 
+    function updateExpectedRow(row) {
+      const values = row.dataset.values.split(",").map(Number);
+
+      const num = Number(document.getElementById("sum-success-rb").textContent);
+      console.log(num * 100);
+      const tgt_i = findClosestIndex(values, num * 100);
+
+      values.forEach((v, i) => {
+        const cell = row.querySelector(`.val-${i}`);
+        cell.style.backgroundColor = "";
+      });
+      
+      if (num == 0) return;
+      
+      const cell = row.querySelector(`.val-${tgt_i}`);
+      cell.style.backgroundColor = "#e6f0e6";
+    }
+
     function resetAllCounters() {
       document.querySelectorAll(".counter-a, .counter-b").forEach(input => input.value = 0);
       document.querySelectorAll("tbody tr").forEach(row => updateRow(row));
@@ -241,7 +262,7 @@
       tr.appendChild(labelTd);
       values.forEach((val, idx) => {
         const td = document.createElement("td");
-        td.textContent = "> " + (val / 100).toFixed(1);
+        td.textContent = (val / 100).toFixed(1);
         td.classList.add(`val-${idx}`);
         tr.appendChild(td);
       });
@@ -259,7 +280,7 @@
       tr.appendChild(labelTd);
       values.forEach((val, idx) => {
         const td = document.createElement("td");
-        td.textContent = "> " + (val / 100).toFixed(1);
+        td.textContent = (val / 100).toFixed(1);
         td.classList.add(`val-${idx}`);
         tr.appendChild(td);
       });
