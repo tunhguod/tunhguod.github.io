@@ -60,25 +60,6 @@
   <script>
     const tableBody = document.querySelector("#data-table tbody");
 
-    const fixedData = [
-      [1.98, 3.94, 5.86, 7.75, 9.61, 10.98],
-      [7.75, 9.61, 27.77, 29.30, 30.43, 31.91],
-      [6.62, 8.50, 23.84, 25.44, 26.69, 28.16],
-      [5.48, 7.38, 19.70, 21.36, 22.75, 24.21],
-      [4.33, 6.25, 15.33, 17.06, 18.60, 20.03],
-      [3.16, 5.10, 10.72, 12.53, 14.22, 15.63],
-      [40.18, 41.50, 53.35, 60.23, 61.14, 62.64],
-      [33.34, 34.77, 47.96, 54.08, 55.05, 56.59],
-      [25.71, 27.28, 41.95, 46.98, 48.01, 49.56],
-      [17.22, 18.92, 35.25, 38.77, 39.86, 41.40],
-      [32.53, 33.98, 45.13, 51.57, 52.63, 54.20], 
-      [24.81, 26.39, 38.79, 44.08, 45.21, 46.79],
-      [16.21, 17.93, 31.73, 35.43, 36.62, 38.17],
-      [23.89, 25.49, 35.46, 41.02, 42.26, 43.85],
-      [15.19, 16.93, 28.01, 31.90, 33.22, 34.77],
-      [14.15, 15.91, 24.09, 28.17, 29.63, 31.17],
-    ];
-    
     const ptnData = [
       "✕✕✕✕✕",
       "○✕✕✕✕",
@@ -103,28 +84,56 @@
       [1.6, 2.0, 6.3, 6.7, 7.0, 7.4],
       [11.7, 12.1, 16.0, 19.2, 19.6, 20.3]
     ]
-    
-    function getExpectValue(stg, zeroPnt, onePnt, twoPnt) {
+
+    function getExpectProb(stg, zeroPnt, onePnt, twoPnt) {
+      const a = (zeroPnt == 0) ? 1 : Math.pow(1 - (raffleData[0][stg - 1] / 100), zeroPnt);
+      const b = (onePnt == 0) ? 1 : Math.pow(1 - (raffleData[1][stg - 1] / 100), onePnt);
+      const c = (twoPnt == 0) ? 1 : Math.pow(1 - (raffleData[2][stg - 1] / 100), twoPnt);
+      
+      console.log((1 - Math.pow((raffleData[0][stg - 1] / 100), zeroPnt)) * 100);
+      return (1 - a * b * c) * 100;
+    }
+
+    function getExpectAmt(stg, zeroPnt, onePnt, twoPnt) {
       return (zeroPnt * raffleData[0][stg - 1]) + (onePnt * raffleData[1][stg - 1]) + (twoPnt * raffleData[2][stg - 1])
     }
     
-    const expectedData = [
-      [getExpectValue(1, 5, 0, 0), getExpectValue(2, 5, 0, 0), getExpectValue(3, 5, 0, 0), getExpectValue(4, 5, 0, 0), getExpectValue(5, 5, 0, 0), getExpectValue(6, 5, 0, 0)],
-      [getExpectValue(1, 0, 5, 0), getExpectValue(2, 0, 5, 0), getExpectValue(3, 0, 5, 0), getExpectValue(4, 0, 5, 0), getExpectValue(5, 0, 5, 0), getExpectValue(6, 0, 5, 0)],
-      [getExpectValue(1, 1, 4, 0), getExpectValue(2, 1, 4, 0), getExpectValue(3, 1, 4, 0), getExpectValue(4, 1, 4, 0), getExpectValue(5, 1, 4, 0), getExpectValue(6, 1, 4, 0)],
-      [getExpectValue(1, 2, 3, 0), getExpectValue(2, 2, 3, 0), getExpectValue(3, 2, 3, 0), getExpectValue(4, 2, 3, 0), getExpectValue(5, 2, 3, 0), getExpectValue(6, 2, 3, 0)],
-      [getExpectValue(1, 3, 2, 0), getExpectValue(2, 3, 2, 0), getExpectValue(3, 3, 2, 0), getExpectValue(4, 3, 2, 0), getExpectValue(5, 3, 2, 0), getExpectValue(6, 3, 2, 0)],
-      [getExpectValue(1, 4, 1, 0), getExpectValue(2, 4, 1, 0), getExpectValue(3, 4, 1, 0), getExpectValue(4, 4, 1, 0), getExpectValue(5, 4, 1, 0), getExpectValue(6, 4, 1, 0)],
-      [getExpectValue(1, 0, 1, 4), getExpectValue(2, 0, 1, 4), getExpectValue(3, 0, 1, 4), getExpectValue(4, 0, 1, 4), getExpectValue(5, 0, 1, 4), getExpectValue(6, 0, 1, 4)],
-      [getExpectValue(1, 0, 2, 3), getExpectValue(2, 0, 2, 3), getExpectValue(3, 0, 2, 3), getExpectValue(4, 0, 2, 3), getExpectValue(5, 0, 2, 3), getExpectValue(6, 0, 2, 3)],
-      [getExpectValue(1, 0, 3, 2), getExpectValue(2, 0, 3, 2), getExpectValue(3, 0, 3, 2), getExpectValue(4, 0, 3, 2), getExpectValue(5, 0, 3, 2), getExpectValue(6, 0, 3, 2)],
-      [getExpectValue(1, 0, 4, 1), getExpectValue(2, 0, 4, 1), getExpectValue(3, 0, 4, 1), getExpectValue(4, 0, 4, 1), getExpectValue(5, 0, 4, 1), getExpectValue(6, 0, 4, 1)],
-      [getExpectValue(1, 1, 1, 3), getExpectValue(2, 1, 1, 3), getExpectValue(3, 1, 1, 3), getExpectValue(4, 1, 1, 3), getExpectValue(5, 1, 1, 3), getExpectValue(6, 1, 1, 3)],
-      [getExpectValue(1, 1, 2, 2), getExpectValue(2, 1, 2, 2), getExpectValue(3, 1, 2, 2), getExpectValue(4, 1, 2, 2), getExpectValue(5, 1, 2, 2), getExpectValue(6, 1, 2, 2)],
-      [getExpectValue(1, 1, 3, 1), getExpectValue(2, 1, 3, 1), getExpectValue(3, 1, 3, 1), getExpectValue(4, 1, 3, 1), getExpectValue(5, 1, 3, 1), getExpectValue(6, 1, 3, 1)],
-      [getExpectValue(1, 2, 1, 2), getExpectValue(2, 2, 1, 2), getExpectValue(3, 2, 1, 2), getExpectValue(4, 2, 1, 2), getExpectValue(5, 2, 1, 2), getExpectValue(6, 2, 1, 2)],
-      [getExpectValue(1, 2, 2, 1), getExpectValue(2, 2, 2, 1), getExpectValue(3, 2, 2, 1), getExpectValue(4, 2, 2, 1), getExpectValue(5, 2, 2, 1), getExpectValue(6, 2, 2, 1)],
-      [getExpectValue(1, 3, 1, 1), getExpectValue(2, 3, 1, 1), getExpectValue(3, 3, 1, 1), getExpectValue(4, 3, 1, 1), getExpectValue(5, 3, 1, 1), getExpectValue(6, 3, 1, 1)],
+    const expectedStockProbData = [
+      [getExpectProb(1, 5, 0, 0), getExpectProb(2, 5, 0, 0), getExpectProb(3, 5, 0, 0), getExpectProb(4, 5, 0, 0), getExpectProb(5, 5, 0, 0), getExpectProb(6, 5, 0, 0)],
+      [getExpectProb(1, 0, 5, 0), getExpectProb(2, 0, 5, 0), getExpectProb(3, 0, 5, 0), getExpectProb(4, 0, 5, 0), getExpectProb(5, 0, 5, 0), getExpectProb(6, 0, 5, 0)],
+      [getExpectProb(1, 1, 4, 0), getExpectProb(2, 1, 4, 0), getExpectProb(3, 1, 4, 0), getExpectProb(4, 1, 4, 0), getExpectProb(5, 1, 4, 0), getExpectProb(6, 1, 4, 0)],
+      [getExpectProb(1, 2, 3, 0), getExpectProb(2, 2, 3, 0), getExpectProb(3, 2, 3, 0), getExpectProb(4, 2, 3, 0), getExpectProb(5, 2, 3, 0), getExpectProb(6, 2, 3, 0)],
+      [getExpectProb(1, 3, 2, 0), getExpectProb(2, 3, 2, 0), getExpectProb(3, 3, 2, 0), getExpectProb(4, 3, 2, 0), getExpectProb(5, 3, 2, 0), getExpectProb(6, 3, 2, 0)],
+      [getExpectProb(1, 4, 1, 0), getExpectProb(2, 4, 1, 0), getExpectProb(3, 4, 1, 0), getExpectProb(4, 4, 1, 0), getExpectProb(5, 4, 1, 0), getExpectProb(6, 4, 1, 0)],
+      [getExpectProb(1, 0, 1, 4), getExpectProb(2, 0, 1, 4), getExpectProb(3, 0, 1, 4), getExpectProb(4, 0, 1, 4), getExpectProb(5, 0, 1, 4), getExpectProb(6, 0, 1, 4)],
+      [getExpectProb(1, 0, 2, 3), getExpectProb(2, 0, 2, 3), getExpectProb(3, 0, 2, 3), getExpectProb(4, 0, 2, 3), getExpectProb(5, 0, 2, 3), getExpectProb(6, 0, 2, 3)],
+      [getExpectProb(1, 0, 3, 2), getExpectProb(2, 0, 3, 2), getExpectProb(3, 0, 3, 2), getExpectProb(4, 0, 3, 2), getExpectProb(5, 0, 3, 2), getExpectProb(6, 0, 3, 2)],
+      [getExpectProb(1, 0, 4, 1), getExpectProb(2, 0, 4, 1), getExpectProb(3, 0, 4, 1), getExpectProb(4, 0, 4, 1), getExpectProb(5, 0, 4, 1), getExpectProb(6, 0, 4, 1)],
+      [getExpectProb(1, 1, 1, 3), getExpectProb(2, 1, 1, 3), getExpectProb(3, 1, 1, 3), getExpectProb(4, 1, 1, 3), getExpectProb(5, 1, 1, 3), getExpectProb(6, 1, 1, 3)],
+      [getExpectProb(1, 1, 2, 2), getExpectProb(2, 1, 2, 2), getExpectProb(3, 1, 2, 2), getExpectProb(4, 1, 2, 2), getExpectProb(5, 1, 2, 2), getExpectProb(6, 1, 2, 2)],
+      [getExpectProb(1, 1, 3, 1), getExpectProb(2, 1, 3, 1), getExpectProb(3, 1, 3, 1), getExpectProb(4, 1, 3, 1), getExpectProb(5, 1, 3, 1), getExpectProb(6, 1, 3, 1)],
+      [getExpectProb(1, 2, 1, 2), getExpectProb(2, 2, 1, 2), getExpectProb(3, 2, 1, 2), getExpectProb(4, 2, 1, 2), getExpectProb(5, 2, 1, 2), getExpectProb(6, 2, 1, 2)],
+      [getExpectProb(1, 2, 2, 1), getExpectProb(2, 2, 2, 1), getExpectProb(3, 2, 2, 1), getExpectProb(4, 2, 2, 1), getExpectProb(5, 2, 2, 1), getExpectProb(6, 2, 2, 1)],
+      [getExpectProb(1, 3, 1, 1), getExpectProb(2, 3, 1, 1), getExpectProb(3, 3, 1, 1), getExpectProb(4, 3, 1, 1), getExpectProb(5, 3, 1, 1), getExpectProb(6, 3, 1, 1)],
+    ]
+    
+    const expectedStockAmtData = [
+      [getExpectAmt(1, 5, 0, 0), getExpectAmt(2, 5, 0, 0), getExpectAmt(3, 5, 0, 0), getExpectAmt(4, 5, 0, 0), getExpectAmt(5, 5, 0, 0), getExpectAmt(6, 5, 0, 0)],
+      [getExpectAmt(1, 0, 5, 0), getExpectAmt(2, 0, 5, 0), getExpectAmt(3, 0, 5, 0), getExpectAmt(4, 0, 5, 0), getExpectAmt(5, 0, 5, 0), getExpectAmt(6, 0, 5, 0)],
+      [getExpectAmt(1, 1, 4, 0), getExpectAmt(2, 1, 4, 0), getExpectAmt(3, 1, 4, 0), getExpectAmt(4, 1, 4, 0), getExpectAmt(5, 1, 4, 0), getExpectAmt(6, 1, 4, 0)],
+      [getExpectAmt(1, 2, 3, 0), getExpectAmt(2, 2, 3, 0), getExpectAmt(3, 2, 3, 0), getExpectAmt(4, 2, 3, 0), getExpectAmt(5, 2, 3, 0), getExpectAmt(6, 2, 3, 0)],
+      [getExpectAmt(1, 3, 2, 0), getExpectAmt(2, 3, 2, 0), getExpectAmt(3, 3, 2, 0), getExpectAmt(4, 3, 2, 0), getExpectAmt(5, 3, 2, 0), getExpectAmt(6, 3, 2, 0)],
+      [getExpectAmt(1, 4, 1, 0), getExpectAmt(2, 4, 1, 0), getExpectAmt(3, 4, 1, 0), getExpectAmt(4, 4, 1, 0), getExpectAmt(5, 4, 1, 0), getExpectAmt(6, 4, 1, 0)],
+      [getExpectAmt(1, 0, 1, 4), getExpectAmt(2, 0, 1, 4), getExpectAmt(3, 0, 1, 4), getExpectAmt(4, 0, 1, 4), getExpectAmt(5, 0, 1, 4), getExpectAmt(6, 0, 1, 4)],
+      [getExpectAmt(1, 0, 2, 3), getExpectAmt(2, 0, 2, 3), getExpectAmt(3, 0, 2, 3), getExpectAmt(4, 0, 2, 3), getExpectAmt(5, 0, 2, 3), getExpectAmt(6, 0, 2, 3)],
+      [getExpectAmt(1, 0, 3, 2), getExpectAmt(2, 0, 3, 2), getExpectAmt(3, 0, 3, 2), getExpectAmt(4, 0, 3, 2), getExpectAmt(5, 0, 3, 2), getExpectAmt(6, 0, 3, 2)],
+      [getExpectAmt(1, 0, 4, 1), getExpectAmt(2, 0, 4, 1), getExpectAmt(3, 0, 4, 1), getExpectAmt(4, 0, 4, 1), getExpectAmt(5, 0, 4, 1), getExpectAmt(6, 0, 4, 1)],
+      [getExpectAmt(1, 1, 1, 3), getExpectAmt(2, 1, 1, 3), getExpectAmt(3, 1, 1, 3), getExpectAmt(4, 1, 1, 3), getExpectAmt(5, 1, 1, 3), getExpectAmt(6, 1, 1, 3)],
+      [getExpectAmt(1, 1, 2, 2), getExpectAmt(2, 1, 2, 2), getExpectAmt(3, 1, 2, 2), getExpectAmt(4, 1, 2, 2), getExpectAmt(5, 1, 2, 2), getExpectAmt(6, 1, 2, 2)],
+      [getExpectAmt(1, 1, 3, 1), getExpectAmt(2, 1, 3, 1), getExpectAmt(3, 1, 3, 1), getExpectAmt(4, 1, 3, 1), getExpectAmt(5, 1, 3, 1), getExpectAmt(6, 1, 3, 1)],
+      [getExpectAmt(1, 2, 1, 2), getExpectAmt(2, 2, 1, 2), getExpectAmt(3, 2, 1, 2), getExpectAmt(4, 2, 1, 2), getExpectAmt(5, 2, 1, 2), getExpectAmt(6, 2, 1, 2)],
+      [getExpectAmt(1, 2, 2, 1), getExpectAmt(2, 2, 2, 1), getExpectAmt(3, 2, 2, 1), getExpectAmt(4, 2, 2, 1), getExpectAmt(5, 2, 2, 1), getExpectAmt(6, 2, 2, 1)],
+      [getExpectAmt(1, 3, 1, 1), getExpectAmt(2, 3, 1, 1), getExpectAmt(3, 3, 1, 1), getExpectAmt(4, 3, 1, 1), getExpectAmt(5, 3, 1, 1), getExpectAmt(6, 3, 1, 1)],
     ]
 
     function findClosestIndex(arr, target) {
@@ -160,9 +169,9 @@
       document.querySelectorAll(".counter-a").forEach((v, i) => {
         for (let j = 0; j < 6; ++j) {
           if (isLowest) {
-            expectedArr[j] += fixedData[i][j] * v.value;
+            expectedArr[j] += expectedStockProbData[i][j] * v.value;
           } else {
-            expectedArr[j] += expectedData[i][j] * v.value;
+            expectedArr[j] += expectedStockAmtData[i][j] * v.value;
           }
         }
       });
@@ -170,9 +179,9 @@
       document.querySelectorAll(".counter-b").forEach((v, i) => {
         for (let j = 0; j < 6; ++j) {
           if (isLowest) {
-            expectedArr[j] += fixedData[i][j] * v.value;
+            expectedArr[j] += expectedStockProbData[i][j] * v.value;
           } else {
-            expectedArr[j] += expectedData[i][j] * v.value;
+            expectedArr[j] += expectedStockAmtData[i][j] * v.value;
           }
         }
       });
@@ -332,7 +341,7 @@
       return td;
     }
 
-    fixedData.forEach((values, rowIndex) => {
+    expectedStockProbData.forEach((values, rowIndex) => {
       const tr = document.createElement("tr");
       tr.dataset.rowId = `eureka-row${rowIndex}`;
       tr.dataset.values = values.join(",");
