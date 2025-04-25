@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>例のアレ</title>
   <style>
     table {
@@ -19,9 +20,6 @@
     .highlight-yellow {
       background-color: #fde68a;
     }
-    button {
-      margin: 0 2px;
-    }
     .row-label {
       font-weight: bold;
       background-color: #f0f0f0;
@@ -36,10 +34,46 @@
       width: 40px;
       text-align: right;
     }
+    
+    button {
+      display: inline-block;
+      font-size: 0.95rem;
+      padding: 0.5em 1.2em;
+      min-height: 25px;
+      border: 2px solid #4a90e2;
+      border-radius: 6px;
+      background-color: transparent;
+      color: #4a90e2;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      user-select: none;
+    }
+
+    button:hover {
+      background-color: #4a90e2;
+      color: #fff;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+    
+    input {
+      border: none;
+      outline: none;
+    }
+
+    @media (max-width: 600px) {
+      button {
+        font-size: 1rem;
+        padding: 0.6em 1.5em;
+        min-height: 44px;
+      }
+    }
   </style>
 </head>
 <body>
-  <button onclick="resetAllCounters()">すべてクリア</button>
+  <button class="flat-button" onclick="resetAllCounters()">すべてクリア</button>
   <table id="data-table">
     <thead>
       <tr>
@@ -50,8 +84,8 @@
         <th>設定4</th>
         <th>設定5</th>
         <th>設定6</th>
-        <th>ストック有</th>
-        <th>ストック無</th>
+        <th>CM当選</th>
+        <th>CM非当選</th>
       </tr>
     </thead>
     <tbody></tbody>
@@ -90,6 +124,7 @@
       const b = (onePnt == 0) ? 1 : Math.pow(1 - (raffleData[1][stg - 1] / 100), onePnt);
       const c = (twoPnt == 0) ? 1 : Math.pow(1 - (raffleData[2][stg - 1] / 100), twoPnt);
       
+      console.log((1 - Math.pow((raffleData[0][stg - 1] / 100), zeroPnt)) * 100);
       return (1 - a * b * c) * 100;
     }
 
@@ -309,6 +344,9 @@
       input.min = "0";
       input.classList.add(className);
       input.value = 0;
+      input.readOnly = true;
+      input.style.userSelect = "none";
+      input.style.pointerEvents = "none";
       input.oninput = () => {
         if (input.value < 0) input.value = 0;
         initRow(row);
