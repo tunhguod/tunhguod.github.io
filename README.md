@@ -34,3 +34,10 @@
 
 * URL
   * [https://tunhguod.github.io/takuate-kun/](https://tunhguod.github.io/takuate-kun/)
+
+## EurekaRBChk/
+
+ゑバケの設定判別ツール
+
+* URL
+  * [https://tunhguod.github.io/EurekaRBChk/](https://tunhguod.github.io/EurekaRBChk/)
