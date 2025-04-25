@@ -287,7 +287,7 @@
       document.querySelectorAll("tbody tr").forEach(row => updateRow(row));
       refreshExpectedValue(isLowest = true);
       refreshExpectedValue(isLowest = false);
-      navigator.vibrate(10);
+      navigator.vibrate(25);
     }
 
     function createExpectedStockAmtRow(tableBody) {
@@ -355,7 +355,7 @@
         updateRow(row);
         refreshExpectedValue(isLowest = true);
         refreshExpectedValue(isLowest = false);
-        navigator.vibrate(10);
+        navigator.vibrate(25);
       };
 
       const btnPlus = document.createElement("button");
@@ -365,7 +365,7 @@
         updateRow(row);
         refreshExpectedValue(isLowest = true);
         refreshExpectedValue(isLowest = false);
-        navigator.vibrate(10);
+        navigator.vibrate(25);
       };
 
       container.appendChild(btnMinus);
