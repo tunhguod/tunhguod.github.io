@@ -165,6 +165,7 @@ function updateRow(row) {
     const c = (a / (a + b)) * 100;
     const tgt_i = findClosestIndex(values, c);
 
+    /* Responded to point out that coloring was not necessary.
     values.forEach((v, i) => {
         const cell = row.querySelector(`.val-${i}`);
         cell.style.backgroundColor = "";
@@ -174,6 +175,7 @@ function updateRow(row) {
 
     const cell = row.querySelector(`.val-${tgt_i}`);
     cell.style.backgroundColor = "#e6f0e6";
+    */
 }
 
 function updateExpectedRow(row) {
