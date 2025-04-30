@@ -1,6 +1,12 @@
 table {
+    table-layout: auto;
     border-collapse: collapse;
     margin-top: 1em;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    width: 100%;
 }
 
 td,
@@ -48,7 +54,6 @@ button {
     user-select: none;
 }
 
-
 button:active {
     transform: scale(0.97);
 }
@@ -57,4 +62,12 @@ input {
     border: none;
     outline: none;
     text-align: center;
+}
+
+@media (max-width: 600px) {
+    button {
+        font-size: 1rem;
+        padding: 0.6em 1.5em;
+        min-height: 44px;
+    }
 }
