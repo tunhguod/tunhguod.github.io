@@ -150,11 +150,11 @@ function updateRow(row) {
 
     localStorage.setItem(`counter-${rowId}-a`, a);
     localStorage.setItem(`counter-${rowId}-b`, b);
-
+    
+    /* Responded to point out that coloring was not necessary.
     const c = (a / (a + b)) * 100;
     const tgt_i = findClosestIndex(values, c);
 
-    /* Responded to point out that coloring was not necessary.
     values.forEach((v, i) => {
         const cell = row.querySelector(`.val-${i}`);
         cell.style.backgroundColor = "";
@@ -178,7 +178,7 @@ function updateExpectedRow(row) {
         cell.style.backgroundColor = "";
     });
 
-    if (num == 0) return;
+    // if (num == 0) return;
 
     const cell = row.querySelector(`.val-${tgt_i}`);
     cell.style.backgroundColor = "#e6f0e6";
