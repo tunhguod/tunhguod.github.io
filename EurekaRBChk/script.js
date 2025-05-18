@@ -20,7 +20,7 @@ const ptnData = [
     "✕✕✕○○",
 ]
 
-const ptnAnsNumData = [
+const correctPointData = [
     [5, 0, 0],
     [0, 5, 0],
     [1, 4, 0],
@@ -57,11 +57,11 @@ function getExpectAmt(stg, zeroPnt, onePnt, twoPnt) {
     return (zeroPnt * raffleData[0][stg - 1]) + (onePnt * raffleData[1][stg - 1]) + (twoPnt * raffleData[2][stg - 1])
 }
 
-const expectedStockProbData = ptnAnsNumData.map(([a, b, c]) => {
+const expectedStockProbData = correctPointData.map(([a, b, c]) => {
     return Array.from({ length: 6 }, (_, i) => getExpectProb(i + 1, a, b, c))
 })
 
-const expectedStockAmtData = ptnAnsNumData.map(([a, b, c]) => {
+const expectedStockAmtData = correctPointData.map(([a, b, c]) => {
     return Array.from({ length: 6 }, (_, i) => getExpectAmt(i + 1, a, b, c))
 })
 
