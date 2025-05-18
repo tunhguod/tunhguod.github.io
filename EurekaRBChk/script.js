@@ -1,4 +1,4 @@
-const vibSec = 35;
+const vibMs = 35;
 const tableBody = document.querySelector("#data-table tbody");
 
 const ptnData = [
@@ -20,6 +20,25 @@ const ptnData = [
     "✕✕✕○○",
 ]
 
+const ptnAnsNumData = [
+    [5, 0, 0],
+    [0, 5, 0],
+    [1, 4, 0],
+    [2, 3, 0],
+    [3, 2, 0],
+    [4, 1, 0],
+    [0, 1, 4],
+    [0, 2, 3],
+    [0, 3, 2],
+    [0, 4, 1],
+    [1, 1, 3],
+    [1, 2, 2],
+    [1, 3, 1],
+    [2, 1, 2],
+    [2, 2, 1],
+    [3, 1, 1],
+]
+
 const raffleData = [
     [0.4, 0.8, 1.2, 1.6, 2.0, 2.3],
     [1.6, 2.0, 6.3, 6.7, 7.0, 7.4],
@@ -38,43 +57,13 @@ function getExpectAmt(stg, zeroPnt, onePnt, twoPnt) {
     return (zeroPnt * raffleData[0][stg - 1]) + (onePnt * raffleData[1][stg - 1]) + (twoPnt * raffleData[2][stg - 1])
 }
 
-const expectedStockProbData = [
-    [getExpectProb(1, 5, 0, 0), getExpectProb(2, 5, 0, 0), getExpectProb(3, 5, 0, 0), getExpectProb(4, 5, 0, 0), getExpectProb(5, 5, 0, 0), getExpectProb(6, 5, 0, 0)],
-    [getExpectProb(1, 0, 5, 0), getExpectProb(2, 0, 5, 0), getExpectProb(3, 0, 5, 0), getExpectProb(4, 0, 5, 0), getExpectProb(5, 0, 5, 0), getExpectProb(6, 0, 5, 0)],
-    [getExpectProb(1, 1, 4, 0), getExpectProb(2, 1, 4, 0), getExpectProb(3, 1, 4, 0), getExpectProb(4, 1, 4, 0), getExpectProb(5, 1, 4, 0), getExpectProb(6, 1, 4, 0)],
-    [getExpectProb(1, 2, 3, 0), getExpectProb(2, 2, 3, 0), getExpectProb(3, 2, 3, 0), getExpectProb(4, 2, 3, 0), getExpectProb(5, 2, 3, 0), getExpectProb(6, 2, 3, 0)],
-    [getExpectProb(1, 3, 2, 0), getExpectProb(2, 3, 2, 0), getExpectProb(3, 3, 2, 0), getExpectProb(4, 3, 2, 0), getExpectProb(5, 3, 2, 0), getExpectProb(6, 3, 2, 0)],
-    [getExpectProb(1, 4, 1, 0), getExpectProb(2, 4, 1, 0), getExpectProb(3, 4, 1, 0), getExpectProb(4, 4, 1, 0), getExpectProb(5, 4, 1, 0), getExpectProb(6, 4, 1, 0)],
-    [getExpectProb(1, 0, 1, 4), getExpectProb(2, 0, 1, 4), getExpectProb(3, 0, 1, 4), getExpectProb(4, 0, 1, 4), getExpectProb(5, 0, 1, 4), getExpectProb(6, 0, 1, 4)],
-    [getExpectProb(1, 0, 2, 3), getExpectProb(2, 0, 2, 3), getExpectProb(3, 0, 2, 3), getExpectProb(4, 0, 2, 3), getExpectProb(5, 0, 2, 3), getExpectProb(6, 0, 2, 3)],
-    [getExpectProb(1, 0, 3, 2), getExpectProb(2, 0, 3, 2), getExpectProb(3, 0, 3, 2), getExpectProb(4, 0, 3, 2), getExpectProb(5, 0, 3, 2), getExpectProb(6, 0, 3, 2)],
-    [getExpectProb(1, 0, 4, 1), getExpectProb(2, 0, 4, 1), getExpectProb(3, 0, 4, 1), getExpectProb(4, 0, 4, 1), getExpectProb(5, 0, 4, 1), getExpectProb(6, 0, 4, 1)],
-    [getExpectProb(1, 1, 1, 3), getExpectProb(2, 1, 1, 3), getExpectProb(3, 1, 1, 3), getExpectProb(4, 1, 1, 3), getExpectProb(5, 1, 1, 3), getExpectProb(6, 1, 1, 3)],
-    [getExpectProb(1, 1, 2, 2), getExpectProb(2, 1, 2, 2), getExpectProb(3, 1, 2, 2), getExpectProb(4, 1, 2, 2), getExpectProb(5, 1, 2, 2), getExpectProb(6, 1, 2, 2)],
-    [getExpectProb(1, 1, 3, 1), getExpectProb(2, 1, 3, 1), getExpectProb(3, 1, 3, 1), getExpectProb(4, 1, 3, 1), getExpectProb(5, 1, 3, 1), getExpectProb(6, 1, 3, 1)],
-    [getExpectProb(1, 2, 1, 2), getExpectProb(2, 2, 1, 2), getExpectProb(3, 2, 1, 2), getExpectProb(4, 2, 1, 2), getExpectProb(5, 2, 1, 2), getExpectProb(6, 2, 1, 2)],
-    [getExpectProb(1, 2, 2, 1), getExpectProb(2, 2, 2, 1), getExpectProb(3, 2, 2, 1), getExpectProb(4, 2, 2, 1), getExpectProb(5, 2, 2, 1), getExpectProb(6, 2, 2, 1)],
-    [getExpectProb(1, 3, 1, 1), getExpectProb(2, 3, 1, 1), getExpectProb(3, 3, 1, 1), getExpectProb(4, 3, 1, 1), getExpectProb(5, 3, 1, 1), getExpectProb(6, 3, 1, 1)],
-]
+const expectedStockProbData = ptnAnsNumData.map(([a, b, c]) => {
+    return Array.from({ length: 6 }, (_, i) => getExpectProb(i + 1, a, b, c))
+})
 
-const expectedStockAmtData = [
-    [getExpectAmt(1, 5, 0, 0), getExpectAmt(2, 5, 0, 0), getExpectAmt(3, 5, 0, 0), getExpectAmt(4, 5, 0, 0), getExpectAmt(5, 5, 0, 0), getExpectAmt(6, 5, 0, 0)],
-    [getExpectAmt(1, 0, 5, 0), getExpectAmt(2, 0, 5, 0), getExpectAmt(3, 0, 5, 0), getExpectAmt(4, 0, 5, 0), getExpectAmt(5, 0, 5, 0), getExpectAmt(6, 0, 5, 0)],
-    [getExpectAmt(1, 1, 4, 0), getExpectAmt(2, 1, 4, 0), getExpectAmt(3, 1, 4, 0), getExpectAmt(4, 1, 4, 0), getExpectAmt(5, 1, 4, 0), getExpectAmt(6, 1, 4, 0)],
-    [getExpectAmt(1, 2, 3, 0), getExpectAmt(2, 2, 3, 0), getExpectAmt(3, 2, 3, 0), getExpectAmt(4, 2, 3, 0), getExpectAmt(5, 2, 3, 0), getExpectAmt(6, 2, 3, 0)],
-    [getExpectAmt(1, 3, 2, 0), getExpectAmt(2, 3, 2, 0), getExpectAmt(3, 3, 2, 0), getExpectAmt(4, 3, 2, 0), getExpectAmt(5, 3, 2, 0), getExpectAmt(6, 3, 2, 0)],
-    [getExpectAmt(1, 4, 1, 0), getExpectAmt(2, 4, 1, 0), getExpectAmt(3, 4, 1, 0), getExpectAmt(4, 4, 1, 0), getExpectAmt(5, 4, 1, 0), getExpectAmt(6, 4, 1, 0)],
-    [getExpectAmt(1, 0, 1, 4), getExpectAmt(2, 0, 1, 4), getExpectAmt(3, 0, 1, 4), getExpectAmt(4, 0, 1, 4), getExpectAmt(5, 0, 1, 4), getExpectAmt(6, 0, 1, 4)],
-    [getExpectAmt(1, 0, 2, 3), getExpectAmt(2, 0, 2, 3), getExpectAmt(3, 0, 2, 3), getExpectAmt(4, 0, 2, 3), getExpectAmt(5, 0, 2, 3), getExpectAmt(6, 0, 2, 3)],
-    [getExpectAmt(1, 0, 3, 2), getExpectAmt(2, 0, 3, 2), getExpectAmt(3, 0, 3, 2), getExpectAmt(4, 0, 3, 2), getExpectAmt(5, 0, 3, 2), getExpectAmt(6, 0, 3, 2)],
-    [getExpectAmt(1, 0, 4, 1), getExpectAmt(2, 0, 4, 1), getExpectAmt(3, 0, 4, 1), getExpectAmt(4, 0, 4, 1), getExpectAmt(5, 0, 4, 1), getExpectAmt(6, 0, 4, 1)],
-    [getExpectAmt(1, 1, 1, 3), getExpectAmt(2, 1, 1, 3), getExpectAmt(3, 1, 1, 3), getExpectAmt(4, 1, 1, 3), getExpectAmt(5, 1, 1, 3), getExpectAmt(6, 1, 1, 3)],
-    [getExpectAmt(1, 1, 2, 2), getExpectAmt(2, 1, 2, 2), getExpectAmt(3, 1, 2, 2), getExpectAmt(4, 1, 2, 2), getExpectAmt(5, 1, 2, 2), getExpectAmt(6, 1, 2, 2)],
-    [getExpectAmt(1, 1, 3, 1), getExpectAmt(2, 1, 3, 1), getExpectAmt(3, 1, 3, 1), getExpectAmt(4, 1, 3, 1), getExpectAmt(5, 1, 3, 1), getExpectAmt(6, 1, 3, 1)],
-    [getExpectAmt(1, 2, 1, 2), getExpectAmt(2, 2, 1, 2), getExpectAmt(3, 2, 1, 2), getExpectAmt(4, 2, 1, 2), getExpectAmt(5, 2, 1, 2), getExpectAmt(6, 2, 1, 2)],
-    [getExpectAmt(1, 2, 2, 1), getExpectAmt(2, 2, 2, 1), getExpectAmt(3, 2, 2, 1), getExpectAmt(4, 2, 2, 1), getExpectAmt(5, 2, 2, 1), getExpectAmt(6, 2, 2, 1)],
-    [getExpectAmt(1, 3, 1, 1), getExpectAmt(2, 3, 1, 1), getExpectAmt(3, 3, 1, 1), getExpectAmt(4, 3, 1, 1), getExpectAmt(5, 3, 1, 1), getExpectAmt(6, 3, 1, 1)],
-]
+const expectedStockAmtData = ptnAnsNumData.map(([a, b, c]) => {
+    return Array.from({ length: 6 }, (_, i) => getExpectAmt(i + 1, a, b, c))
+})
 
 function findClosestIndex(arr, target) {
     let closestIndex = 0;
@@ -162,10 +151,10 @@ function updateRow(row) {
     localStorage.setItem(`counter-${rowId}-a`, a);
     localStorage.setItem(`counter-${rowId}-b`, b);
 
-    /* Responded to point out that coloring was not necessary.
     const c = (a / (a + b)) * 100;
     const tgt_i = findClosestIndex(values, c);
-    
+
+    /* Responded to point out that coloring was not necessary.
     values.forEach((v, i) => {
         const cell = row.querySelector(`.val-${i}`);
         cell.style.backgroundColor = "";
@@ -189,7 +178,7 @@ function updateExpectedRow(row) {
         cell.style.backgroundColor = "";
     });
 
-    // if (num == 0) return;
+    if (num == 0) return;
 
     const cell = row.querySelector(`.val-${tgt_i}`);
     cell.style.backgroundColor = "#e6f0e6";
@@ -200,7 +189,7 @@ function resetAllCounters() {
     document.querySelectorAll("tbody tr").forEach(row => updateRow(row));
     refreshExpectedValue(isLowest = true);
     refreshExpectedValue(isLowest = false);
-    navigator.vibrate(vibSec);
+    navigator.vibrate(vibMs);
 }
 
 function createExpectedStockAmtRow(tableBody) {
@@ -268,7 +257,7 @@ function createCounterCell(className, row) {
         updateRow(row);
         refreshExpectedValue(isLowest = true);
         refreshExpectedValue(isLowest = false);
-        navigator.vibrate(vibSec);
+        navigator.vibrate(vibMs);
     };
 
     const btnPlus = document.createElement("button");
@@ -278,7 +267,7 @@ function createCounterCell(className, row) {
         updateRow(row);
         refreshExpectedValue(isLowest = true);
         refreshExpectedValue(isLowest = false);
-        navigator.vibrate(vibSec);
+        navigator.vibrate(vibMs);
     };
 
     container.appendChild(btnMinus);
