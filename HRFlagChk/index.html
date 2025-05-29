@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>ハイパラフラグチェッカー</title>
+  <link rel="stylesheet" href="./css/style.css" type="text/css">
+</head>
+
+<body>
+  <div class="slot-wrapper">
+    <div class="reel-row">
+      <div id="reel-container">
+        <div id="reel"></div>
+      </div>
+
+      <div class="selector-box">
+        <label for="x-value">表示滑りコマ数</label>
+        <div class="button-group">
+          <button class="control-button" id="decrease-btn">−</button>
+          <div id="x-value" class="value-display">0</div>
+          <button class="control-button" id="increase-btn">＋</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-panel">
+      <div class="info-box">
+        <span class="info-label">フラグ (確定)</span>
+        <span id="info1"></span>
+      </div>
+      <div class="info-box">
+        <span class="info-label">フラグ (調査中)</span>
+        <span id="info2"></span>
+      </div>
+      <div class="info-box">
+        <span class="info-label">小役</span>
+        <span id="info3"></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="./script/script.js"></script>
+
+</body>
+
+</html>
