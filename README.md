@@ -41,3 +41,12 @@
 
 * URL
   * [https://tunhguod.github.io/EurekaRBChk/](https://tunhguod.github.io/EurekaRBChk/)
+
+## HRFlagChk/
+
+ハイパーラッシュのフラグチェッカー
+
+* URL
+  * [https://tunhguod.github.io/HRFlagChk/](https://tunhguod.github.io/HRFlagChk/)
+ 
+
