@@ -168,15 +168,15 @@ function getFlagNamesStr(reelIdx, xValue) {
   const findTbcFlagIdx = [];
 
   for (let i = 0; i < flagMapRowData.length; i++) {
+    let flagName = flagNames[i];
     if (flagMapRowData[i] === xValue) {
-      let flagName = flagNames[i];
       if ((flagName === "S") || (flagName >= "A") && (flagName <= "Q")) {
         findBbFlagIdx.push(flagName);
       } else {
         findRbFlagIdx.push(flagName);
       }
     } else if (flagMapRowData[i] === 5) {
-      findTbcFlagIdx.push(flagNames[i]);
+      findTbcFlagIdx.push(flagName);
     }
   }
 
