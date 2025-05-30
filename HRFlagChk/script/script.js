@@ -209,7 +209,7 @@ function updateDisplay() {
   if (findPrizeIdx.length > 0) {
     prizeDisplay.textContent = findPrizeIdx.join(", ");
   } else {
-    prizeDisplay.textContent = "- (1確)";
+    prizeDisplay.textContent = "- (ボナ1確)";
   }
 }
 
