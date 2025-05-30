@@ -58,12 +58,12 @@ const flagNames = [
   'F',
   'G',
   'H',
-  'HH',
+  'H1',
   'I',
   'J',
   'K',
   'L',
-  'LL',
+  'L2',
   'M',
   'N',
   'O',
@@ -199,17 +199,17 @@ function updateDisplay() {
   if (findFlagIdx.length > 0) {
     flagDisplay.textContent = findFlagIdx.join(", ");
   } else {
-    flagDisplay.textContent = "-";
+    flagDisplay.textContent = "なし";
   }
   if (findTbcFlagIdx.length > 0) {
     tbcFlagDisplay.textContent = findTbcFlagIdx.join(", ");
   } else {
-    tbcFlagDisplay.textContent = "-";
+    tbcFlagDisplay.textContent = "なし";
   }
   if (findPrizeIdx.length > 0) {
     prizeDisplay.textContent = findPrizeIdx.join(", ");
   } else {
-    prizeDisplay.textContent = "- (ボナ1確)";
+    prizeDisplay.textContent = "なし (ボナ1確)";
   }
 }
 
