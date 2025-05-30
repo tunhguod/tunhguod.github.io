@@ -206,7 +206,7 @@ function getPrizeNamesStr(reelIdx, xValue) {
 
 function updateDisplay() {
   xDisplay.textContent = xValue;
-  if (snappedIndex === 0) snappedIndex = 20;
+  if (snappedIndex === 0) snappedIndex = 21;
   stopIndex = snappedIndex - 1;
   if (stopIndex === 0) stopIndex = 21;
   const findData = getFlagNamesStr(stopIndex, xValue);
