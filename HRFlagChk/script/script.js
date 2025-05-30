@@ -227,7 +227,7 @@ function updateDisplay() {
   if (findTbcFlagIdx.length > 0) {
     tbcFlagDisplay.textContent = findTbcFlagIdx.join(", ");
   } else {
-    tbcFlagDisplay.textContent = "なし";
+    tbcFlagDisplay.textContent = "なし (済)";
   }
   if (findPrizeIdx.length > 0) {
     prizeDisplay.textContent = findPrizeIdx.join(", ");
