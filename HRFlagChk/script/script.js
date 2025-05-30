@@ -62,7 +62,7 @@ const flagNames = [
   'I',
   'J',
   'K',
-  'L1',
+  'L',
   'L2',
   'M',
   'N',
@@ -98,9 +98,10 @@ const increaseBtn = document.getElementById('increase-btn');
 const decreaseBtn = document.getElementById('decrease-btn');
 let xValue = 0;
 
-const flagDisplay = document.getElementById('info1');
-const tbcFlagDisplay = document.getElementById('info2');
-const prizeDisplay = document.getElementById('info3');
+const bbFlagDisplay = document.getElementById('info1');
+const rbFlagDisplay = document.getElementById('info2');
+const tbcFlagDisplay = document.getElementById('info3');
+const prizeDisplay = document.getElementById('info4');
 
 let startY = 0;
 let isDragging = false;
@@ -109,6 +110,10 @@ let dragStartBgY = 0;
 
 let stopIndex = 20;
 let snappedIndex = 21;
+
+let reelCorrectionValue = 0;
+
+let isCorrectReel = false;
 
 reel.addEventListener('pointerdown', (e) => {
   startY = e.clientY;
@@ -149,25 +154,43 @@ reel.addEventListener('pointercancel', () => {
 });
 
 function getFlagNamesStr(reelIdx, xValue) {
-  let arrIdx = Math.abs(reelIdx - 21 - xValue);
+  let arrIdx;
+  if (isCorrectReel) {
+    arrIdx = Math.abs(reelIdx - 21);
+  } else {
+    arrIdx = Math.abs(reelIdx - 21 - xValue);
+  }
+
   if (arrIdx >= totalSymbols) arrIdx -= 21;
   const flagMapRowData = flagMap[arrIdx];
-  const findFlagIdx = [];
+  const findBbFlagIdx = [];
+  const findRbFlagIdx = [];
   const findTbcFlagIdx = [];
 
   for (let i = 0; i < flagMapRowData.length; i++) {
     if (flagMapRowData[i] === xValue) {
-      findFlagIdx.push(flagNames[i]);
+      let flagName = flagNames[i];
+      if ((flagName === "S") || (flagName >= "A") && (flagName <= "Q")) {
+        findBbFlagIdx.push(flagName);
+      } else {
+        findRbFlagIdx.push(flagName);
+      }
     } else if (flagMapRowData[i] === 5) {
       findTbcFlagIdx.push(flagNames[i]);
     }
   }
 
-  return [findFlagIdx, findTbcFlagIdx];
+  return [findBbFlagIdx, findRbFlagIdx, findTbcFlagIdx];
 }
 
 function getPrizeNamesStr(reelIdx, xValue) {
-  let arrIdx = Math.abs(reelIdx - 21 - xValue);
+  let arrIdx;
+  if (isCorrectReel) {
+    arrIdx = Math.abs(reelIdx - 21);
+  } else {
+    arrIdx = Math.abs(reelIdx - 21 - xValue);
+  }
+
   if (arrIdx >= totalSymbols) arrIdx -= 21;
   const prizeMapRowData = prizeMap[arrIdx];
   const prizeFlagIdx = [];
@@ -187,13 +210,19 @@ function updateDisplay() {
   stopIndex = snappedIndex - 1;
   if (stopIndex === 0) stopIndex = 21;
   const findData = getFlagNamesStr(stopIndex, xValue);
-  const findFlagIdx = findData[0];
-  const findTbcFlagIdx = findData[1];
+  const findBbFlagIdx = findData[0];
+  const findRbFlagIdx = findData[1];
+  const findTbcFlagIdx = findData[2];
   const findPrizeIdx = getPrizeNamesStr(stopIndex, xValue);
-  if (findFlagIdx.length > 0) {
-    flagDisplay.textContent = findFlagIdx.join(", ");
+  if (findBbFlagIdx.length > 0) {
+    bbFlagDisplay.textContent = findBbFlagIdx.join(", ");
   } else {
-    flagDisplay.textContent = "なし";
+    bbFlagDisplay.textContent = "なし";
+  }
+  if (findRbFlagIdx.length > 0) {
+    rbFlagDisplay.textContent = findRbFlagIdx.join(", ");
+  } else {
+    rbFlagDisplay.textContent = "なし";
   }
   if (findTbcFlagIdx.length > 0) {
     tbcFlagDisplay.textContent = findTbcFlagIdx.join(", ");
@@ -222,6 +251,16 @@ decreaseBtn.addEventListener('click', () => {
     xValue--;
   } else {
     xValue = 4;
+  }
+  updateDisplay();
+});
+
+const toggle = document.getElementById('toggle');
+toggle.addEventListener('change', () => {
+  if (toggle.checked) {
+    isCorrectReel = true;
+  } else {
+    isCorrectReel = false;
   }
   updateDisplay();
 });
