@@ -110,6 +110,11 @@
        min-width: 160px;
        font-size: 14px;
        line-height: 1.4;
+       display: flex;
+   }
+
+   .flag-value-box {
+       margin: 0 0 0 auto;
    }
 
    .info-label {
