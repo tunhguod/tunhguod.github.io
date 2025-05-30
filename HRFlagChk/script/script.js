@@ -87,14 +87,12 @@ const prizeNames = [
   '🍵',
 ]
 
-// -------- リール制御 --------
 const reel = document.getElementById('reel');
 
 const totalSymbols = 21;
-const imageHeight = 1911; // reel.png の高さ
-const symbolHeight = imageHeight / totalSymbols; // ≒ 90.6px
+const imageHeight = 1911;
+const symbolHeight = imageHeight / totalSymbols;
 
-// 要素Xの + - ボタン処理
 const xDisplay = document.getElementById('x-value');
 const increaseBtn = document.getElementById('increase-btn');
 const decreaseBtn = document.getElementById('decrease-btn');
@@ -109,7 +107,7 @@ let isDragging = false;
 let bgY = 0;
 let dragStartBgY = 0;
 
-let stopIndex = 20; // ← 停止時の図柄インデックス（1〜21）
+let stopIndex = 20;
 let snappedIndex = 21;
 
 reel.addEventListener('pointerdown', (e) => {
@@ -124,7 +122,6 @@ reel.addEventListener('pointermove', (e) => {
   const dy = e.clientY - startY;
   bgY = dragStartBgY + dy;
 
-  // 無限ループさせる（modulo演算）
   const loopHeight = symbolHeight * totalSymbols;
   bgY = (bgY % loopHeight + loopHeight) % loopHeight;
 
@@ -134,15 +131,12 @@ reel.addEventListener('pointermove', (e) => {
 reel.addEventListener('pointerup', () => {
   isDragging = false;
 
-  // 最寄りのコマ位置へスナップ
   snappedIndex = Math.round(bgY / symbolHeight);
   bgY = snappedIndex * symbolHeight;
 
-  // アニメーションでスナップ（任意：CSSトランジション風に）
   reel.style.transition = 'background-position 0.2s ease-out';
   reel.style.backgroundPosition = `0px ${bgY}px`;
 
-  // トランジション解除（次のドラッグで変にならないように）
   setTimeout(() => {
     reel.style.transition = '';
   }, 200);
@@ -232,4 +226,4 @@ decreaseBtn.addEventListener('click', () => {
   updateDisplay();
 });
 
-updateDisplay(); // 初期表示
+updateDisplay();
