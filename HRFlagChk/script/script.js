@@ -77,6 +77,34 @@ const flagNames = [
   'W',
 ]
 
+const flagNums = [
+  16,
+  8,
+  17,
+  17,
+  44,
+  20,
+  30,
+  20,
+  4,
+  4,
+  13,
+  4,
+  20,
+  4,
+  4,
+  4,
+  7,
+  4,
+  7,
+  10,
+  4,
+  10,
+  23,
+  20,
+  63,
+]
+
 const prizeNames = [
   'ハズレ',
   'ハズレ',
@@ -101,6 +129,9 @@ let xValue = 0;
 const bbFlagDisplay = document.getElementById('info1');
 const rbFlagDisplay = document.getElementById('info2');
 const prizeDisplay = document.getElementById('info3');
+
+const bbFlagValueDisplay = document.getElementById('bb-flag-value-label');
+const rbFlagValueDisplay = document.getElementById('rb-flag-value-label');
 
 let startY = 0;
 let isDragging = false;
@@ -152,7 +183,7 @@ reel.addEventListener('pointercancel', () => {
   isDragging = false;
 });
 
-function getFlagNamesStr(reelIdx, xValue) {
+function getFlagData(reelIdx, xValue) {
   let arrIdx;
   if (isCorrectReel) {
     arrIdx = Math.abs(reelIdx - 21);
@@ -164,19 +195,24 @@ function getFlagNamesStr(reelIdx, xValue) {
   const flagMapRowData = flagMap[arrIdx];
   const findBbFlagIdx = [];
   const findRbFlagIdx = [];
+  let bbFlagNum = 0;
+  let rbFlagNum = 0;
 
   for (let i = 0; i < flagMapRowData.length; i++) {
     let flagName = flagNames[i];
+    let flagNum = flagNums[i];
     if (flagMapRowData[i] === xValue) {
       if ((flagName === "S") || (flagName >= "A") && (flagName <= "Q")) {
         findBbFlagIdx.push(flagName);
+        bbFlagNum += flagNum;
       } else {
         findRbFlagIdx.push(flagName);
+        rbFlagNum += flagNum;
       }
     }
   }
 
-  return [findBbFlagIdx, findRbFlagIdx];
+  return [findBbFlagIdx, findRbFlagIdx, bbFlagNum, rbFlagNum];
 }
 
 function getPrizeNamesStr(reelIdx, xValue) {
@@ -205,19 +241,25 @@ function updateDisplay() {
   if (snappedIndex === 0) snappedIndex = 21;
   stopIndex = snappedIndex - 1;
   if (stopIndex === 0) stopIndex = 21;
-  const findData = getFlagNamesStr(stopIndex, xValue);
+  const findData = getFlagData(stopIndex, xValue);
   const findBbFlagIdx = findData[0];
   const findRbFlagIdx = findData[1];
+  const findBbFlagNum = findData[2];
+  const findRbFlagNum = findData[3];
   const findPrizeIdx = getPrizeNamesStr(stopIndex, xValue);
   if (findBbFlagIdx.length > 0) {
     bbFlagDisplay.textContent = findBbFlagIdx.join(", ");
+    bbFlagValueDisplay.textContent = "1/" + (65536 / findBbFlagNum).toFixed(1).toString();
   } else {
     bbFlagDisplay.textContent = "なし";
+    bbFlagValueDisplay.textContent = "-";
   }
   if (findRbFlagIdx.length > 0) {
     rbFlagDisplay.textContent = findRbFlagIdx.join(", ");
+    rbFlagValueDisplay.textContent = "1/" + (65536 / findRbFlagNum).toFixed(1).toString();
   } else {
     rbFlagDisplay.textContent = "なし";
+    rbFlagValueDisplay.textContent = "-";
   }
   if (findPrizeIdx.length > 0) {
     prizeDisplay.textContent = findPrizeIdx.join(", ");
