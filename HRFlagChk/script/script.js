@@ -62,7 +62,7 @@ const flagNames = [
   'I',
   'J',
   'K',
-  'L',
+  'L1',
   'L2',
   'M',
   'N',
