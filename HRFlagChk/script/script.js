@@ -141,8 +141,6 @@ let dragStartBgY = 0;
 let stopIndex = 20;
 let snappedIndex = 21;
 
-let reelCorrectionValue = 0;
-
 let isCorrectReel = false;
 
 reel.addEventListener('pointerdown', (e) => {
@@ -264,14 +262,13 @@ function updateDisplay() {
   if (findPrizeIdx.length > 0) {
     prizeDisplay.textContent = findPrizeIdx.join(", ");
   } else {
-    prizeDisplay.textContent = "なし (ボナ1確)";
+    prizeDisplay.textContent = "なし";
   }
 }
 
 increaseBtn.addEventListener('click', () => {
   if (xValue < 4) {
     xValue++;
-
   } else {
     xValue = 0;
   }
