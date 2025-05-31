@@ -183,3 +183,13 @@
        left: 123px;
        background-color: #2196F3;
    }
+
+   a {
+       color: #4fc3f7;
+       text-decoration: underline;
+       transition: color 0.2s;
+   }
+
+   a:hover {
+       color: #81d4fa;
+   }
