@@ -130,6 +130,9 @@ const bbFlagDisplay = document.getElementById('info1');
 const rbFlagDisplay = document.getElementById('info2');
 const prizeDisplay = document.getElementById('info3');
 
+const bbFlagContainer = document.getElementById("bb-flag-container");
+const rbFlagContainer = document.getElementById("rb-flag-container");
+
 const bbFlagValueDisplay = document.getElementById('bb-flag-value-label');
 const rbFlagValueDisplay = document.getElementById('rb-flag-value-label');
 
@@ -181,6 +184,42 @@ reel.addEventListener('pointercancel', () => {
   isDragging = false;
 });
 
+function sumArray(arr) {
+  return arr.reduce((acc, curr) => acc + curr, 0);
+}
+
+function createFlagInfoDiv(parentElem, key, value) {
+  const badge = document.createElement("div");
+  badge.className = "badge";
+
+  const keyEl = document.createElement("div");
+  keyEl.className = "key";
+  if (key) {
+    keyEl.textContent = key;
+  } else {
+    keyEl.textContent = "-";
+  }
+
+  const valueEl = document.createElement("div");
+  valueEl.className = "value";
+
+  // カラー指定：value優先、なければkeyで
+  valueEl.style.backgroundColor = "#888";
+  if (value) {
+    valueEl.textContent = value + "%";
+  } else {
+    valueEl.textContent = "-";
+  }
+
+  badge.appendChild(keyEl);
+  badge.appendChild(valueEl);
+  if (!key || !value) {
+    badge.style.visibility = 'hidden';
+  }
+
+  parentElem.appendChild(badge);
+}
+
 function getFlagData(reelIdx, xValue) {
   let arrIdx;
   if (isCorrectReel) {
@@ -191,26 +230,26 @@ function getFlagData(reelIdx, xValue) {
 
   if (arrIdx >= totalSymbols) arrIdx -= 21;
   const flagMapRowData = flagMap[arrIdx];
-  const findBbFlagIdx = [];
-  const findRbFlagIdx = [];
-  let bbFlagNum = 0;
-  let rbFlagNum = 0;
+  const findBbFlagNames = [];
+  const findRbFlagNames = [];
+  const findBbFlagNums = [];
+  const findRbFlagNums = [];
 
   for (let i = 0; i < flagMapRowData.length; i++) {
     let flagName = flagNames[i];
     let flagNum = flagNums[i];
     if (flagMapRowData[i] === xValue) {
       if ((flagName === "S") || (flagName >= "A") && (flagName <= "Q")) {
-        findBbFlagIdx.push(flagName);
-        bbFlagNum += flagNum;
+        findBbFlagNames.push(flagName);
+        findBbFlagNums.push(flagNum);
       } else {
-        findRbFlagIdx.push(flagName);
-        rbFlagNum += flagNum;
+        findRbFlagNames.push(flagName);
+        findRbFlagNums.push(flagNum);
       }
     }
   }
 
-  return [findBbFlagIdx, findRbFlagIdx, bbFlagNum, rbFlagNum];
+  return [findBbFlagNames, findRbFlagNames, findBbFlagNums, findRbFlagNums];
 }
 
 function getPrizeNamesStr(reelIdx, xValue) {
@@ -240,27 +279,43 @@ function updateDisplay() {
   stopIndex = snappedIndex - 1;
   if (stopIndex === 0) stopIndex = 21;
   const findData = getFlagData(stopIndex, xValue);
-  const findBbFlagIdx = findData[0];
-  const findRbFlagIdx = findData[1];
-  const findBbFlagNum = findData[2];
-  const findRbFlagNum = findData[3];
-  const findPrizeIdx = getPrizeNamesStr(stopIndex, xValue);
-  if (findBbFlagIdx.length > 0) {
-    bbFlagDisplay.textContent = findBbFlagIdx.join(", ");
-    bbFlagValueDisplay.textContent = "1/" + (65536 / findBbFlagNum).toFixed(1).toString();
+  const findBbFlagNames = findData[0];
+  const findRbFlagNames = findData[1];
+  const findBbFlagNums = findData[2];
+  const findRbFlagNums = findData[3];
+  const findPrizeNames = getPrizeNamesStr(stopIndex, xValue);
+
+  // init.
+  bbFlagContainer.innerHTML = "";
+  rbFlagContainer.innerHTML = "";
+
+  const totalBbFlagNum = sumArray(findBbFlagNums);
+  const totalRbFlagNum = sumArray(findRbFlagNums);
+  const totalFlagNum = totalBbFlagNum + totalRbFlagNum;
+
+  if (findBbFlagNames.length > 0) {
+    for (let i = 0; i < findBbFlagNames.length; i++) {
+      createFlagInfoDiv(bbFlagContainer, findBbFlagNames[i], ((findBbFlagNums[i] / totalFlagNum) * 100).toFixed(0));
+    }
+    // bbFlagDisplay.textContent = findBbFlagNames.join(", ");
+    bbFlagValueDisplay.textContent = "1/" + (65536 / totalBbFlagNum).toFixed(1).toString();
   } else {
-    bbFlagDisplay.textContent = "なし";
-    bbFlagValueDisplay.textContent = "-";
-  }
-  if (findRbFlagIdx.length > 0) {
-    rbFlagDisplay.textContent = findRbFlagIdx.join(", ");
-    rbFlagValueDisplay.textContent = "1/" + (65536 / findRbFlagNum).toFixed(1).toString();
-  } else {
-    rbFlagDisplay.textContent = "なし";
+    // bbFlagDisplay.textContent = "なし";
+    createFlagInfoDiv(bbFlagContainer, null, null);
     rbFlagValueDisplay.textContent = "-";
   }
-  if (findPrizeIdx.length > 0) {
-    prizeDisplay.textContent = findPrizeIdx.join(", ");
+  if (findRbFlagNames.length > 0) {
+    for (let i = 0; i < findRbFlagNames.length; i++) {
+      createFlagInfoDiv(rbFlagContainer, findRbFlagNames[i], ((findRbFlagNums[i] / totalFlagNum) * 100).toFixed(0));
+    }
+    rbFlagValueDisplay.textContent = "1/" + (65536 / totalRbFlagNum).toFixed(1).toString();
+  } else {
+    // rbFlagDisplay.textContent = "なし";
+    createFlagInfoDiv(rbFlagContainer, null, null);
+    rbFlagValueDisplay.textContent = "-";
+  }
+  if (findPrizeNames.length > 0) {
+    prizeDisplay.textContent = findPrizeNames.join(", ");
   } else {
     prizeDisplay.textContent = "なし";
   }

@@ -30,7 +30,7 @@
 
    #reel-container {
        width: 180px;
-       height: 273px;
+       height: 270px;
        overflow: hidden;
        border: 3px solid #fff;
        border-radius: 10px;
@@ -51,7 +51,7 @@
        display: flex;
        flex-direction: column;
        align-items: center;
-       padding: 20px;
+       padding: 30px 100px;
        background: rgba(255, 255, 255, 0.08);
        border-radius: 8px;
        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
@@ -192,4 +192,44 @@
 
    a:hover {
        color: #81d4fa;
+   }
+
+   .badge {
+       display: inline-flex;
+       line-height: 1;
+       border-radius: 4px;
+       overflow: hidden;
+       flex-direction: column;
+       margin: 0px 1px;
+   }
+
+   .badge .key {
+       background-color: #555;
+       color: #fff;
+       padding: 3px 5px;
+       text-align: center;
+   }
+
+   .badge .value {
+       background-color: #4c1;
+       color: #fff;
+
+       width: 2.5em;
+       /* ← 2桁分＋余白 */
+       font-family: monospace;
+       text-align: center;
+       padding: 2px 0px;
+   }
+
+   /* 色のカスタマイズ例 */
+   .value.blue {
+       background-color: #007ec6;
+   }
+
+   .value.orange {
+       background-color: #f39c12;
+   }
+
+   .value.red {
+       background-color: #e05d44;
    }
