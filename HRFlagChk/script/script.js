@@ -248,7 +248,7 @@ function createFlagInfoDiv(parentElem, reelIdx, key, value) {
 
 function getFlagData(reelIdx, xValue) {
   let arrIdx = Math.abs(reelIdx - 21);
-  
+
   if (arrIdx >= totalSymbols) arrIdx -= 21;
   const flagMapRowData = flagMap[arrIdx];
   const findBbFlagNames = [];
@@ -274,12 +274,7 @@ function getFlagData(reelIdx, xValue) {
 }
 
 function getPrizeNamesStr(reelIdx, xValue) {
-  let arrIdx;
-  if (isCorrectReel) {
-    arrIdx = Math.abs(reelIdx - 21);
-  } else {
-    arrIdx = Math.abs(reelIdx - 21 - xValue);
-  }
+  let arrIdx = Math.abs(reelIdx - 21);
 
   if (arrIdx >= totalSymbols) arrIdx -= 21;
   const prizeMapRowData = prizeMap[arrIdx];
