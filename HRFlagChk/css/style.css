@@ -205,31 +205,14 @@
 
    .badge .key {
        background-color: #555;
-       color: #fff;
        padding: 3px 5px;
        text-align: center;
    }
 
    .badge .value {
-       background-color: #4c1;
-       color: #fff;
-
+       background-color: #777;
        width: 2.5em;
-       /* ← 2桁分＋余白 */
        font-family: monospace;
        text-align: center;
        padding: 2px 0px;
-   }
-
-   /* 色のカスタマイズ例 */
-   .value.blue {
-       background-color: #007ec6;
-   }
-
-   .value.orange {
-       background-color: #f39c12;
-   }
-
-   .value.red {
-       background-color: #e05d44;
    }
