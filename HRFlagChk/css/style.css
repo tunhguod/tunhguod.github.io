@@ -30,7 +30,7 @@
 
    #reel-container {
        width: 180px;
-       height: 270px;
+       height: 320px;
        overflow: hidden;
        border: 3px solid #fff;
        border-radius: 10px;
@@ -43,7 +43,7 @@
        height: 100%;
        background-image: url('../img/reel.png');
        background-repeat: repeat-y;
-       background-position: 0 0;
+       background-position: 0 25px;
        cursor: grab;
    }
 

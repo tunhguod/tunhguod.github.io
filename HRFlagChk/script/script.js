@@ -139,8 +139,8 @@ let isDragging = false;
 let bgY = 0;
 let dragStartBgY = 0;
 
-let stopIndex = 20;
-let snappedIndex = 21;
+let dispedReelTopIndex = 21;
+let pressedReelIndex = 20;
 
 let isCorrectReel = false;
 
@@ -159,17 +159,17 @@ reel.addEventListener('pointermove', (e) => {
   const loopHeight = symbolHeight * totalSymbols;
   bgY = (bgY % loopHeight + loopHeight) % loopHeight;
 
-  reel.style.backgroundPosition = `0px ${bgY}px`;
+  reel.style.backgroundPosition = `0px ${bgY + 25}px`;
 });
 
 reel.addEventListener('pointerup', () => {
   isDragging = false;
 
-  snappedIndex = Math.round(bgY / symbolHeight);
-  bgY = snappedIndex * symbolHeight;
+  dispedReelTopIndex = Math.round(bgY / symbolHeight);
+  bgY = dispedReelTopIndex * symbolHeight;
 
   reel.style.transition = 'background-position 0.2s ease-out';
-  reel.style.backgroundPosition = `0px ${bgY}px`;
+  reel.style.backgroundPosition = `0px ${bgY + 25}px`;
 
   setTimeout(() => {
     reel.style.transition = '';
@@ -186,7 +186,7 @@ function sumArray(arr) {
   return arr.reduce((acc, curr) => acc + curr, 0);
 }
 
-function createFlagInfoDiv(parentElem, key, value) {
+function createFlagInfoDiv(parentElem, reelIdx, key, value) {
   const badge = document.createElement("div");
   badge.className = "badge";
 
@@ -198,9 +198,39 @@ function createFlagInfoDiv(parentElem, key, value) {
     keyEl.textContent = "-";
   }
 
+  switch (key) {
+    case 'N':
+    case 'P':
+    case 'S':
+      keyEl.style.backgroundColor = '#9E8622';
+      break;
+    case 'J':
+    case 'K':
+    case 'M':
+    case 'O':
+    case 'Q':
+    case 'R':
+    case 'T':
+      keyEl.style.backgroundColor = '#3B6AA0';
+      break;
+    case 'H2':
+      if (((reelIdx >= 1) && (reelIdx <= 8)) || ((reelIdx >= 14) && (reelIdx <= 21))) {
+        keyEl.style.backgroundColor = '#A62828';
+      }
+      break;
+    case 'L2':
+      if (((reelIdx >= 1) && (reelIdx <= 4)) || ((reelIdx >= 14) && (reelIdx <= 21))) {
+        keyEl.style.backgroundColor = '#A62828';
+      }
+      break;
+    case 'I':
+      keyEl.style.backgroundColor = '#A62828';
+      break;
+  }
+
   const valueEl = document.createElement("div");
   valueEl.className = "value";
-  
+
   if (value) {
     valueEl.textContent = value + "%";
   } else {
@@ -217,12 +247,8 @@ function createFlagInfoDiv(parentElem, key, value) {
 }
 
 function getFlagData(reelIdx, xValue) {
-  let arrIdx;
-  if (isCorrectReel) {
-    arrIdx = Math.abs(reelIdx - 21);
-  } else {
-    arrIdx = Math.abs(reelIdx - 21 - xValue);
-  }
+  let arrIdx = Math.abs(reelIdx - 21);
+  console.log(arrIdx)
 
   if (arrIdx >= totalSymbols) arrIdx -= 21;
   const flagMapRowData = flagMap[arrIdx];
@@ -271,15 +297,20 @@ function getPrizeNamesStr(reelIdx, xValue) {
 
 function updateDisplay() {
   xDisplay.textContent = xValue;
-  if (snappedIndex === 0) snappedIndex = 21;
-  stopIndex = snappedIndex - 1;
-  if (stopIndex === 0) stopIndex = 21;
-  const findData = getFlagData(stopIndex, xValue);
+  if (dispedReelTopIndex === 0) dispedReelTopIndex = 21;
+  if (isCorrectReel) {
+    pressedReelIndex = dispedReelTopIndex - 1;
+  } else {
+    pressedReelIndex = dispedReelTopIndex - 1 - xValue;
+  }
+  if (pressedReelIndex < 1) pressedReelIndex += 21;
+
+  const findData = getFlagData(pressedReelIndex, xValue);
   const findBbFlagNames = findData[0];
   const findRbFlagNames = findData[1];
   const findBbFlagNums = findData[2];
   const findRbFlagNums = findData[3];
-  const findPrizeNames = getPrizeNamesStr(stopIndex, xValue);
+  const findPrizeNames = getPrizeNamesStr(pressedReelIndex, xValue);
 
   // init.
   bbFlagContainer.innerHTML = "";
@@ -291,20 +322,20 @@ function updateDisplay() {
 
   if (findBbFlagNames.length > 0) {
     for (let i = 0; i < findBbFlagNames.length; i++) {
-      createFlagInfoDiv(bbFlagContainer, findBbFlagNames[i], ((findBbFlagNums[i] / totalFlagNum) * 100).toFixed(0));
+      createFlagInfoDiv(bbFlagContainer, pressedReelIndex, findBbFlagNames[i], ((findBbFlagNums[i] / totalFlagNum) * 100).toFixed(0));
     }
     bbFlagValueDisplay.textContent = "1/" + (65536 / totalBbFlagNum).toFixed(1).toString();
   } else {
-    createFlagInfoDiv(bbFlagContainer, null, null);
+    createFlagInfoDiv(bbFlagContainer, null, null, null);
     rbFlagValueDisplay.textContent = "-";
   }
   if (findRbFlagNames.length > 0) {
     for (let i = 0; i < findRbFlagNames.length; i++) {
-      createFlagInfoDiv(rbFlagContainer, findRbFlagNames[i], ((findRbFlagNums[i] / totalFlagNum) * 100).toFixed(0));
+      createFlagInfoDiv(rbFlagContainer, pressedReelIndex, findRbFlagNames[i], ((findRbFlagNums[i] / totalFlagNum) * 100).toFixed(0));
     }
     rbFlagValueDisplay.textContent = "1/" + (65536 / totalRbFlagNum).toFixed(1).toString();
   } else {
-    createFlagInfoDiv(rbFlagContainer, null, null);
+    createFlagInfoDiv(rbFlagContainer, null, null, null);
     rbFlagValueDisplay.textContent = "-";
   }
   if (findPrizeNames.length > 0) {
