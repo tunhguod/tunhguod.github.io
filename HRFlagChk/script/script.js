@@ -126,9 +126,7 @@ const increaseBtn = document.getElementById('increase-btn');
 const decreaseBtn = document.getElementById('decrease-btn');
 let xValue = 0;
 
-const bbFlagDisplay = document.getElementById('info1');
-const rbFlagDisplay = document.getElementById('info2');
-const prizeDisplay = document.getElementById('info3');
+const prizeDisplay = document.getElementById('prize-display');
 
 const bbFlagContainer = document.getElementById("bb-flag-container");
 const rbFlagContainer = document.getElementById("rb-flag-container");
