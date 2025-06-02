@@ -202,9 +202,7 @@ function createFlagInfoDiv(parentElem, key, value) {
 
   const valueEl = document.createElement("div");
   valueEl.className = "value";
-
-  // カラー指定：value優先、なければkeyで
-  valueEl.style.backgroundColor = "#888";
+  
   if (value) {
     valueEl.textContent = value + "%";
   } else {
@@ -297,10 +295,8 @@ function updateDisplay() {
     for (let i = 0; i < findBbFlagNames.length; i++) {
       createFlagInfoDiv(bbFlagContainer, findBbFlagNames[i], ((findBbFlagNums[i] / totalFlagNum) * 100).toFixed(0));
     }
-    // bbFlagDisplay.textContent = findBbFlagNames.join(", ");
     bbFlagValueDisplay.textContent = "1/" + (65536 / totalBbFlagNum).toFixed(1).toString();
   } else {
-    // bbFlagDisplay.textContent = "なし";
     createFlagInfoDiv(bbFlagContainer, null, null);
     rbFlagValueDisplay.textContent = "-";
   }
@@ -310,7 +306,6 @@ function updateDisplay() {
     }
     rbFlagValueDisplay.textContent = "1/" + (65536 / totalRbFlagNum).toFixed(1).toString();
   } else {
-    // rbFlagDisplay.textContent = "なし";
     createFlagInfoDiv(rbFlagContainer, null, null);
     rbFlagValueDisplay.textContent = "-";
   }
