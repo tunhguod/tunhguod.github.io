@@ -248,8 +248,7 @@ function createFlagInfoDiv(parentElem, reelIdx, key, value) {
 
 function getFlagData(reelIdx, xValue) {
   let arrIdx = Math.abs(reelIdx - 21);
-  console.log(arrIdx)
-
+  
   if (arrIdx >= totalSymbols) arrIdx -= 21;
   const flagMapRowData = flagMap[arrIdx];
   const findBbFlagNames = [];
