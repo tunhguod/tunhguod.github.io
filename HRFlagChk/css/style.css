@@ -216,3 +216,8 @@
        text-align: center;
        padding: 2px 0px;
    }
+
+   #note {
+       margin: 0 0 0 auto;
+       font-size: 12px;
+   }

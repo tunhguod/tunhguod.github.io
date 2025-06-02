@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Key-Value Badge</title>
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: sans-serif;
+      padding: 2rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      font-size: 14px;
+      line-height: 1;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 4px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .badge .key {
+      background-color: #555;
+      color: #fff;
+      padding: 6px 10px;
+      font-weight: bold;
+    }
+
+    .badge .value {
+      background-color: #4c1;
+      color: #fff;
+      padding: 6px 10px;
+    }
+
+    /* 色のカスタマイズ例 */
+    .value.blue {
+      background-color: #007ec6;
+    }
+
+    .value.orange {
+      background-color: #f39c12;
+    }
+
+    .value.red {
+      background-color: #e05d44;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="badge">
+    <div class="key">Version</div>
+    <div class="value blue">v1.2.3</div>
+  </div>
+
+  <div class="badge">
+    <div class="key">License</div>
+    <div class="value orange">MIT</div>
+  </div>
+
+  <div class="badge">
+    <div class="key">Status</div>
+    <div class="value red">Deprecated</div>
+  </div>
+
+</body>
+</html>

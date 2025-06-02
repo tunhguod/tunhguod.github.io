@@ -139,8 +139,8 @@ let isDragging = false;
 let bgY = 0;
 let dragStartBgY = 0;
 
-let dispedReelTopIndex = 21;
-let pressedReelIndex = 20;
+let dispedReelTopIndex = totalSymbols;
+let pressedReelIndex = dispedReelTopIndex - 1;
 
 let isCorrectReel = false;
 
@@ -247,9 +247,9 @@ function createFlagInfoDiv(parentElem, reelIdx, key, value) {
 }
 
 function getFlagData(reelIdx, xValue) {
-  let arrIdx = Math.abs(reelIdx - 21);
+  let arrIdx = Math.abs(reelIdx - totalSymbols);
 
-  if (arrIdx >= totalSymbols) arrIdx -= 21;
+  if (arrIdx >= totalSymbols) arrIdx -= totalSymbols;
   const flagMapRowData = flagMap[arrIdx];
   const findBbFlagNames = [];
   const findRbFlagNames = [];
@@ -274,9 +274,9 @@ function getFlagData(reelIdx, xValue) {
 }
 
 function getPrizeNamesStr(reelIdx, xValue) {
-  let arrIdx = Math.abs(reelIdx - 21);
+  let arrIdx = Math.abs(reelIdx - totalSymbols);
 
-  if (arrIdx >= totalSymbols) arrIdx -= 21;
+  if (arrIdx >= totalSymbols) arrIdx -= totalSymbols;
   const prizeMapRowData = prizeMap[arrIdx];
   const prizeFlagIdx = [];
 
@@ -291,13 +291,13 @@ function getPrizeNamesStr(reelIdx, xValue) {
 
 function updateDisplay() {
   xDisplay.textContent = xValue;
-  if (dispedReelTopIndex === 0) dispedReelTopIndex = 21;
+  if (dispedReelTopIndex === 0) dispedReelTopIndex = totalSymbols;
   if (isCorrectReel) {
     pressedReelIndex = dispedReelTopIndex - 1;
   } else {
     pressedReelIndex = dispedReelTopIndex - 1 - xValue;
   }
-  if (pressedReelIndex < 1) pressedReelIndex += 21;
+  if (pressedReelIndex < 1) pressedReelIndex += totalSymbols;
 
   const findData = getFlagData(pressedReelIndex, xValue);
   const findBbFlagNames = findData[0];
