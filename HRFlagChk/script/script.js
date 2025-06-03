@@ -78,31 +78,31 @@ const flagNames = [
 ]
 
 const flagNums = [
-  16,
-  8,
-  17,
-  17,
-  44,
-  20,
-  30,
-  20,
-  4,
-  4,
-  13,
-  4,
-  20,
-  4,
-  4,
-  4,
-  7,
-  4,
-  7,
-  10,
-  4,
-  10,
-  23,
-  20,
-  63,
+  [16, 16, 16, 16, 16, 16],
+  [8, 8, 8, 17, 17, 17],
+  [17, 18, 21, 22, 23, 25],
+  [17, 18, 20, 22, 24, 26],
+  [44, 45, 47, 48, 50, 52],
+  [20, 20, 20, 20, 20, 20],
+  [30, 31, 32, 33, 35, 36],
+  [20, 20, 20, 20, 20, 20],
+  [4, 4, 4, 4, 4, 4],
+  [4, 4, 4, 4, 4, 4],
+  [13, 13, 13, 13, 13, 13],
+  [4, 4, 4, 4, 4, 4],
+  [20, 20, 20, 20, 20, 20],
+  [4, 4, 4, 4, 4, 4],
+  [4, 4, 4, 4, 4, 4],
+  [4, 4, 6, 6, 8, 12],
+  [7, 7, 7, 7, 7, 7],
+  [4, 4, 4, 4, 4, 4],
+  [7, 8, 9, 11, 12, 13],
+  [10, 10, 10, 10, 10, 10],
+  [4, 4, 4, 4, 4, 4],
+  [10, 11, 12, 14, 15, 18],
+  [23, 23, 23, 23, 23, 23],
+  [20, 20, 20, 20, 20, 20],
+  [63, 66, 71, 75, 80, 84]
 ]
 
 const prizeNames = [
@@ -122,8 +122,8 @@ const imageHeight = 1911;
 const symbolHeight = imageHeight / totalSymbols;
 
 const xDisplay = document.getElementById('x-value');
-const increaseBtn = document.getElementById('increase-btn');
-const decreaseBtn = document.getElementById('decrease-btn');
+const xIncreaseBtn = document.getElementById('x-increase-btn');
+const xDecreaseBtn = document.getElementById('x-decrease-btn');
 let xValue = 0;
 
 const prizeDisplay = document.getElementById('prize-display');
@@ -143,6 +143,11 @@ let dispedReelTopIndex = totalSymbols;
 let pressedReelIndex = dispedReelTopIndex - 1;
 
 let isCorrectReel = false;
+
+const sDisplay = document.getElementById('s-value');
+const sIncreaseBtn = document.getElementById('s-increase-btn');
+const sDecreaseBtn = document.getElementById('s-decrease-btn');
+let sValue = 1;
 
 reel.addEventListener('pointerdown', (e) => {
   startY = e.clientY;
@@ -258,7 +263,7 @@ function getFlagData(reelIdx, xValue) {
 
   for (let i = 0; i < flagMapRowData.length; i++) {
     let flagName = flagNames[i];
-    let flagNum = flagNums[i];
+    let flagNum = flagNums[i][sValue - 1];
     if (flagMapRowData[i] === xValue) {
       if ((flagName === "S") || (flagName >= "A") && (flagName <= "Q")) {
         findBbFlagNames.push(flagName);
@@ -291,6 +296,7 @@ function getPrizeNamesStr(reelIdx, xValue) {
 
 function updateDisplay() {
   xDisplay.textContent = xValue;
+  sDisplay.textContent = sValue;
   if (dispedReelTopIndex === 0) dispedReelTopIndex = totalSymbols;
   if (isCorrectReel) {
     pressedReelIndex = dispedReelTopIndex - 1;
@@ -339,7 +345,7 @@ function updateDisplay() {
   }
 }
 
-increaseBtn.addEventListener('click', () => {
+xIncreaseBtn.addEventListener('click', () => {
   if (xValue < 4) {
     xValue++;
   } else {
@@ -348,11 +354,29 @@ increaseBtn.addEventListener('click', () => {
   updateDisplay();
 });
 
-decreaseBtn.addEventListener('click', () => {
+xDecreaseBtn.addEventListener('click', () => {
   if (xValue > 0) {
     xValue--;
   } else {
     xValue = 4;
+  }
+  updateDisplay();
+});
+
+sIncreaseBtn.addEventListener('click', () => {
+  if (sValue < 6) {
+    sValue++;
+  } else {
+    sValue = 1;
+  }
+  updateDisplay();
+});
+
+sDecreaseBtn.addEventListener('click', () => {
+  if (sValue > 1) {
+    sValue--;
+  } else {
+    sValue = 6;
   }
   updateDisplay();
 });
