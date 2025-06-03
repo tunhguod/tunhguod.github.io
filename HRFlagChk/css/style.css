@@ -95,10 +95,6 @@
        transition: background 0.2s;
    }
 
-   .control-button:hover {
-       background: #555;
-   }
-
    .info-panel {
        width: 100%;
        gap: 12px;
