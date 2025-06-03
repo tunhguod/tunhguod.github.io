@@ -321,7 +321,7 @@ function updateDisplay() {
     bbFlagValueDisplay.textContent = "1/" + (65536 / totalBbFlagNum).toFixed(1).toString();
   } else {
     createFlagInfoDiv(bbFlagContainer, null, null, null);
-    rbFlagValueDisplay.textContent = "-";
+    bbFlagValueDisplay.textContent = "-";
   }
   if (findRbFlagNames.length > 0) {
     for (let i = 0; i < findRbFlagNames.length; i++) {
