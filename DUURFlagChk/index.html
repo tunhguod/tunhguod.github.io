@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>ウルリミフラグチェッカー</title>
+  <link rel="stylesheet" href="./css/style.css" type="text/css">
+</head>
+
+<body>
+  <div class="slot-wrapper">
+    <div class="reel-row">
+      <div id="reel-container">
+        <div id="reel"></div>
+      </div>
+
+      <div class="selector-box">
+        <label for="x-value">表示滑りコマ数</label>
+        <div class="button-group">
+          <button class="control-button" id="decrease-btn">−</button>
+          <div id="x-value" class="value-display">0</div>
+          <button class="control-button" id="increase-btn">＋</button>
+        </div>
+        <label for="s-value">設定</label>
+        <div class="button-group">
+          <button class="control-button" id="s-decrease-btn">−</button>
+          <div id="s-value" class="value-display">1</div>
+          <button class="control-button" id="s-increase-btn">＋</button>
+        </div>
+        <label for="x-value">リールの位置</label>
+        <input type="checkbox" id="toggle" hidden />
+        <label for="toggle" class="switch">
+          <span class="label-left">リール停止時</span>
+          <span class="label-right">ボタン押下時</span>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="info-panel">
+      <div class="info-box">
+        <div>
+          <span class="info-label">リーチ目役</span>
+          <div id="reach-container"></div>
+        </div>
+        <!-- <div class="flag-value-box">
+          <span class="info-label">合算 (設定1)</span>
+          <span id="bb-flag-value-label"></span>
+        </div> -->
+      </div>
+      <div class="info-box">
+        <div>
+          <span class="info-label">フラグ (重複フラグのみ)</span>
+          <div id="flag-container"></div>
+        </div>
+        <!-- <div class="flag-value-box">
+          <span class="info-label">合算 (設定1)</span>
+          <span id="rb-flag-value-label"></span>
+        </div> -->
+      </div>
+      <div class="info-box">
+        <div>
+          <span class="info-label">小役</span>
+          <span id="prize-display"></span>
+        </div>
+      </div>
+      <div class="info-box">
+        <div>
+          <span class="info-label">左1st制御表 (しのぶっぷさん作成)</span>
+          <a href="https://x.com/L_Shinobup_UR/status/1931913363778654625" target="_blank">
+            X (旧 Twitter)
+          </a>
+        </div>
+      </div>
+    </div>
+    <div id="note">
+      (不具合報告/ご質問等は <a href="https://x.com/doughnut_777" target"_blank">@doughnut_777</a> 宛にお願いします)
+    </div>
+  </div>
+
+  <script src="./script/script.js"></script>
+
+</body>
+
+</html>
