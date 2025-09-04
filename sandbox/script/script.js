@@ -284,12 +284,12 @@ function createFlagInfoDiv(parentElem, reelIdx, key, value) {
       keyEl.style.backgroundColor = '#3B6AA0';
       break;
     case 'H2':
-      if (((reelIdx >= 1) && (reelIdx <= 8)) || ((reelIdx >= 14) && (reelIdx <= 21))) {
+      if (!isOrderCenter && ((reelIdx >= 1) && (reelIdx <= 8) || (reelIdx >= 14) && (reelIdx <= 21))) {
         keyEl.style.backgroundColor = '#A62828';
       }
       break;
     case 'L2':
-      if (((reelIdx >= 1) && (reelIdx <= 4)) || ((reelIdx >= 14) && (reelIdx <= 21))) {
+      if (!isOrderCenter && ((reelIdx >= 1) && (reelIdx <= 4) || (reelIdx >= 14) && (reelIdx <= 21))) {
         keyEl.style.backgroundColor = '#A62828';
       }
       break;
