@@ -27,11 +27,18 @@
           <div id="s-value" class="value-display">1</div>
           <button class="control-button" id="s-increase-btn">＋</button>
         </div>
-        <label for="toggle">リールの位置</label>
-        <input type="checkbox" id="toggle" hidden />
-        <label for="toggle" class="switch">
+        <label for="toggle-correct-reel">リールの位置</label>
+        <input type="checkbox" id="toggle-correct-reel" hidden />
+        <label for="toggle-correct-reel" class="switch">
           <span class="label-left">リール停止時</span>
           <span class="label-right">ボタン押下時</span>
+          <span class="slider"></span>
+        </label>
+        <label for="toggle-press-order">押し順</label>
+        <input type="checkbox" id="toggle-press-order" hidden />
+        <label for="toggle-press-order" class="switch">
+          <span class="label-left">左1st</span>
+          <span class="label-right">中1st</span>
           <span class="slider"></span>
         </label>
 
@@ -68,7 +75,7 @@
       </div>
       <div class="info-box">
         <div>
-          <span class="info-label">左1st制御表</span>
+          <span class="info-label">制御表</span>
           <a href="https://docs.google.com/spreadsheets/d/1UNeeJEg-8OYhitDBvvdec_t7KXVm53Dh3pOAyrQQS9M/edit?gid=157777121#gid=157777121"
             target="_blank">
             スプレッドシートを開く
