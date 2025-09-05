@@ -25,6 +25,33 @@ const flagMap = [
   [0, 0, 1, 2, 0, 0, 2, 0, 0, 0, 3, 4, 1, 0, 1, 2, 1, 2, 3, 1, 2, 3, 0, 0, 0],
 ]
 
+const flagMapCenter = [
+  /**
+   A  B  C  D  E  F  G  H  H' I  J  K  L  L' M  N  O  P  Q  R  S  T  U  V  W
+  **/
+  [1, 2, 2, 2, 2, 0, 2, 2, 1, 2, 0, 1, 2, 1, 1, 3, 2, 3, 2, 0, 0, 0, 2, 2, 2],
+  [2, 3, 3, 3, 3, 1, 3, 3, 2, 0, 1, 2, 0, 2, 2, 4, 3, 4, 3, 1, 1, 1, 0, 0, 0],
+  [3, 0, 0, 0, 0, 2, 4, 0, 3, 1, 2, 3, 1, 3, 3, 2, 4, 2, 4, 2, 2, 2, 1, 1, 1],
+  [4, 1, 0, 1, 1, 3, 2, 0, 4, 2, 3, 4, 2, 4, 4, 3, 0, 3, 0, 3, 3, 3, 2, 2, 2],
+  [0, 2, 1, 2, 2, 4, 3, 1, 0, 3, 4, 0, 3, 0, 0, 4, 1, 4, 1, 4, 4, 4, 3, 3, 3],
+  [1, 3, 2, 3, 3, 0, 4, 2, 1, 4, 0, 1, 4, 1, 1, 0, 2, 0, 2, 0, 0, 0, 4, 4, 4],
+  [2, 4, 3, 4, 4, 1, 0, 3, 2, 0, 1, 2, 4, 2, 2, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0],
+  [3, 1, 4, 1, 1, 2, 1, 4, 3, 1, 2, 0, 1, 3, 3, 2, 1, 2, 1, 2, 2, 2, 1, 1, 1],
+  [1, 2, 2, 2, 2, 0, 2, 2, 1, 2, 0, 1, 2, 1, 1, 3, 2, 3, 2, 0, 0, 0, 2, 2, 2],
+  [2, 3, 3, 3, 3, 1, 3, 3, 2, 0, 1, 2, 0, 2, 2, 4, 3, 4, 3, 1, 1, 1, 0, 0, 0],
+  [3, 0, 0, 0, 0, 2, 4, 0, 3, 1, 2, 3, 1, 3, 3, 2, 4, 2, 4, 2, 2, 2, 1, 1, 1],
+  [4, 1, 1, 1, 1, 3, 2, 1, 4, 2, 3, 4, 2, 4, 4, 3, 0, 3, 0, 3, 3, 3, 2, 2, 2],
+  [0, 2, 2, 2, 2, 4, 3, 2, 0, 3, 4, 0, 3, 0, 0, 4, 1, 4, 1, 4, 4, 4, 3, 3, 3],
+  [1, 3, 3, 3, 3, 0, 4, 3, 1, 4, 0, 1, 4, 1, 1, 0, 2, 0, 2, 0, 0, 0, 4, 4, 4],
+  [2, 4, 4, 4, 4, 1, 0, 4, 2, 0, 1, 2, 0, 2, 2, 1, 3, 1, 3, 1, 1, 1, 0, 0, 0],
+  [3, 4, 4, 4, 0, 2, 1, 4, 0, 1, 2, 3, 1, 0, 0, 2, 4, 2, 4, 2, 2, 2, 1, 1, 1],
+  [4, 0, 0, 0, 1, 3, 2, 0, 1, 2, 3, 4, 2, 1, 1, 3, 0, 3, 0, 3, 3, 3, 2, 2, 2],
+  [0, 1, 1, 1, 2, 4, 3, 1, 2, 3, 4, 0, 3, 2, 2, 4, 1, 4, 1, 4, 4, 4, 3, 3, 3],
+  [1, 2, 2, 2, 3, 0, 4, 2, 3, 4, 0, 1, 4, 3, 3, 0, 2, 0, 2, 0, 0, 0, 4, 4, 4],
+  [2, 3, 3, 3, 4, 1, 0, 3, 4, 0, 1, 2, 3, 4, 4, 1, 3, 1, 3, 1, 1, 1, 0, 0, 0],
+  [0, 4, 4, 4, 1, 2, 1, 4, 0, 1, 2, 0, 4, 0, 0, 2, 4, 2, 4, 2, 2, 2, 1, 1, 1],
+]
+
 const prizeMap = [
   [2, 5, 3, 0, 0, 4, 3],
   [1, 5, 2, 3, 4, 0, 1],
@@ -47,6 +74,30 @@ const prizeMap = [
   [0, 5, 0, 4, 0, 3, 0],
   [0, 1, 1, 0, 0, 4, 1],
   [1, 2, 0, 1, 2, 3, 0],
+]
+
+const prizeMapCenter = [
+  [1, 1, 1, 2, 0, 2, 2, 0, 0],
+  [2, 2, 2, 3, 1, 0, 0, 1, 1],
+  [3, 3, 3, 4, 2, 1, 0, 2, 2],
+  [4, 4, 0, 0, 3, 2, 1, 3, 3],
+  [0, 0, 1, 1, 4, 3, 2, 4, 4],
+  [1, 1, 2, 2, 0, 4, 3, 0, 0],
+  [2, 2, 5, 0, 1, 4, 4, 1, 1],
+  [0, 0, 5, 1, 2, 1, 1, 2, 2],
+  [1, 1, 1, 2, 0, 2, 2, 0, 0],
+  [2, 2, 2, 3, 1, 0, 0, 1, 1],
+  [3, 3, 3, 4, 2, 0, 0, 2, 2],
+  [4, 4, 4, 0, 3, 1, 1, 3, 3],
+  [0, 0, 0, 1, 4, 2, 2, 4, 4],
+  [1, 1, 1, 2, 0, 3, 3, 0, 0],
+  [2, 2, 2, 3, 1, 0, 4, 1, 1],
+  [3, 3, 3, 4, 2, 1, 0, 2, 2],
+  [4, 4, 4, 0, 3, 2, 1, 3, 3],
+  [0, 0, 0, 1, 4, 3, 2, 4, 4],
+  [1, 1, 1, 2, 0, 4, 3, 0, 0],
+  [2, 2, 2, 0, 1, 4, 4, 1, 1],
+  [0, 0, 0, 1, 2, 1, 1, 2, 2],
 ]
 
 const flagNames = [
@@ -115,7 +166,20 @@ const prizeNames = [
   '🍵',
 ]
 
+const prizeNamesCenter = [
+  'ハズレ',
+  '🔁A',
+  '🔁A2',
+  '🔁B',
+  '🔔',
+  '🍉A',
+  '🍉B',
+  '🍒',
+  '🍵',
+]
+
 const reel = document.getElementById('reel');
+reel.style.setProperty('--reel-image', "url('../img/reel.png')");
 
 const totalSymbols = 21;
 const imageHeight = 1911;
@@ -143,6 +207,7 @@ let dispedReelTopIndex = totalSymbols;
 let pressedReelIndex = dispedReelTopIndex - 1;
 
 let isCorrectReel = false;
+let isOrderCenter = false;
 
 const sDisplay = document.getElementById('s-value');
 const sIncreaseBtn = document.getElementById('s-increase-btn');
@@ -219,12 +284,12 @@ function createFlagInfoDiv(parentElem, reelIdx, key, value) {
       keyEl.style.backgroundColor = '#3B6AA0';
       break;
     case 'H2':
-      if (((reelIdx >= 1) && (reelIdx <= 8)) || ((reelIdx >= 14) && (reelIdx <= 21))) {
+      if (!isOrderCenter && ((reelIdx >= 1) && (reelIdx <= 8) || (reelIdx >= 14) && (reelIdx <= 21))) {
         keyEl.style.backgroundColor = '#A62828';
       }
       break;
     case 'L2':
-      if (((reelIdx >= 1) && (reelIdx <= 4)) || ((reelIdx >= 14) && (reelIdx <= 21))) {
+      if (!isOrderCenter && ((reelIdx >= 1) && (reelIdx <= 4) || (reelIdx >= 14) && (reelIdx <= 21))) {
         keyEl.style.backgroundColor = '#A62828';
       }
       break;
@@ -255,7 +320,14 @@ function getFlagData(reelIdx, xValue) {
   let arrIdx = Math.abs(reelIdx - totalSymbols);
 
   if (arrIdx >= totalSymbols) arrIdx -= totalSymbols;
-  const flagMapRowData = flagMap[arrIdx];
+
+  let flagMapRowData;
+  if (isOrderCenter) {
+    flagMapRowData = flagMapCenter[arrIdx];
+  } else {
+    flagMapRowData = flagMap[arrIdx];
+  }
+
   const findBbFlagNames = [];
   const findRbFlagNames = [];
   const findBbFlagNums = [];
@@ -282,16 +354,26 @@ function getPrizeNamesStr(reelIdx, xValue) {
   let arrIdx = Math.abs(reelIdx - totalSymbols);
 
   if (arrIdx >= totalSymbols) arrIdx -= totalSymbols;
-  const prizeMapRowData = prizeMap[arrIdx];
-  const prizeFlagIdx = [];
+
+  let prizeMapRowData;
+  if (isOrderCenter) {
+    prizeMapRowData = prizeMapCenter[arrIdx];
+  } else {
+    prizeMapRowData = prizeMap[arrIdx];
+  }
+  const prizeFlagNames = [];
 
   for (let i = 0; i < prizeMapRowData.length; i++) {
     if (prizeMapRowData[i] === xValue) {
-      prizeFlagIdx.push(prizeNames[i]);
+      if (isOrderCenter) {
+        prizeFlagNames.push(prizeNamesCenter[i]);
+      } else {
+        prizeFlagNames.push(prizeNames[i]);
+      }
     }
   }
 
-  return prizeFlagIdx;
+  return prizeFlagNames;
 }
 
 function updateDisplay() {
@@ -381,12 +463,24 @@ sDecreaseBtn.addEventListener('click', () => {
   updateDisplay();
 });
 
-const toggle = document.getElementById('toggle');
-toggle.addEventListener('change', () => {
-  if (toggle.checked) {
+const toggleCorrectReel = document.getElementById('toggle-correct-reel');
+toggleCorrectReel.addEventListener('change', () => {
+  if (toggleCorrectReel.checked) {
     isCorrectReel = true;
   } else {
     isCorrectReel = false;
+  }
+  updateDisplay();
+});
+
+const togglePressOrder = document.getElementById('toggle-press-order');
+togglePressOrder.addEventListener('change', () => {
+  if (togglePressOrder.checked) {
+    isOrderCenter = true;
+    reel.style.setProperty('--reel-image', "url('../img/reel_c.png')");
+  } else {
+    isOrderCenter = false;
+    reel.style.setProperty('--reel-image', "url('../img/reel.png')");
   }
   updateDisplay();
 });
