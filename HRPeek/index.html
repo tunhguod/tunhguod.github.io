@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ハイパラ簡易設定推測</title>
+<style>
+  body {
+    font-family: sans-serif;
+    background: #f9fafb;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .container {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    max-width: 800px;
+    width: 100%;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  textarea {
+    width: 100%;
+    height: 200px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: vertical;
+    font-size: 14px;
+  }
+  button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 30px;
+    background: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  button:hover {
+    background: #4338ca;
+  }
+  .chart {
+    margin-top: 20px;
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .label {
+    width: 60px;
+    font-weight: bold;
+  }
+  .bar-inner {
+    flex: 1;
+    background: #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-left: 10px;
+  }
+  .bar-fill {
+    height: 24px;
+    background: #4f46e5;
+    color: white;
+    text-align: right;
+    padding-right: 6px;
+    line-height: 24px;
+    border-radius: 8px 0 0 8px;
+    transition: width 0.5s;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>ハイパラ簡易設定推測</h1>
+  <textarea id="input" placeholder="スロプラのフラグAからフラグWのデータをコピーし、ここに貼り付け&#10;&#10;(例)&#10;フラグA&#10;3回 (1/1666.0)&#10;フラグB&#10;1回 (1/4998.0)&#10;フラグC&#10;2回 (1/2499.0)&#10;...&#10;フラグW&#10;2回 (1/2499.0)"></textarea>
+  <button onclick="analyze()">判別開始</button>
+  <div id="chart" class="chart"></div>
+</div>
+
+<script>
+  total = -1;
+
+  const settingsTheory = {
+        1: {'フラグB': 1/8192.0, 'フラグC': 1/3855.1, 'フラグD': 1/3855.1, 'フラグE': 1/1489.5, 'フラグG': 1/2184.5, 'フラグN': 1/16384.0, 'フラグQ': 1/9362.3, 'フラグT': 1/6553.6, 'フラグW': 1/1040.3},
+        2: {'フラグB': 1/8192.0, 'フラグC': 1/3640.9, 'フラグD': 1/3640.9, 'フラグE': 1/1456.4, 'フラグG': 1/2114.1, 'フラグN': 1/16384.0, 'フラグQ': 1/8192.0, 'フラグT': 1/5957.8, 'フラグW': 1/993.0},
+        3: {'フラグB': 1/8192.0, 'フラグC': 1/3120.8, 'フラグD': 1/3276.8, 'フラグE': 1/1394.4, 'フラグG': 1/2048.0, 'フラグN': 1/10922.7, 'フラグQ': 1/7281.8, 'フラグT': 1/5461.3, 'フラグW': 1/923.0},
+        4: {'フラグB': 1/5461.3, 'フラグC': 1/2978.9, 'フラグD': 1/2978.9, 'フラグE': 1/1365.3, 'フラグG': 1/1985.9, 'フラグN': 1/10922.7, 'フラグQ': 1/5957.8, 'フラグT': 1/4681.1, 'フラグW': 1/873.8},
+        5: {'フラグB': 1/5461.3, 'フラグC': 1/2849.4, 'フラグD': 1/2730.7, 'フラグE': 1/1310.7, 'フラグG': 1/1872.5, 'フラグN': 1/8192.0 , 'フラグQ': 1/5461.3, 'フラグT': 1/4369.1, 'フラグW': 1/819.2},
+        6: {'フラグB': 1/5461.3, 'フラグC': 1/2621.4, 'フラグD': 1/2520.6, 'フラグE': 1/1260.3, 'フラグG': 1/1820.4, 'フラグN': 1/8192.0 , 'フラグQ': 1/5041.2, 'フラグT': 1/3640.9, 'フラグW': 1/780.2},
+  };
+
+  function parseInput(text) {
+    const lines = text.split("\n").map(l => l.trim()).filter(l => l);
+    const data = [];
+    for (let i = 0; i < lines.length; i += 2) {
+      const flag = lines[i];
+      const line = lines[i+1];
+      if (!line) continue;
+      // 0回 (-) もしくは n回 (1/XXXX)
+      const match = line.match(/(\d+)回\s*\((?:1\/([\d.]+)|-)\)/);
+      if (match) {
+        const count = parseInt(match[1], 10);
+        const denom = match[2] ? parseFloat(match[2]) : null;
+        data.push({ flag, count, probability: denom ? 1/denom : null });
+        
+        if (total < 0) {
+          total = denom * count;
+        }
+      }
+    }
+    return data;
+  }
+
+  function analyze() {
+    total = -1
+    const inputText = document.getElementById("input").value;
+    const observedData = parseInput(inputText);
+    if (observedData.length === 0) {
+      alert("入力が正しくありません");
+      return;
+    }
+
+    // 尤度計算
+    const results = [];
+    console.log(total)
+    for (let s = 1; s <= 6; s++) {
+      let likelihood = 1;
+      observedData.forEach(d => {
+        const p = settingsTheory[s][d.flag];
+        const k = d.count;
+        
+        if (p == null) {
+          return;
+        }
+        
+        likelihood *= Math.pow(p, k) * Math.pow(1 - p, total - k);
+      });
+      results.push({ setting: `設定${s}`, value: likelihood });
+    }
+
+    const sum = results.reduce((a,b)=>a+b.value,0);
+    results.forEach(r => r.value = ((r.value / sum) * 100).toFixed(1));
+
+    const chart = document.getElementById("chart");
+    chart.innerHTML = "";
+    results.forEach(r => {
+      const bar = document.createElement("div");
+      bar.className = "bar";
+
+      const label = document.createElement("div");
+      label.className = "label";
+      label.textContent = r.setting;
+
+      const barInner = document.createElement("div");
+      barInner.className = "bar-inner";
+
+      const barFill = document.createElement("div");
+      barFill.className = "bar-fill";
+      barFill.style.width = r.value + "%";
+      barFill.textContent = r.value + "%";
+
+      barInner.appendChild(barFill);
+      bar.appendChild(label);
+      bar.appendChild(barInner);
+      chart.appendChild(bar);
+    });
+  }
+</script>
+</body>
+</html>
