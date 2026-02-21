@@ -557,7 +557,7 @@ function updateDisplay() {
     pre1Arr.push(["B", BonusType.BLUE]);
   }
   if (findBlueBbNames.includes('1C')) {
-    pre2Arr.push(["C", BonusType.BLUE]);
+    pre1Arr.push(["C", BonusType.BLUE]);
   }
   if (findBlueBbNames.includes('1D')) {
     pre4Arr.push(["D", BonusType.BLUE]);
@@ -694,3 +694,4 @@ toggle.addEventListener('change', () => {
 });
 
 updateDisplay();
+
