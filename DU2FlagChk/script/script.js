@@ -175,32 +175,16 @@ const flagNames = [
   'W',
 ]
 
+
+// 設定1 のみ
+// → 重複フラグ
+// ↓ 色
 const flagNums = [
-  [16, 16, 16, 16, 16, 16],
-  [8, 8, 8, 17, 17, 17],
-  [17, 18, 21, 22, 23, 25],
-  [17, 18, 20, 22, 24, 26],
-  [44, 45, 47, 48, 50, 52],
-  [20, 20, 20, 20, 20, 20],
-  [30, 31, 32, 33, 35, 36],
-  [20, 20, 20, 20, 20, 20],
-  [4, 4, 4, 4, 4, 4],
-  [4, 4, 4, 4, 4, 4],
-  [13, 13, 13, 13, 13, 13],
-  [4, 4, 4, 4, 4, 4],
-  [20, 20, 20, 20, 20, 20],
-  [4, 4, 4, 4, 4, 4],
-  [4, 4, 4, 4, 4, 4],
-  [4, 4, 6, 6, 8, 12],
-  [7, 7, 7, 7, 7, 7],
-  [4, 4, 4, 4, 4, 4],
-  [7, 8, 9, 11, 12, 13],
-  [10, 10, 10, 10, 10, 10],
-  [4, 4, 4, 4, 4, 4],
-  [10, 11, 12, 14, 15, 18],
-  [23, 23, 23, 23, 23, 23],
-  [20, 20, 20, 20, 20, 20],
-  [63, 66, 71, 75, 80, 84]
+  [14, 12, 9, 5, 10],   // 赤
+  [5, 6, 19, 4, 6],     // 青
+  [10, 8, 8, 9, 8],     // 黒
+  [4, 5, -1, -1, -1],   // 異色
+  [48, -1, 11, 15, 14]  // バケ
 ]
 
 const prizeNames = [
@@ -219,6 +203,14 @@ const BonusType = Object.freeze({
   BLACK: 2,
   UNIQUE: 3,
   RB: 4
+})
+
+const DuplicationType = Object.freeze({
+  NONE: "単",
+  A: "A",
+  B: "B",
+  C: "C",
+  D: "D",
 })
 
 const reel = document.getElementById('reel');
@@ -338,16 +330,27 @@ function createFlagInfoDiv(parentElem, reelIdx, key, value) {
 }
 
 function createPredInfoDiv(parentElem, target, flagName) {
+  const duplicationTypeIdx = Object.values(DuplicationType).indexOf(flagName)
+
+  let flagNum
+  if (duplicationTypeIdx >= 0) {
+    flagNum = flagNums[target][duplicationTypeIdx]
+  } else {
+    flagNum = 0
+  }
+
   const badge = document.createElement("div");
   badge.className = "badge";
 
   const keyEl = document.createElement("div");
   keyEl.className = "key";
-  keyEl.textContent = flagName;
+  keyEl.textContent = flagName + ":" + flagNum;
 
   const valueEl = document.createElement("div");
   valueEl.className = "value";
-  valueEl.style.backgroundImage = `url(./img/${target}.png)`
+  if (target != null) {
+    valueEl.style.backgroundImage = `url(./img/${target}.png)`
+  }
   valueEl.textContent = "."
   valueEl.style.color = 'transparent';
 
@@ -532,71 +535,71 @@ function updateDisplay() {
   let pre4Arr = [];
 
   if (findRedBbNames.includes('単')) {
-    pre1Arr.push(["単", BonusType.RED]);
+    pre1Arr.push([DuplicationType.NONE, BonusType.RED]);
   }
   if (findRedBbNames.includes('1A')) {
-    pre1Arr.push(["A", BonusType.RED]);
+    pre1Arr.push([DuplicationType.A, BonusType.RED]);
   }
   if (findRedBbNames.includes('1B')) {
-    pre2Arr.push(["B", BonusType.RED]);
+    pre2Arr.push([DuplicationType.B, BonusType.RED]);
   }
   if (findRedBbNames.includes('1C')) {
-    pre2Arr.push(["C", BonusType.RED]);
+    pre2Arr.push([DuplicationType.C, BonusType.RED]);
   }
   if (findRedBbNames.includes('1D')) {
-    pre3Arr.push(["D", BonusType.RED]);
+    pre3Arr.push([DuplicationType.D, BonusType.RED]);
   }
 
   if (findBlueBbNames.includes('単')) {
-    pre1Arr.push(["単", BonusType.BLUE]);
+    pre1Arr.push([DuplicationType.NONE, BonusType.BLUE]);
   }
   if (findBlueBbNames.includes('1A')) {
-    pre2Arr.push(["A", BonusType.BLUE]);
+    pre2Arr.push([DuplicationType.A, BonusType.BLUE]);
   }
   if (findBlueBbNames.includes('1B')) {
-    pre1Arr.push(["B", BonusType.BLUE]);
+    pre1Arr.push([DuplicationType.B, BonusType.BLUE]);
   }
   if (findBlueBbNames.includes('1C')) {
-    pre1Arr.push(["C", BonusType.BLUE]);
+    pre2Arr.push([DuplicationType.C, BonusType.BLUE]);
   }
   if (findBlueBbNames.includes('1D')) {
-    pre4Arr.push(["D", BonusType.BLUE]);
+    pre4Arr.push([DuplicationType.D, BonusType.BLUE]);
   }
 
   if (findBlackBbNames.includes('単')) {
-    pre1Arr.push(["単", BonusType.BLACK]);
+    pre1Arr.push([DuplicationType.NONE, BonusType.BLACK]);
   }
   if (findBlackBbNames.includes('1A')) {
-    pre2Arr.push(["A", BonusType.BLACK]);
+    pre2Arr.push([DuplicationType.A, BonusType.BLACK]);
   }
   if (findBlackBbNames.includes('1B')) {
-    pre1Arr.push(["B", BonusType.BLACK]);
+    pre1Arr.push([DuplicationType.B, BonusType.BLACK]);
   }
   if (findBlackBbNames.includes('1C')) {
-    pre3Arr.push(["C", BonusType.BLACK]);
+    pre3Arr.push([DuplicationType.C, BonusType.BLACK]);
   }
   if (findBlackBbNames.includes('1D')) {
-    pre2Arr.push(["D", BonusType.BLACK]);
+    pre2Arr.push([DuplicationType.D, BonusType.BLACK]);
   }
 
   if (findUniqueBbNames.includes('単')) {
-    pre1Arr.push(["単", BonusType.UNIQUE]);
+    pre1Arr.push([DuplicationType.NONE, BonusType.UNIQUE]);
   }
   if (findUniqueBbNames.includes('1A')) {
-    pre1Arr.push(["A", BonusType.UNIQUE]);
+    pre1Arr.push([DuplicationType.A, BonusType.UNIQUE]);
   }
 
   if (findRbNames.includes('単')) {
-    pre1Arr.push(["単", BonusType.RB]);
+    pre1Arr.push([DuplicationType.NONE, BonusType.RB]);
   }
   if (findRbNames.includes('1B')) {
-    pre2Arr.push(["B", BonusType.RB]);
+    pre2Arr.push([DuplicationType.B, BonusType.RB]);
   }
   if (findRbNames.includes('1C')) {
-    pre2Arr.push(["C", BonusType.RB]);
+    pre2Arr.push([DuplicationType.C, BonusType.RB]);
   }
   if (findRbNames.includes('1D')) {
-    pre3Arr.push(["D", BonusType.RB]);
+    pre3Arr.push([DuplicationType.D, BonusType.RB]);
   }
 
   if (pre1Arr.length > 0) {
@@ -694,4 +697,3 @@ toggle.addEventListener('change', () => {
 });
 
 updateDisplay();
-
